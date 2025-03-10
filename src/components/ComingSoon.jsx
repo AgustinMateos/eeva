@@ -27,14 +27,14 @@ export default function ComingSoon() {
                             <p className="text-sm md:text-base text-center">
                                 BE THE FIRST TO KNOW WHEN WE GO LIVE
                             </p>
-                            <div className="w-full flex flex-col sm:flex-row gap-2 lg:gap-0">
+                            <div className="w-full flex flex-col sm:flex-row gap-2 sm:gap-0">
                                 <input
                                     type="text"
-                                    className="h-12 rounded-l-md border border-[#DFDFDF] sm:rounded-r-none w-full sm:w-4/5 bg-white bg-opacity-20 text-white placeholder-gray-300 backdrop-blur-md px-4 text-sm md:text-base focus:outline-none"
+                                    className="h-12 rounded-l-md rounded-r-md rounded-l-md-none border border-[#DFDFDF] sm:rounded-r-none w-full sm:w-4/5 bg-white bg-opacity-20 text-white placeholder-gray-300 backdrop-blur-md px-4 text-sm md:text-base focus:outline-none"
                                     placeholder="Enter your email address"
                                 />
 
-                                <button className="h-12 w-full sm:w-1/5 bg-[#DFDFDF] rounded-r-md sm:rounded-l-none text-black text-sm md:text-base">
+                                <button className="h-12 w-full sm:w-1/5 bg-[#DFDFDF] rounded-r-md rounded-l-md sm:rounded-l-md-none sm:rounded-l-none text-black text-sm md:text-base">
                                     Notify me
                                 </button>
                             </div>
