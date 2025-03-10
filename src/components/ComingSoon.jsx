@@ -8,10 +8,10 @@ export default function ComingSoon() {
                 style={{ backgroundImage: "url('/bgHome.svg')" }}
             >
                 <div className="flex flex-col items-center justify-between w-full h-full py-6 md:py-12">
-                    {/* Logo */}
+                  
                     <div className="w-full flex justify-center h-16 md:h-20">
                         <Image
-                            src="/eevalogo.svg"
+                            src="/eevaLogo.svg"
                             width={262}
                             height={31}
                             alt="logoEEva"
@@ -27,12 +27,13 @@ export default function ComingSoon() {
                             <p className="text-sm md:text-base text-center">
                                 BE THE FIRST TO KNOW WHEN WE GO LIVE
                             </p>
-                            <div className="w-full flex flex-col sm:flex-row gap-2">
+                            <div className="w-full flex flex-col sm:flex-row gap-2 lg:gap-0">
                                 <input
                                     type="text"
-                                    className="h-12 rounded-l-md sm:rounded-r-none w-full sm:w-4/5 bg-white bg-opacity-20 text-white placeholder-gray-300 backdrop-blur-md px-4 text-sm md:text-base"
+                                    className="h-12 rounded-l-md border border-[#DFDFDF] sm:rounded-r-none w-full sm:w-4/5 bg-white bg-opacity-20 text-white placeholder-gray-300 backdrop-blur-md px-4 text-sm md:text-base focus:outline-none"
                                     placeholder="Enter your email address"
                                 />
+
                                 <button className="h-12 w-full sm:w-1/5 bg-[#DFDFDF] rounded-r-md sm:rounded-l-none text-black text-sm md:text-base">
                                     Notify me
                                 </button>
@@ -46,7 +47,7 @@ export default function ComingSoon() {
                         <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center text-[#F9F9F9] space-y-4 md:space-y-0">
                             <div className="flex justify-center">
                                 <Image
-                                    src="/e.svg"
+                                    src="/e2.svg"
                                     width={143}
                                     height={89}
                                     alt="eevaLogo"
