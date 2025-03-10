@@ -15,7 +15,7 @@ export default function ComingSoon() {
                             width={262}
                             height={31}
                             alt="logoEEva"
-                            className="w-auto h-10 md:h-12"
+                            className="w-auto h-10 md:h-[31px] md:w-[262px]"
                         />
                     </div>
 
