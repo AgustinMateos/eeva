@@ -129,7 +129,7 @@ export default function Slider() {
       style={{
         flex: index === currentIndex - 2 ? 1.5 : 1, // La activa es más grande
         opacity: index === currentIndex - 2 ? 1 : 0.5, // Menos opacidad para inactivas
-        transform: index === currentIndex - 2 ? 'scaleX(1)' : 'scaleX(0.4)', // Hace las inactivas más pequeñas
+        transform: index === currentIndex - 2 ? 'scaleX(0.1)' : 'scaleX(0.4)', // Hace las inactivas más pequeñas
       }}
     />
   ))}
