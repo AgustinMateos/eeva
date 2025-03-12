@@ -1,22 +1,25 @@
 import Image from "next/image";
 
+
 export default function ComingSoon() {
     return (
         <div className="w-full min-h-screen ">
+         
             <div
                 className="w-full h-[100vh] bg-cover bg-no-repeat flex items-center"
                 style={{ backgroundImage: "url('/bgHome.svg')" }}
             >
                 <div className="flex flex-col items-center justify-between w-full h-full py-6 md:py-12">
-                  
+
                     <div className="w-full flex justify-center h-16 md:h-20">
-                        <Image
-                            src="/eevaLogo.svg"
-                            width={262}
-                            height={31}
-                            alt="logoEEva"
-                            className="w-auto h-10 md:h-[31px] md:w-[262px]"
-                        />
+                    <Image
+    src="/e5.svg"
+    width={262}
+    height={31}
+    alt="logoEEva"
+    className="w-64 h-auto" // Ajusta según necesites
+/>
+
                     </div>
 
                     {/* Sección central (Coming Soon) */}
@@ -55,8 +58,8 @@ export default function ComingSoon() {
                                 />
                             </div>
                             <div className="flex flex-wrap justify-center md:justify-around w-full md:w-auto gap-4 md:gap-8 text-sm md:text-base">
-                                <p>INSTAGRAM</p>
-                                <p>TIKTOK</p>
+                                <div className="flex"><p className="pr-[40px]">INSTAGRAM</p><Image src="/x.svg" width={11} height={18} alt="cross"/></div>
+                                <div className="flex"><p className="pr-[40px]">Tiktok</p><Image src="/x.svg" width={11} height={18} alt="cross"/></div>
                                 <p>FACEBOOK</p>
                             </div>
                             <div className="text-center md:text-right">
