@@ -37,7 +37,7 @@ const Navbar = () => {
                 {/* Logo */}
                 <div>
                     <Image 
-                        src={"/eevaLogo.svg"} 
+                        src={"/LogoFullEEVA.svg"} 
                         width={262} 
                         height={31} 
                         alt='logo' 

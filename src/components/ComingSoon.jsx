@@ -13,7 +13,7 @@ export default function ComingSoon() {
 
                     <div className="w-full flex justify-center h-16 md:h-20">
                     <Image
-    src="/e5.svg"
+    src="/LogoFullEEVA.svg"
     width={262}
     height={31}
     alt="logoEEva"
