@@ -1,0 +1,71 @@
+/* navbar.module.css */
+.menuIcon {
+    transition: opacity 0.3s ease;
+}
+
+.menuIcon:hover {
+    opacity: 0.8;
+}
+
+/* Elementos que se ocultan en móvil y se muestran en desktop */
+.desktopOnly {
+    display: block;
+}
+
+
+
+/* Elementos que se muestran solo en el menú hamburguesa en móvil */
+.mobileMenuItem {
+    display: none;
+}
+
+
+
+/* Ocultar los botones Hombre/Mujer fuera del menú en móvil */
+@media (max-width: 768px) { 
+     .mobileMenuItem {
+        display: block;
+    }
+    .desktopDropdown {
+        display: none;
+    }
+    .mobileDropdown {
+        display: block;
+    }
+    .desktopLupa {
+        display: none;
+    }
+    .mobileLupa {
+        display: block;
+    }
+    .desktopOnly {
+        display: none;
+    }
+    .desktopAboutUs {
+        display: none;
+    }
+    .mobileAboutUs {
+        display: block;
+    }
+}
+
+/* Mostrar los botones Hombre/Mujer fuera del menú en desktop */
+@media (min-width: 769px) {
+    .desktopDropdown {
+        display: flex;
+    }
+    .mobileDropdown {
+        display: none;
+    }.desktopLupa {
+        display: flex;
+    }
+    .mobileLupa {
+        display: none;
+    }.desktopAboutUs {
+        display: flex;
+    }
+    .mobileAboutUs {
+        display: none;
+    }
+}
+

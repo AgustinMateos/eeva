@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function ComingSoon() {
     return (
         <div className="w-full min-h-screen ">
-         
+
             <div
                 className="w-full h-[100vh] bg-cover bg-no-repeat flex items-center bg-center md:bg-top"
                 style={{ backgroundImage: "url('/bgHome.svg')" }}
@@ -12,13 +12,13 @@ export default function ComingSoon() {
                 <div className="flex flex-col items-center justify-between w-full h-full py-6 md:py-12">
 
                     <div className="w-full flex justify-center h-16 md:h-20">
-                    <Image
-    src="/LogoFullEEVA.svg"
-    width={262}
-    height={31}
-    alt="logoEEva"
-    className="w-64 h-auto" // Ajusta según necesites
-/>
+                        <Image
+                            src="/LogoFullEEVA.svg"
+                            width={262}
+                            height={31}
+                            alt="logoEEva"
+                            className="w-64 h-auto" // Ajusta según necesites
+                        />
 
                     </div>
 
@@ -58,8 +58,8 @@ export default function ComingSoon() {
                                 />
                             </div>
                             <div className="flex flex-wrap justify-center md:justify-around w-full md:w-auto gap-4 md:gap-8 text-sm md:text-base">
-                                <div className="flex"><p className="pr-[40px]">INSTAGRAM</p><Image src="/x.svg" width={11} height={18} alt="cross"/></div>
-                                <div className="flex"><p className="pr-[40px]">Tiktok</p><Image src="/x.svg" width={11} height={18} alt="cross"/></div>
+                                <div className="flex"><p className="pr-[40px]">INSTAGRAM</p><Image src="/x.svg" width={11} height={18} alt="cross" /></div>
+                                <div className="flex"><p className="pr-[40px]">TIKTOK</p><Image src="/x.svg" width={11} height={18} alt="cross" /></div>
                                 <p>FACEBOOK</p>
                             </div>
                             <div className="text-center md:text-right">
@@ -69,7 +69,7 @@ export default function ComingSoon() {
 
                         {/* Políticas y términos */}
                         <div className="w-full flex justify-center">
-                            <div className="flex flex-wrap justify-center w-full max-w-md md:max-w-lg gap-4 md:gap-8 text-[#F9F9F9] text-sm md:text-base">
+                            <div className="flex flex-wrap justify-center w-full max-w-md md:max-w-lg lg:max-w-2xl gap-4 md:gap-8 text-[#F9F9F9] text-sm md:text-base">
                                 <p>Políticas de Privacidad</p>
                                 <p>Términos de Servicio</p>
                                 <p>Cookie Settings</p>
