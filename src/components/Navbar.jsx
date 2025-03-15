@@ -88,8 +88,8 @@ const Navbar = () => {
                         </button>
                         {/* Dropdown del menú hamburguesa */}
                         {isOpen && (
-                            <div className="absolute top-[70px] left-[10px] w-[200px] backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A] text-white z-50">
-                                <div className="flex flex-col py-4 space-y-2 px-4">
+                            <div className="absolute top-0 md:top-[70px] left-0 w-1/2 md:w-[200px] h-screen md:h-auto backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A] text-white z-50 overflow-y-auto">
+                                <div className="flex flex-col p-4 space-y-2">
                                     {/* Colecciones en desktop (sin dropdown) */}
                                     <div className="hidden md:block">
                                         {colecciones.map((coleccion, index) => (
@@ -104,9 +104,24 @@ const Navbar = () => {
                                         ))}
                                     </div>
 
-                                    {/* Botones en móvil (orden: Lupa, Colecciones, Hombre, Mujer, About Us) */}
+                                    {/* Botones en móvil (orden: Cruz, Lupa, Colecciones, Hombre, Mujer, About Us) */}
                                     <div className="block md:hidden">
-                                        {/* Botón de la lupa (primero en móvil) */}
+                                        {/* Ícono de cruz para cerrar el menú (solo en móvil) */}
+                                        <div className="flex justify-end">
+                                            <button
+                                                onClick={() => setIsOpen(false)}
+                                                className="focus:outline-none"
+                                            >
+                                                <Image
+                                                    src="/XMenuIcon.svg"
+                                                    width={24}
+                                                    height={24}
+                                                    alt="close menu"
+                                                />
+                                            </button>
+                                        </div>
+
+                                        {/* Botón de la lupa */}
                                         <div className="mt-2">
                                             <div className="backdrop-blur-[6px] text-center w-[60px] h-[36px] flex items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px]">
                                                 <Image

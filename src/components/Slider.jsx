@@ -89,7 +89,7 @@ export default function Slider() {
       />
 
       {/* Slider */}
-      <div className="absolute top-1/2 left-[-140px] right-[-140px] transform -translate-y-1/2">
+      <div className="absolute top-1/2 left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2">
         <div className="relative w-full overflow-hidden">
           <div
             className={`flex transition-transform duration-500 ease-in-out ${
