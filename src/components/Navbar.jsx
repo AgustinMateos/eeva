@@ -16,11 +16,13 @@ const Navbar = () => {
     const [isHombreOpen, setIsHombreOpen] = useState(false);
     const [isMujerOpen, setIsMujerOpen] = useState(false);
     const [isColeccionesOpen, setIsColeccionesOpen] = useState(false);
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false); // Nuevo estado para el modal
 
     const menuRef = useRef(null);
     const hombreRef = useRef(null);
     const mujerRef = useRef(null);
     const coleccionesRef = useRef(null);
+    const modalRef = useRef(null); // Ref para el modal
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -47,6 +49,10 @@ const Navbar = () => {
         setIsMujerOpen(false);
     };
 
+    const toggleSearchModal = () => {
+        setIsSearchModalOpen(!isSearchModalOpen);
+    };
+
     const handleClickOutside = (event) => {
         if (menuRef.current && !menuRef.current.contains(event.target) && isOpen) {
             setIsOpen(false);
@@ -60,6 +66,9 @@ const Navbar = () => {
         if (coleccionesRef.current && !coleccionesRef.current.contains(event.target) && isColeccionesOpen) {
             setIsColeccionesOpen(false);
         }
+        if (modalRef.current && !modalRef.current.contains(event.target) && isSearchModalOpen) {
+            setIsSearchModalOpen(false); // Cerrar el modal al hacer clic fuera
+        }
     };
 
     useEffect(() => {
@@ -67,7 +76,7 @@ const Navbar = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [isOpen, isHombreOpen, isMujerOpen, isColeccionesOpen]);
+    }, [isOpen, isHombreOpen, isMujerOpen, isColeccionesOpen, isSearchModalOpen]);
 
     return (
         <div className="absolute w-full">
@@ -113,7 +122,7 @@ const Navbar = () => {
                                                 className="focus:outline-none"
                                             >
                                                 <Image
-                                                    src="/XMenuIcon.svg"
+                                                    src="/xMenuIcon.svg"
                                                     width={24}
                                                     height={24}
                                                     alt="close menu"
@@ -123,14 +132,17 @@ const Navbar = () => {
 
                                         {/* Botón de la lupa */}
                                         <div className="mt-2">
-                                            <div className="backdrop-blur-[6px] text-center w-[60px] h-[36px] flex items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px]">
+                                            <button
+                                                onClick={toggleSearchModal}
+                                                className="backdrop-blur-[6px] text-center w-[60px] h-[36px] flex items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px] focus:outline-none"
+                                            >
                                                 <Image
                                                     src={'/lupa.svg'}
                                                     width={24}
                                                     height={24}
                                                     alt="lupa"
                                                 />
-                                            </div>
+                                            </button>
                                         </div>
 
                                         {/* Colecciones en móvil (dentro de un dropdown) */}
@@ -334,14 +346,17 @@ const Navbar = () => {
                 <div className="w-[424px] text-[#FFFFFF] flex justify-end">
                     <div className="flex w-[188px] md:w-[288px] justify-around items-center">
                         {/* Botón de la lupa fuera del menú hamburguesa (solo en desktop) */}
-                        <div className="hidden md:flex backdrop-blur-[6px] text-center w-[60px] h-[36px] items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px]">
+                        <button
+                            onClick={toggleSearchModal}
+                            className="hidden md:flex backdrop-blur-[6px] text-center w-[60px] h-[36px] items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px] focus:outline-none"
+                        >
                             <Image
                                 src={'/lupa.svg'}
                                 width={24}
                                 height={24}
                                 alt="lupa"
                             />
-                        </div>
+                        </button>
                         {/* Botón About Us fuera del menú hamburguesa (solo en desktop) */}
                         <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] justify-center items-center text-center bg-[#A8A8A81A] w-[120px]">
                             About Us
@@ -353,6 +368,39 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modal de búsqueda */}
+            {isSearchModalOpen && (
+                <div className="fixed inset-0 bg-black backdrop-blur-[6px] bg-opacity-50 flex  z-50">
+                    <div
+                        ref={modalRef}
+                        className="  h-[50%]  rounded-lg p-6 w-full max-w-[52rem] mt-[10px]  text-white"
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            
+                            <button
+                                onClick={toggleSearchModal}
+                                className="focus:outline-none"
+                            >
+                                <Image
+                                    src="/xMenuIcon.svg"
+                                    width={24}
+                                    height={24}
+                                    alt="close modal"
+                                />
+                            </button>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Enter your search term..."
+                            className="w-full p-2 rounded-md bg-[#FFFFFF1A] border-[0.5px] border-white text-white placeholder-gray-300 focus:outline-none"
+                        />
+                        <div className="mt-4 w-full bg-[#FFFFFF1A] border-[0.5px] border-white rounded-md p-2 text-white">
+                            Search
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
