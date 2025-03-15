@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Navbar from './Navbar';
+
 const options = [
   { id: 1, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop' },
   { id: 2, name: 'New Asia', bgImage: '/slide2.svg', estado: 'archive' },
@@ -45,7 +46,7 @@ export default function Slider() {
       const animate = () => {
         setTransitionProgress((prev) => {
           if (prev < 1) {
-            return prev + 0.02;
+            return prev + 0.05; // Incremento más rápido para una transición más fluida
           } else {
             setIsTransitioning(false);
             return 1;
@@ -61,31 +62,27 @@ export default function Slider() {
   }, [isTransitioning]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-transparent">
+    <div className="relative w-full h-screen overflow-hidden bg-black">
       <nav className="fixed top-0 left-0 w-full z-50 bg-black/80">
-          <Navbar/>
-        </nav>
+        <Navbar />
+      </nav>
 
       {/* Fondo anterior */}
-      <div
-        className="absolute inset-0 transition-opacity duration-500 ease-in-out"
-        style={{
-          backgroundImage: `url(${extendedOptions[previousIndex]?.bgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 1 - transitionProgress,
-        }}
+      <Image
+        src={extendedOptions[previousIndex]?.bgImage}
+        alt="Previous slide"
+        fill
+        className="absolute inset-0 object-cover transition-opacity duration-500 ease-in-out"
+        style={{ opacity: 1 - transitionProgress }}
       />
 
       {/* Fondo actual */}
-      <div
-        className="absolute inset-0 transition-opacity duration-500 ease-in-out"
-        style={{
-          backgroundImage: `url(${extendedOptions[currentIndex]?.bgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: transitionProgress,
-        }}
+      <Image
+        src={extendedOptions[currentIndex]?.bgImage}
+        alt="Current slide"
+        fill
+        className="absolute inset-0 object-cover transition-opacity duration-500 ease-in-out"
+        style={{ opacity: transitionProgress }}
       />
 
       {/* Slider */}
@@ -106,9 +103,7 @@ export default function Slider() {
                   ${index === currentIndex ? 'scale-110 z-10' : 'scale-90 opacity-70'}`}
                 onClick={() => handleClick(index)}
               >
-                <div
-                  className="text-[#FFFFFF] rounded-lg p-4 text-center"
-                >
+                <div className="text-[#FFFFFF] rounded-lg p-4 text-center">
                   <h3 className="text-lg font-semibold">{option.name}</h3>
                   <p>{option.estado}</p>
                   {index === currentIndex && <p>{option.estadoAccion}</p>}
@@ -120,31 +115,30 @@ export default function Slider() {
       </div>
 
       {/* Paginación con líneas animadas */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 w-[30%] ">
-  {/* Fondo de las barras no activas */}
-  {options.map((_, index) => (
-    <div
-      key={index}
-      className={`h-[4px] backdrop-blur-[10px] bg-[#F2F2F24D] transition-all duration-500 ease-in-out`}
-      style={{
-        flex: index === currentIndex - 2 ? 1.5 : 1, // La activa es más grande
-        opacity: index === currentIndex - 2 ? 1 : 0.5, // Menos opacidad para inactivas
-        transform: index === currentIndex - 2 ? 'scaleX(0.1)' : 'scaleX(0.4)', // Hace las inactivas más pequeñas
-      }}
-    />
-  ))}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 w-[30%]">
+        {/* Fondo de las barras no activas */}
+        {options.map((_, index) => (
+          <div
+            key={index}
+            className={`h-[4px] backdrop-blur-[10px] bg-[#F2F2F24D] transition-all duration-500 ease-in-out`}
+            style={{
+              flex: index === currentIndex - 2 ? 1.5 : 1,
+              opacity: index === currentIndex - 2 ? 1 : 0.5,
+              transform: index === currentIndex - 2 ? 'scaleX(0.1)' : 'scaleX(0.4)',
+            }}
+          />
+        ))}
 
-  {/* Línea activa que se mueve */}
-  <div
-    className="absolute h-[4px] bg-[#F2F2F2] transition-transform duration-500 ease-in-out"
-    style={{
-      width: `${100 / options.length}%`,
-      transform: `translateX(${(currentIndex - 2) * 100}%)`,
-      zIndex: 10,
-    }}
-  />
-</div>
-
+        {/* Línea activa que se mueve */}
+        <div
+          className="absolute h-[4px] bg-[#F2F2F2] transition-transform duration-500 ease-in-out"
+          style={{
+            width: `${100 / options.length}%`,
+            transform: `translateX(${(currentIndex - 2) * 100}%)`,
+            zIndex: 10,
+          }}
+        />
+      </div>
     </div>
   );
 }
