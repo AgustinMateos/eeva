@@ -89,7 +89,7 @@ const Navbar = () => {
                             className={`${style.menuIcon} focus:outline-none`}
                         >
                             <Image
-                                src={isOpen ? '/xMenuIcon.svg' : '/IconoHamburguesa.svg'}
+                                src={isOpen ? '/XMenuIcon.svg' : '/IconoHamburguesa.svg'}
                                 width={50}
                                 height={50}
                                 alt={isOpen ? 'close menu' : 'menu'}
@@ -122,7 +122,7 @@ const Navbar = () => {
                                                 className="focus:outline-none"
                                             >
                                                 <Image
-                                                    src="/xMenuIcon.svg"
+                                                    src="/XMenuIcon.svg"
                                                     width={24}
                                                     height={24}
                                                     alt="close menu"
@@ -180,7 +180,7 @@ const Navbar = () => {
                                                 onClick={toggleHombreDropdown}
                                                 className="w-full backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
                                             >
-                                                Hombre
+                                                H
                                             </button>
                                             {isHombreOpen && (
                                                 <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
@@ -217,7 +217,7 @@ const Navbar = () => {
                                                 onClick={toggleMujerDropdown}
                                                 className="w-full backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
                                             >
-                                                Mujer
+                                                M
                                             </button>
                                             {isMujerOpen && (
                                                 <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
@@ -266,9 +266,9 @@ const Navbar = () => {
                             <div ref={hombreRef} className="relative">
                                 <button
                                     onClick={toggleHombreDropdown}
-                                    className="w-[120px] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                                    className="w-[50px] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
                                 >
-                                    Hombre
+                                    H
                                 </button>
                                 {isHombreOpen && (
                                     <div className="absolute top-[40px] left-0 w-[120px] backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
@@ -301,9 +301,9 @@ const Navbar = () => {
                             <div ref={mujerRef} className="relative">
                                 <button
                                     onClick={toggleMujerDropdown}
-                                    className="w-[120px] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                                    className="w-[50px] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
                                 >
-                                    Mujer
+                                    M
                                 </button>
                                 {isMujerOpen && (
                                     <div className="absolute top-[40px] left-0 w-[120px] backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
@@ -383,7 +383,7 @@ const Navbar = () => {
                                 className="focus:outline-none"
                             >
                                 <Image
-                                    src="/xMenuIcon.svg"
+                                    src="/XMenuIcon.svg"
                                     width={24}
                                     height={24}
                                     alt="close modal"
