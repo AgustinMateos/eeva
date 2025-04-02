@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import style from '@/app/ui/navbar.module.css'; // Asegúrate de que la ruta sea correcta
@@ -81,7 +82,7 @@ const Navbar = () => {
     return (
         <div className="absolute w-full">
             <div className="flex justify-around h-[90px] items-center">
-                <div className="w-[424px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
+                <div className="w-[324px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
                     {/* Botón hamburguesa */}
                     <div ref={menuRef}>
                         <button
@@ -262,7 +263,7 @@ const Navbar = () => {
 
                     {/* Botones Hombre y Mujer fuera del menú hamburguesa (solo en desktop) */}
                     <div className="hidden md:flex">
-                        <div className="flex w-[280px] justify-around">
+                        <div className="flex w-[180px] justify-around">
                             <div ref={hombreRef} className="relative">
                                 <button
                                     onClick={toggleHombreDropdown}
@@ -343,7 +344,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Sección derecha */}
-                <div className="w-[424px] text-[#FFFFFF] flex justify-end">
+                <div className="w-[324px] text-[#FFFFFF] flex justify-end">
                     <div className="flex w-[188px] md:w-[288px] justify-around items-center">
                         {/* Botón de la lupa fuera del menú hamburguesa (solo en desktop) */}
                         <button

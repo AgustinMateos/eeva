@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Navbar from './Navbar';
+
 
 const options = [
   { id: 1, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop' },
@@ -63,9 +63,7 @@ export default function Slider() {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
-      <nav className="fixed top-0 left-0 w-full z-50 bg-black/80">
-        <Navbar />
-      </nav>
+     
 
       {/* Fondo anterior */}
       <Image

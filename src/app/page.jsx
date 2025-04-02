@@ -1,6 +1,6 @@
 import Image from "next/image";
 import ComingSoon from "@/components/ComingSoon";
-import ClientHome from "@/components/ClientHome";
+
 
 export default function Home() {
   // Fecha actual
@@ -12,7 +12,8 @@ export default function Home() {
   return (
     <div>
       <ComingSoon />
-      {today >= releaseDate && <ClientHome />}
+      {today >= releaseDate && 
+      <></>}
     </div>
   );
 }
