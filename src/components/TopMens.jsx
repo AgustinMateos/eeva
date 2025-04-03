@@ -23,7 +23,7 @@ const ImgMiddle = [
   { id: 2, image: '/InitiationMiddle2.svg' },
 ];
 
-const Initiation = () => {
+export default function TopMens ()  {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
 
@@ -36,33 +36,12 @@ const Initiation = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <h1 className="text-white text-4xl font-bold pb-[30px]">INITIATION</h1>
-      <p className="text-white text-lg text-center max-w-2xl uppercase">
-        “INITIATION” Winter 2025 reinterpreta el futuro.
-      </p>
-      <p className="text-white text-lg text-center max-w-[1250px] mb-8 uppercase">
-        Más allá de diseños extravagantes, apuesta por lo puro, lo simple y lo intencional. Líneas limpias, caídas estructuradas y monocromía absoluta dan forma a prendas pensadas para transmitir fuerza, identidad y cohesión.
-      </p>
+     <p className="text-white text-lg w-full max-w-[70rem] border-b pb-[30px] border-[#AEAEAE] uppercase">
+  TOPS - MEN
+</p>
 
-      {/* Contenedor del video */}
-      <div className="relative h-[610px] w-full">
-        <video
-          ref={videoRef}
-          src="/initiation.mp4"
-          autoPlay
-          loop
-          muted={isMuted}
-          playsInline
-          className="w-full h-full object-cover"
-        />
-        <button
-          onClick={toggleSound}
-          className="absolute bottom-4 flex justify-center items-center left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded-md text-sm"
-        >
-          {isMuted ? 'Allow Sound' : 'Deny Sound'}
-          <Image src="/sound.svg" alt="Sound Toggle" width={32} height={32} />
-        </button>
-      </div>
+
+     
 
       <div className="w-[80%] mt-[60px]">
         {/* Primer grid de cards */}
@@ -90,20 +69,7 @@ const Initiation = () => {
           ))}
         </div>
 
-        {/* Segundo grid con las imágenes centradas */}
-        <div className="grid grid-cols-2 gap-6 mt-[60px] mb-[60px]">
-          {ImgMiddle.map((card) => (
-            <div key={card.id} className="flex justify-center items-center h-[942px]">
-              <Image
-                src={card.image}
-                alt={`Middle image ${card.id}`}
-                width={500}
-                height={900}
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
+       
 
         {/* Tercer grid de cards */}
         <div className="grid grid-cols-4 gap-6 mt-8">
@@ -131,14 +97,7 @@ const Initiation = () => {
         </div>
       </div>
 
-      <div className="relative h-[410px] w-full mt-[40px]">
-        <Image
-          src="/evvaprevfooter.svg"
-          alt="Initiation Background"
-          fill
-          className="object-cover"
-        />
-      </div>
+      
 
       <div className="h-[315px] flex min-w-[1315px]">
         <Footer />
@@ -146,5 +105,3 @@ const Initiation = () => {
     </div>
   );
 };
-
-export default Initiation;
