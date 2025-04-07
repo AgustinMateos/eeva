@@ -340,7 +340,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Logo */}
+        {/* Logo  */}
         <div>
           <Link href="/collections/slider">
             <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" />
