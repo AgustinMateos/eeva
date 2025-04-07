@@ -2,7 +2,7 @@
 
 
 import React from 'react';
-import Accesoriesm from '@/components/accesoriesm';
+import Accesoriesm from '@/components/Accesoriesm';
 
 
 const Page = () => {
