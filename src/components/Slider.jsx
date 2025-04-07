@@ -99,13 +99,14 @@ export default function Slider() {
                   ${index === currentIndex ? 'scale-110 z-10' : 'scale-90 opacity-70'}`}
                 onClick={() => handleClick(index)} // Mantienes el cambio de índice
               >
-                <Link href={option.link} className="block">
+                <div  className="block">
                   <div className="text-[#FFFFFF] rounded-lg p-4 text-center">
                     <h3 className="text-lg font-semibold">{option.name}</h3>
                     <p>{option.estado}</p>
-                    {index === currentIndex && <p>{option.estadoAccion}</p>}
+                    <Link href={option.link}>{index === currentIndex && <p>{option.estadoAccion}</p>}</Link>
+                    
                   </div>
-                </Link>
+                </div>
               </div>
             ))}
           </div>
