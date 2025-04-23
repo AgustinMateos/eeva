@@ -312,21 +312,21 @@ const Navbar = () => {
                   <div className="absolute top-[40px] left-0 w-[120px] backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
                     <div className="flex flex-col py-2 space-y-1 px-2">
                       <a
-                        href="/collections/accesoriesg"
+                        href="/collections/topw"
                         className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                         onClick={() => setIsMujerOpen(false)}
                       >
                         Top
                       </a>
                       <a
-                        href="#"
+                        href="/collections/bottomw"
                         className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                         onClick={() => setIsMujerOpen(false)}
                       >
                         Bottom
                       </a>
                       <a
-                        href="#"
+                        href="/collections/accesoriesg"
                         className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                         onClick={() => setIsMujerOpen(false)}
                       >

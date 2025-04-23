@@ -7,7 +7,7 @@ export default function Home() {
   const today = new Date();
 
   // Fecha de activación del slider (20 de julio de 2025)
-  const releaseDate = new Date("2025-07-20");
+  const releaseDate = new Date("2025-04-23");
 
   return (
     <div>
