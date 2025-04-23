@@ -107,7 +107,7 @@ const Navbar = () => {
   return (
     <div className="absolute w-full">
       <div className="flex justify-around h-[90px] items-center">
-        <div className="w-[324px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
+        <div className="w-[90px] md:w-[324px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
           {/* Botón hamburguesa */}
           <div ref={menuRef}>
             <button onClick={toggleDropdown} className={`${style.menuIcon} focus:outline-none`}>
@@ -120,8 +120,8 @@ const Navbar = () => {
             </button>
             {/* Dropdown del menú hamburguesa */}
             {isOpen && (
-              <div className="absolute top-0 md:top-[70px] md:left-[140px] left-0 w-1/2 md:w-[200px] h-screen md:h-auto backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A] text-white z-50 overflow-y-auto">
-                <div className="flex flex-col p-4 space-y-2">
+              <div className="absolute top-0 md:top-[78px]  md:left-[140px] left-0 w-1/2 md:w-[200px] h-screen md:h-auto backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A] text-white z-50 overflow-y-auto">
+                <div className="flex flex-col p-4  space-y-2">
                   {/* Colecciones en desktop */}
                   <div className="hidden md:block">
                     {colecciones.map((coleccion, index) => (
@@ -190,32 +190,53 @@ const Navbar = () => {
                         H
                       </button>
                       {isHombreOpen && (
-                        <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
-                          <div className="flex flex-col py-2 space-y-1 px-2">
-                            <a
-                              href="/topsM"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
-                              onClick={() => setIsHombreOpen(false)}
-                            >
-                              Top
-                            </a>
-                            <a
-                              href="#"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
-                              onClick={() => setIsHombreOpen(false)}
-                            >
-                              Bottom
-                            </a>
-                            <a
-                              href="#"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
-                              onClick={() => setIsHombreOpen(false)}
-                            >
-                              Accesories
-                            </a>
-                          </div>
-                        </div>
-                      )}
+  <div className="absolute top-[40px] mt-[10px] left-0 w-[190px] text-white z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
+    <div className="flex flex-col py-2 space-y-1 px-2">
+      <a
+        href="/collections/topsm"
+        className="group flex items-center h-[30px] text-center hover:bg-[#FFFFFF1A] rounded-[2px]"
+        onClick={() => setIsHombreOpen(false)}
+      >
+        <Image
+          src="/flechaDiagonal.svg"
+          width={16}
+          height={16}
+          alt="arrow"
+          className="hidden group-hover:block mr-2 ml-2"
+        />
+        Top
+      </a>
+      <a
+        href="/collections/bottomm"
+        className="group flex items-center h-[30px] text-center hover:bg-[#FFFFFF1A] rounded-[2px]"
+        onClick={() => setIsHombreOpen(false)}
+      >
+        <Image
+          src="/flechaDiagonal.svg"
+          width={16}
+          height={16}
+          alt="arrow"
+          className="hidden group-hover:block mr-2 ml-2"
+        />
+        Bottom
+      </a>
+      <a
+        href="/collections/accesoriesm"
+        className="group flex items-center h-[30px] text-center hover:bg-[#FFFFFF1A] rounded-[2px]"
+        onClick={() => setIsHombreOpen(false)}
+      >
+        <Image
+          src="/flechaDiagonal.svg"
+          width={16}
+          height={16}
+          alt="arrow"
+          className="hidden group-hover:block mr-2 ml-2"
+        />
+        Accesories
+      </a>
+    </div>
+  </div>
+)}
                     </div>
                     <div ref={mujerRef} className="relative mt-2">
                       <button
@@ -274,25 +295,25 @@ const Navbar = () => {
                   H
                 </button>
                 {isHombreOpen && (
-                  <div className="absolute top-[40px] left-0 w-[120px] backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
+                  <div className="absolute top-[40px] mt-[10px] left-0 w-[190px]  text-white  z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
                     <div className="flex flex-col py-2 space-y-1 px-2">
                       <a
                         href="/collections/topsm"
-                        className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                        className=" flex justify-left items-center h-[30px] text-center "
                         onClick={() => setIsHombreOpen(false)}
                       >
                         Top
                       </a>
                       <a
                         href="/collections/bottomm"
-                        className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                        className=" flex justify-left items-center h-[30px] text-center "
                         onClick={() => setIsHombreOpen(false)}
                       >
                         Bottom
                       </a>
                       <a
                         href="/collections/accesoriesm"
-                        className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                        className=" flex justify-left items-center h-[30px] text-center  "
                         onClick={() => setIsHombreOpen(false)}
                       >
                         Accesories
@@ -309,25 +330,25 @@ const Navbar = () => {
                   M
                 </button>
                 {isMujerOpen && (
-                  <div className="absolute top-[40px] left-0 w-[120px] backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
-                    <div className="flex flex-col py-2 space-y-1 px-2">
+                  <div className="absolute top-[40px] left-0  mt-[10px] w-[190px] text-white  z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
+                    <div className="flex  flex-col py-2 space-y-1 px-2">
                       <a
                         href="/collections/topw"
-                        className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                        className=" flex justify-left items-center h-[30px] text-center  "
                         onClick={() => setIsMujerOpen(false)}
                       >
                         Top
                       </a>
                       <a
                         href="/collections/bottomw"
-                        className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                        className=" flex justify-left items-center h-[30px] text-center"
                         onClick={() => setIsMujerOpen(false)}
                       >
                         Bottom
                       </a>
                       <a
                         href="/collections/accesoriesg"
-                        className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                        className=" flex justify-left items-center h-[30px] text-center  "
                         onClick={() => setIsMujerOpen(false)}
                       >
                         Accesories
@@ -348,7 +369,7 @@ const Navbar = () => {
         </div>
 
         {/* Sección derecha */}
-        <div className="w-[324px] text-[#FFFFFF] flex justify-end">
+        <div className="w-[90px] md:w-[324px] text-[#FFFFFF] flex justify-end">
           <div className="flex w-[188px] md:w-[288px] justify-around items-center">
             <button
               onClick={toggleSearchModal}
