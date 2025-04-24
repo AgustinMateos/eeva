@@ -88,8 +88,7 @@ export default function Accesoriesm() {
             </div>
 
 
-
-            <div className="h-[315px] flex min-w-[1315px]">
+            <div className="h-[315px] flex md:min-w-[1315px]">
                 <Footer />
             </div>
         </div>

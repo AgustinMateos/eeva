@@ -190,53 +190,32 @@ const Navbar = () => {
                         H
                       </button>
                       {isHombreOpen && (
-  <div className="absolute top-[40px] mt-[10px] left-0 w-[190px] text-white z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
-    <div className="flex flex-col py-2 space-y-1 px-2">
-      <a
-        href="/collections/topsm"
-        className="group flex items-center h-[30px] text-center hover:bg-[#FFFFFF1A] rounded-[2px]"
-        onClick={() => setIsHombreOpen(false)}
-      >
-        <Image
-          src="/flechaDiagonal.svg"
-          width={16}
-          height={16}
-          alt="arrow"
-          className="hidden group-hover:block mr-2 ml-2"
-        />
-        Top
-      </a>
-      <a
-        href="/collections/bottomm"
-        className="group flex items-center h-[30px] text-center hover:bg-[#FFFFFF1A] rounded-[2px]"
-        onClick={() => setIsHombreOpen(false)}
-      >
-        <Image
-          src="/flechaDiagonal.svg"
-          width={16}
-          height={16}
-          alt="arrow"
-          className="hidden group-hover:block mr-2 ml-2"
-        />
-        Bottom
-      </a>
-      <a
-        href="/collections/accesoriesm"
-        className="group flex items-center h-[30px] text-center hover:bg-[#FFFFFF1A] rounded-[2px]"
-        onClick={() => setIsHombreOpen(false)}
-      >
-        <Image
-          src="/flechaDiagonal.svg"
-          width={16}
-          height={16}
-          alt="arrow"
-          className="hidden group-hover:block mr-2 ml-2"
-        />
-        Accesories
-      </a>
-    </div>
-  </div>
-)}
+                        <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
+                          <div className="flex flex-col py-2 space-y-1 px-2">
+                            <a
+                              href="/topsM"
+                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              onClick={() => setIsHombreOpen(false)}
+                            >
+                              Top
+                            </a>
+                            <a
+                              href="#"
+                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              onClick={() => setIsHombreOpen(false)}
+                            >
+                              Bottom
+                            </a>
+                            <a
+                              href="#"
+                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              onClick={() => setIsHombreOpen(false)}
+                            >
+                              Accesories
+                            </a>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <div ref={mujerRef} className="relative mt-2">
                       <button
@@ -295,28 +274,49 @@ const Navbar = () => {
                   H
                 </button>
                 {isHombreOpen && (
-                  <div className="absolute top-[40px] mt-[10px] left-0 w-[190px]  text-white  z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
+                  <div className="absolute top-[40px] mt-[10px] left-0 w-[190px] text-white z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
                     <div className="flex flex-col py-2 space-y-1 px-2">
                       <a
                         href="/collections/topsm"
-                        className=" flex justify-left items-center h-[30px] text-center "
+                        className="group flex items-center h-[30px] text-center  rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
-                      >
-                        Top
+                      >Top
+                        <Image
+                          src="/flechaDiagonal.svg"
+                          width={16}
+                          height={16}
+                          alt="arrow"
+                          className="hidden group-hover:block mr-2  ml-[120px]"
+                        />
+
                       </a>
                       <a
                         href="/collections/bottomm"
-                        className=" flex justify-left items-center h-[30px] text-center "
+                        className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
-                      >
-                        Bottom
+                      >Bottom
+                        <Image
+                          src="/flechaDiagonal.svg"
+                          width={16}
+                          height={16}
+                          alt="arrow"
+                          className="hidden group-hover:block mr-2 ml-[90px]"
+                        />
+
                       </a>
                       <a
                         href="/collections/accesoriesm"
-                        className=" flex justify-left items-center h-[30px] text-center  "
+                        className="group flex items-center h-[30px] text-center  rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
-                      >
-                        Accesories
+                      > Accesories
+                        <Image
+                          src="/flechaDiagonal.svg"
+                          width={16}
+                          height={16}
+                          alt="arrow"
+                          className="hidden group-hover:block mr-2 ml-[50px]"
+                        />
+
                       </a>
                     </div>
                   </div>
@@ -330,31 +330,52 @@ const Navbar = () => {
                   M
                 </button>
                 {isMujerOpen && (
-                  <div className="absolute top-[40px] left-0  mt-[10px] w-[190px] text-white  z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
-                    <div className="flex  flex-col py-2 space-y-1 px-2">
-                      <a
-                        href="/collections/topw"
-                        className=" flex justify-left items-center h-[30px] text-center  "
-                        onClick={() => setIsMujerOpen(false)}
-                      >
-                        Top
-                      </a>
-                      <a
-                        href="/collections/bottomw"
-                        className=" flex justify-left items-center h-[30px] text-center"
-                        onClick={() => setIsMujerOpen(false)}
-                      >
-                        Bottom
-                      </a>
-                      <a
-                        href="/collections/accesoriesg"
-                        className=" flex justify-left items-center h-[30px] text-center  "
-                        onClick={() => setIsMujerOpen(false)}
-                      >
-                        Accesories
-                      </a>
-                    </div>
+                  <div className="absolute top-[40px] mt-[10px] left-0 w-[190px] text-white z-50 backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
+                  <div className="flex flex-col py-2 space-y-1 px-2">
+                    <a
+                      href="/collections/topw"
+                      className="group flex items-center h-[30px] text-center  rounded-[2px]"
+                      onClick={() => setIsHombreOpen(false)}
+                    >Top
+                      <Image
+                        src="/flechaDiagonal.svg"
+                        width={16}
+                        height={16}
+                        alt="arrow"
+                        className="hidden group-hover:block mr-2  ml-[120px]"
+                      />
+
+                    </a>
+                    <a
+                      href="/collections/bottomw"
+                      className="group flex items-center h-[30px] text-center  rounded-[2px]"
+                      onClick={() => setIsHombreOpen(false)}
+                    >Bottom
+                      <Image
+                        src="/flechaDiagonal.svg"
+                        width={16}
+                        height={16}
+                        alt="arrow"
+                        className="hidden group-hover:block mr-2 ml-[90px]"
+                      />
+
+                    </a>
+                    <a
+                      href="/collections/accesoriesg"
+                      className="group flex items-center h-[30px] text-center  rounded-[2px]"
+                      onClick={() => setIsHombreOpen(false)}
+                    > Accesories
+                      <Image
+                        src="/flechaDiagonal.svg"
+                        width={16}
+                        height={16}
+                        alt="arrow"
+                        className="hidden group-hover:block mr-2 ml-[50px]"
+                      />
+
+                    </a>
                   </div>
+                </div>
                 )}
               </div>
             </div>
