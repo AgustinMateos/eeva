@@ -193,21 +193,21 @@ const Navbar = () => {
                         <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
                           <div className="flex flex-col py-2 space-y-1 px-2">
                             <a
-                              href="/topsM"
+                              href="/collections/topsm"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsHombreOpen(false)}
                             >
                               Top
                             </a>
                             <a
-                              href="#"
+                              href="/collections/bottomm"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsHombreOpen(false)}
                             >
                               Bottom
                             </a>
                             <a
-                              href="#"
+                              href="/collections/accesoriesm"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsHombreOpen(false)}
                             >
@@ -228,21 +228,21 @@ const Navbar = () => {
                         <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
                           <div className="flex flex-col py-2 space-y-1 px-2">
                             <a
-                              href="#"
+                              href="/collections/topsm"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsMujerOpen(false)}
                             >
                               Top
                             </a>
                             <a
-                              href="#"
+                             href="/collections/bottomw"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsMujerOpen(false)}
                             >
                               Bottom
                             </a>
                             <a
-                              href="#"
+                              href="/collections/accesoriesg"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsMujerOpen(false)}
                             >
@@ -283,8 +283,8 @@ const Navbar = () => {
                       >Top
                         <Image
                           src="/flechaDiagonal.svg"
-                          width={16}
-                          height={16}
+                          width={14}
+                          height={14}
                           alt="arrow"
                           className="hidden group-hover:block mr-2  ml-[120px]"
                         />
@@ -297,8 +297,8 @@ const Navbar = () => {
                       >Bottom
                         <Image
                           src="/flechaDiagonal.svg"
-                          width={16}
-                          height={16}
+                          width={14}
+                          height={14}
                           alt="arrow"
                           className="hidden group-hover:block mr-2 ml-[90px]"
                         />
@@ -311,8 +311,8 @@ const Navbar = () => {
                       > Accesories
                         <Image
                           src="/flechaDiagonal.svg"
-                          width={16}
-                          height={16}
+                          width={14}
+                          height={14}
                           alt="arrow"
                           className="hidden group-hover:block mr-2 ml-[50px]"
                         />
@@ -339,8 +339,8 @@ const Navbar = () => {
                     >Top
                       <Image
                         src="/flechaDiagonal.svg"
-                        width={16}
-                        height={16}
+                        width={14}
+                        height={14}
                         alt="arrow"
                         className="hidden group-hover:block mr-2  ml-[120px]"
                       />
@@ -353,8 +353,8 @@ const Navbar = () => {
                     >Bottom
                       <Image
                         src="/flechaDiagonal.svg"
-                        width={16}
-                        height={16}
+                        width={14}
+                        height={14}
                         alt="arrow"
                         className="hidden group-hover:block mr-2 ml-[90px]"
                       />
@@ -367,8 +367,8 @@ const Navbar = () => {
                     > Accesories
                       <Image
                         src="/flechaDiagonal.svg"
-                        width={16}
-                        height={16}
+                        width={14}
+                        height={14}
                         alt="arrow"
                         className="hidden group-hover:block mr-2 ml-[50px]"
                       />
