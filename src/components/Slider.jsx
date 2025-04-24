@@ -101,7 +101,7 @@ export default function Slider() {
               >
                 <div  className="block">
                   <div className="text-[#FFFFFF] rounded-lg p-4 text-center">
-                    <h3 className="text-lg font-semibold">{option.name}</h3>
+                    <h3 className="text-lg font-semibold uppercase">{option.name}</h3>
                     <p>{option.estado}</p>
                     <Link href={option.link}>{index === currentIndex && <p>{option.estadoAccion}</p>}</Link>
                     

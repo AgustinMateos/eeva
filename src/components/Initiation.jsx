@@ -131,7 +131,7 @@ const Initiation = () => {
         </div>
       </div>
 
-      <div className="relative h-[410px] w-full mt-[40px]">
+      <div className="relative h-[410px] md:h-[667px] w-full mt-[40px]">
         <Image
           src="/evvaprevfooter.svg"
           alt="Initiation Background"

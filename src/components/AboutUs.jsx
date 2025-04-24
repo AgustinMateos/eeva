@@ -3,9 +3,9 @@ const AboutUs = () => {
     return (
         <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
             <div className="w-[80%]">
-                <div className="w-[720px] text-[#F2F2F2]">
+                <div className="w-[100%] md:w-[720px] text-[#F2F2F2]">
                     <div >
-                        <h3>OBJETIVO</h3>
+                        <h3 className="font-normal text-[28px] leading-[64px] tracking-[-0.04em]">OBJETIVO</h3>
                         <br />
                         <p>Nuestro objetivo en cada colección es poder transmitir una narrativa única mediante nuestras prendas,
                             brindando emociones y sensaciones que conecten con la esencia de quienes las usan. Cada pieza está diseñada
@@ -24,7 +24,7 @@ const AboutUs = () => {
                     <br />
 
                     <div >
-                        <h3>ACERCA DE NOSOTROS</h3>
+                        <h3 className="font-normal text-[28px] leading-[64px] tracking-[-0.04em]">ACERCA DE NOSOTROS</h3>
                         <br />
                         <p>Eeva es un estudio de diseño con base en Buenos Aires, Argentina, fundado en 2025. Más que una marca, somos una expresión artística que busca contar historias a través del diseño, creando estéticas que representan emociones y sensaciones.
                         </p>
@@ -40,7 +40,7 @@ const AboutUs = () => {
                     <br />
 
                     <div >
-                        <h3>EL VALOR DE EEVA STUDIOS</h3>
+                        <h3 className="font-normal text-[28px] leading-[34px] md:leading-[64px] tracking-[-0.04em]">EL VALOR DE EEVA STUDIOS</h3>
                         <br />
                         <p>En EEVA STUDIOS, cada precio es estratégicamente seleccionado con un propósito claro. No solo refleja la complejidad del diseño y la calidad de los materiales, sino también la exclusividad de cada prenda. Creemos que el lujo no es solo lo que se ve, sino también lo que se siente: la experiencia, la historia detrás de cada colección y el nivel de detalle en cada aspecto de la marca.
                         </p>
@@ -56,7 +56,7 @@ const AboutUs = () => {
                     <br />
 
                     <div >
-                        <h3>POLÍTICA DE CAMBIOS</h3>
+                        <h3 className="font-normal text-[28px] leading-[64px] tracking-[-0.04em]">POLÍTICA DE CAMBIOS</h3>
                         <br />
                         <p>Productos que aceptamos para cambio</p>
                         <ul>
@@ -108,7 +108,7 @@ const AboutUs = () => {
                 </div>
 
             </div>
-            <div className="h-[315px] flex md:min-w-[1315px]">
+            <div className="h-[315px] flex min-w-[100%]  md:min-w-[1315px]">
                 <Footer />
             </div>
         </div>
