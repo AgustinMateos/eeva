@@ -228,7 +228,7 @@ const Navbar = () => {
                         <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
                           <div className="flex flex-col py-2 space-y-1 px-2">
                             <a
-                              href="/collections/topsm"
+                              href="/collections/topw"
                               className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
                               onClick={() => setIsMujerOpen(false)}
                             >
