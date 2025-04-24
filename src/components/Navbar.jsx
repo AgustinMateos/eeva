@@ -253,9 +253,12 @@ const Navbar = () => {
                       )}
                     </div>
                     <div className="mt-2">
+                      
+                      <Link href="/collections/aboutus">
                       <p className="backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] flex justify-center items-center text-center bg-[#A8A8A81A] w-full">
                         ABOUT US
-                      </p>
+                      </p></Link>
+                      
                     </div>
                   </div>
                 </div>
@@ -398,9 +401,11 @@ const Navbar = () => {
             >
               <Image src={'/lupa.svg'} width={24} height={24} alt="lupa" />
             </button>
-            <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] justify-center items-center text-center bg-[#A8A8A81A] w-[120px]">
+            <Link href="/collections/aboutus">
+          <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] justify-center items-center text-center bg-[#A8A8A81A] w-[120px]">
               ABOUT US
-            </p>
+            </p></Link>
+            
             <p className="backdrop-blur-[6px] bg-[#A8A8A81A] text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px]">
               0
             </p>
