@@ -120,7 +120,7 @@ const Navbar = () => {
             </button>
             {/* Dropdown del menú hamburguesa */}
             {isOpen && (
-              <div className="absolute top-0 md:top-[78px]  md:left-[140px] left-0 w-1/2 md:w-[200px] h-screen md:h-auto backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A] text-white z-50 overflow-y-auto">
+              <div className="absolute top-0 md:top-[78px] w-[323px]  md:left-[140px] left-0 md:w-[200px] h-screen md:h-auto backdrop-blur-[6px] rounded-[2px] border-[0.5px] bg-[#A8A8A81A] text-white z-50 overflow-y-auto">
                 <div className="flex flex-col p-4  space-y-2">
                   {/* Colecciones en desktop */}
                   <div className="hidden md:block">
@@ -140,9 +140,9 @@ const Navbar = () => {
                     ))}
                   </div>
 
-                  {/* Botones en móvil */}
-                  <div className="block md:hidden">
-                    <div className="flex justify-end">
+                  {/* Botones en mobile */}
+                  <div className="block md:hidden ">
+                    <div className="flex ">
                       <button onClick={() => setIsOpen(false)} className="focus:outline-none">
                         <Image src="/XMenuIcon.svg" width={24} height={24} alt="close menu" />
                       </button>
@@ -150,20 +150,21 @@ const Navbar = () => {
                     <div className="mt-2">
                       <button
                         onClick={toggleSearchModal}
-                        className="backdrop-blur-[6px] text-center w-[60px] h-[36px] flex items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px] focus:outline-none"
+                        className=" text-center w-[100%] h-[36px] flex items-center justify-between "
                       >
+                        <p>BUSCAR</p>
                         <Image src={'/lupa.svg'} width={24} height={24} alt="lupa" />
                       </button>
                     </div>
                     <div className="mt-2" ref={coleccionesRef}>
                       <button
                         onClick={toggleColeccionesDropdown}
-                        className="w-full backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                        className="w-full uppercase flex h-[36px] text-center  focus:outline-none"
                       >
                         Colecciones
                       </button>
                       {isColeccionesOpen && (
-                        <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
+                        <div className="mt-2 w-full   text-white z-50">
                           <div className="flex flex-col py-2 space-y-1 px-2">
                             {colecciones.map((coleccion, index) => (
                               <Link
@@ -185,30 +186,30 @@ const Navbar = () => {
                     <div ref={hombreRef} className="relative mt-2">
                       <button
                         onClick={toggleHombreDropdown}
-                        className="w-full backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                        className="w-full  flex  h-[36px] text-center  focus:outline-none"
                       >
-                        H
+                        HOMBRE
                       </button>
                       {isHombreOpen && (
-                        <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
+                        <div className="mt-2 w-full   text-white z-50">
                           <div className="flex flex-col py-2 space-y-1 px-2">
                             <a
                               href="/collections/topsm"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              className=" flex  h-[30px] text-center  "
                               onClick={() => setIsHombreOpen(false)}
                             >
                               Top
                             </a>
                             <a
                               href="/collections/bottomm"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              className="flex  h-[30px] text-center  "
                               onClick={() => setIsHombreOpen(false)}
                             >
                               Bottom
                             </a>
                             <a
                               href="/collections/accesoriesm"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              className="flex  h-[30px] text-center "
                               onClick={() => setIsHombreOpen(false)}
                             >
                               Accesories
@@ -220,30 +221,30 @@ const Navbar = () => {
                     <div ref={mujerRef} className="relative mt-2">
                       <button
                         onClick={toggleMujerDropdown}
-                        className="w-full backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                        className="w-full  flex  h-[36px] text-center "
                       >
-                        M
+                        MUJER
                       </button>
                       {isMujerOpen && (
-                        <div className="mt-2 w-full backdrop-blur-[6px] bg-[#A8A8A81A] text-white shadow-lg z-50">
+                        <div className="mt-2 w-full  text-white z-50">
                           <div className="flex flex-col py-2 space-y-1 px-2">
                             <a
                               href="/collections/topw"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              className=" flex  h-[30px] text-center "
                               onClick={() => setIsMujerOpen(false)}
                             >
                               Top
                             </a>
                             <a
                              href="/collections/bottomw"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              className=" flex  h-[30px] text-center "
                               onClick={() => setIsMujerOpen(false)}
                             >
                               Bottom
                             </a>
                             <a
                               href="/collections/accesoriesg"
-                              className="backdrop-blur-[6px] flex justify-center items-center h-[30px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]"
+                              className=" flex  h-[30px] text-center "
                               onClick={() => setIsMujerOpen(false)}
                             >
                               Accesories
@@ -255,7 +256,7 @@ const Navbar = () => {
                     <div className="mt-2">
                       
                       <Link href="/collections/aboutus">
-                      <p className="backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] flex justify-center items-center text-center bg-[#A8A8A81A] w-full">
+                      <p className="  h-[36px] flex  text-center  w-full">
                         ABOUT US
                       </p></Link>
                       
