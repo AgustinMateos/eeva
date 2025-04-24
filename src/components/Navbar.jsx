@@ -415,67 +415,86 @@ const Navbar = () => {
 
       {/* Modal de búsqueda */}
       {isSearchModalOpen && (
-        <div className="fixed inset-0 bg-black backdrop-blur-[6px] bg-opacity-50 flex z-50">
-          <div
-            ref={modalRef}
-            className="h-[50%] rounded-lg p-6 w-full max-w-[65rem] mt-[10px] text-white"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <button onClick={toggleSearchModal} className="focus:outline-none">
-                <Image src="/XMenuIcon.svg" width={24} height={24} alt="close modal" />
-              </button>
-            </div>
-            <input
-              type="text"
-              placeholder="Enter your search term..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 rounded-md bg-[#FFFFFF1A] border-[0.5px] border-white text-white placeholder-gray-300 focus:outline-none"
-            />
-            <div className="mt-4 w-full bg-[#FFFFFF1A] border-[0.5px] border-white rounded-md p-2 text-white overflow-y-auto">
-              {/* Sección fija de productos más buscados */}
-              <div className="mb-4">
-                <p className="mb-2 font-semibold">Productos más buscados:</p>
-                <ul className="space-y-2">
-                  {topSearchedProducts.map((product) => (
-                    <li
-                      key={product.id}
-                      className="cursor-pointer hover:underline"
-                      onClick={() => setSearchTerm(product.title)}
-                    >
-                      {product.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Sección dinámica de resultados de búsqueda */}
-              {searchTerm !== '' && (
-                <div>
-                  {filteredProducts.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                      {filteredProducts.map((product) => (
-                        <div key={product.id} className="flex flex-col items-center">
-                          <Image
-                            src={product.image}
-                            width={150}
-                            height={150}
-                            alt={product.title}
-                            className="rounded-md"
-                          />
-                          <p className="mt-2 text-center">{product.title}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p>No se encontraron productos</p>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
+  <div className="fixed inset-0 bg-black backdrop-blur-[6px] bg-opacity-50 flex z-50">
+    <div
+      ref={modalRef}
+      className="h-[50%] rounded-lg p-6 w-full max-w-[65rem] mt-[10px] text-white"
+    >
+      <div className="relative w-full">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 pr-20 rounded-md bg-[#FFFFFF1A] border-[0.5px] border-white text-white focus:outline-none"
+          style={{ paddingLeft: '40px' }} // Space for the magnifying glass
+        />
+        <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
+          <Image
+            src="/lupa.svg"
+            width={24}
+            height={24}
+            alt="search icon"
+          />
         </div>
-      )}
+        {/* Botón Limpiar */}
+        <button
+          onClick={() => setSearchTerm('')}
+          className="absolute right-10 top-1/2 transform -translate-y-1/2 text-white text-sm px-2 py-1 focus:outline-none"
+        >
+          LIMPIAR
+        </button>
+        {/* Botón Cerrar */}
+        <button
+          onClick={toggleSearchModal}
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 focus:outline-none"
+        >
+          <Image src="/XMenuIcon.svg" width={24} height={24} alt="close modal" />
+        </button>
+      </div>
+      <div className="mt-4 w-full bg-[#FFFFFF1A] border-[0.5px] border-white rounded-md p-2 text-white overflow-y-auto">
+        {/* Dynamic search results section */}
+        {searchTerm !== '' && (
+          <div className="m-4">
+            <h4 className="uppercase">Resultados</h4>
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                {filteredProducts.map((product) => (
+                  <div key={product.id} className="flex flex-col items-center">
+                    <Image
+                      src={product.image}
+                      width={150}
+                      height={150}
+                      alt={product.title}
+                      className="rounded-md"
+                    />
+                    <p className="mt-2 text-center">{product.title}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No se encontraron productos</p>
+            )}
+          </div>
+        )}
+        {/* Fixed top searched products section */}
+        <div className="m-4">
+          <p className="mb-2 font-semibold uppercase">Más buscado</p>
+          <ul className="w-[55%] flex items-center justify-evenly">
+            {topSearchedProducts.map((product) => (
+              <li
+                key={product.id}
+                className="cursor-pointer text-[12px] min-w-[150px] items-center text-center justify-center flex h-[30px] rounded border-[0.5px] gap-[10px] p-2 px-4"
+                onClick={() => setSearchTerm(product.title)}
+              >
+                {product.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
