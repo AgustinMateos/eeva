@@ -36,11 +36,11 @@ const Initiation = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <h1 className="text-white text-4xl font-bold pb-[30px]">INITIATION</h1>
-      <p className="text-white text-lg text-center max-w-2xl uppercase">
+      <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px]">INITIATION</h1>
+      <p className="text-white pl-[15px]  pr-[15px] text-[10px] md:text-lg text-center max-w-2xl uppercase">
         “INITIATION” Winter 2025 reinterpreta el futuro.
       </p>
-      <p className="text-white text-lg text-center max-w-[1250px] mb-8 uppercase">
+      <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-[1250px] mb-8 uppercase">
         Más allá de diseños extravagantes, apuesta por lo puro, lo simple y lo intencional. Líneas
         limpias, caídas estructuradas y monocromía absoluta dan forma a prendas pensadas para
         transmitir fuerza, identidad y cohesión.
@@ -162,9 +162,9 @@ const Initiation = () => {
           fill
           className="object-cover"
         />
-        <div className="absolute top-[95px] right-0 p-4 text-white  ">
-         <h5 className='text-sm md:text-lg font-semibold flex justify-end w-[460px]'>INITIATION</h5>
-         <p className='text-[12px] w-[480px]'>Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor hendrerit.</p>
+        <div className="absolute top-[95px] right-0 p-4 text-white  mr-[0px] md:mr-[40px]  ">
+         <h5 className='text-sm md:text-lg font-semibold flex justify-end '>INITIATION</h5>
+         <div className='text-[8px] text-end md:text-[12px] w-[100%] flex justify-end  md:w-[480px]'><p className='w-[281px] md:w-[480px]'>Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor hendrerit.</p></div>
         </div>
       </div>
 
