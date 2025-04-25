@@ -39,7 +39,7 @@ const Footer = () => {
             <Image src="/x.svg" width={11} height={18} alt="cross" />
           </a>
            {/* Fabebook */}
-           <a href={socialLinks.tiktok} target="_blank" rel="noopener noreferrer" className="flex items-center">
+           <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center">
             <p className="pr-[40px] block md:hidden">FB</p>
             <p className="pr-[40px] hidden md:block">FACEBOOK</p>
             
