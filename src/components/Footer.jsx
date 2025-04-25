@@ -6,6 +6,7 @@ const Footer = () => {
   const socialLinks = {
     instagram: 'https://www.instagram.com/eevastudios?igsh=bzA3YXhwaWdiNjBm&utm_source=qr', // Cambia por la URL real
     tiktok: 'https://www.tiktok.com/@eeva.studios?_t=ZM-8vl83zKp6UJ&_r=1', // Cambia por la URL real
+    facebook: 'https://www.facebook.com/Eevastudios', // Cambia por la URL real
   };
 
   return (
@@ -36,6 +37,12 @@ const Footer = () => {
             <p className="pr-[40px] block md:hidden">TK</p>
             <p className="pr-[40px] hidden md:block">TIKTOK</p>
             <Image src="/x.svg" width={11} height={18} alt="cross" />
+          </a>
+           {/* Fabebook */}
+           <a href={socialLinks.tiktok} target="_blank" rel="noopener noreferrer" className="flex items-center">
+            <p className="pr-[40px] block md:hidden">FB</p>
+            <p className="pr-[40px] hidden md:block">FACEBOOK</p>
+            
           </a>
         </div>
 
