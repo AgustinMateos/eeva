@@ -73,14 +73,7 @@ const AboutUs = () => {
                             <li>	•	Productos en promoción o en liquidación, salvo defecto de fábrica.</li>
                             
                         </ul>
-                        <br />
-                        <p>Productos que aceptamos para cambio</p>
-                        <ul>
-                            <li>• Prendas sin uso, sin lavar y en perfecto estado.</li>
-                            <li>• Con etiquetas originales adheridas y en su empaque original.</li>
-                            <li>• Si el producto vino con caja, debe ser devuelto en la misma caja y en buen estado.</li>
-                            <li>• Se aceptan cambios dentro de los 30 días posteriores a la compra.</li>
-                        </ul>
+                        <br/>
                         <br/>
                         <p>Cambios por talle</p>
                         <ul>
