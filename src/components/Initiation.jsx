@@ -41,7 +41,9 @@ const Initiation = () => {
         “INITIATION” Winter 2025 reinterpreta el futuro.
       </p>
       <p className="text-white text-lg text-center max-w-[1250px] mb-8 uppercase">
-        Más allá de diseños extravagantes, apuesta por lo puro, lo simple y lo intencional. Líneas limpias, caídas estructuradas y monocromía absoluta dan forma a prendas pensadas para transmitir fuerza, identidad y cohesión.
+        Más allá de diseños extravagantes, apuesta por lo puro, lo simple y lo intencional. Líneas
+        limpias, caídas estructuradas y monocromía absoluta dan forma a prendas pensadas para
+        transmitir fuerza, identidad y cohesión.
       </p>
 
       {/* Contenedor del video */}
@@ -66,12 +68,12 @@ const Initiation = () => {
 
       <div className="w-full max-w-[90%] mx-auto mt-[60px]">
         {/* Primer grid de cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {cardData1.map((card) => (
             <Link
               key={card.id}
               href={`/products/${card.id}`}
-              className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
+              className="group w-full h-auto relative flex flex-col"
             >
               <Image
                 src={card.image}
@@ -90,28 +92,49 @@ const Initiation = () => {
           ))}
         </div>
 
-        {/* Segundo grid con las imágenes centradas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-[60px] mb-[60px]">
-          {ImgMiddle.map((card) => (
-            <div key={card.id} className="flex justify-center items-center h-auto">
-              <Image
-                src={card.image}
-                alt={`Middle image ${card.id}`}
-                width={500}
-                height={900}
-                className="object-cover w-full max-w-[500px] h-auto"
-              />
-            </div>
-          ))}
+        {/* Segundo grid con las imágenes centradas (slider en mobile) */}
+        <div className="mt-[60px] mb-[60px]">
+          {/* Slider for mobile */}
+          <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+            {ImgMiddle.map((card) => (
+              <div
+                key={card.id}
+                className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2"
+              >
+                <Image
+                  src={card.image}
+                  alt={`Middle image ${card.id}`}
+                  width={500}
+                  height={900}
+                  className="object-cover w-full h-auto"
+                />
+              </div>
+            ))}
+          </div>
+          {/* Grid for desktop */}
+          <div className="hidden md:grid md:grid-cols-2 md:gap-6">
+            {ImgMiddle.map((card) => (
+              <div key={card.id} className="flex justify-center items-center h-auto">
+                <Image
+                  src={card.image}
+                  alt={`Middle image ${card.id}`}
+                  width={500}
+                  height={900}
+                  className="object-cover w-full max-w-[500px] h-auto"
+                />
+              </div>
+            ))}
+          </div>
+          <p className='text-[#FFFFFF] pl-[10px] md:pl-[68px] pt-[20px]'>INTENSE | STRONG | BOLD W25</p>
         </div>
 
         {/* Tercer grid de cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
           {cardData2.map((card) => (
             <Link
               key={card.id}
               href={`/products/${card.id}`}
-              className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
+              className="group w-full h-auto relative flex flex-col"
             >
               <Image
                 src={card.image}
@@ -131,13 +154,18 @@ const Initiation = () => {
         </div>
       </div>
 
-      <div className="relative h-[410px] md:h-[667px] w-full mt-[40px]">
+     {/* Image with text in top-right corner */}
+     <div className="relative h-[410px] md:h-[667px] w-full mt-[40px]">
         <Image
           src="/evvaprevfooter.svg"
           alt="Initiation Background"
           fill
           className="object-cover"
         />
+        <div className="absolute top-[95px] right-0 p-4 text-white  ">
+         <h5 className='text-sm md:text-lg font-semibold flex justify-end w-[460px]'>INITIATION</h5>
+         <p className='text-[12px] w-[480px]'>Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor hendrerit.</p>
+        </div>
       </div>
 
       <div className="h-[315px] flex md:min-w-[1315px]">
