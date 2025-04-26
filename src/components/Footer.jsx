@@ -34,7 +34,7 @@ const Footer = () => {
           </a>
           {/* TikTok */}
           <a href={socialLinks.tiktok} target="_blank" rel="noopener noreferrer" className="flex items-center">
-            <p className="pr-[40px] block md:hidden">TK</p>
+            <p className="pr-[40px] block md:hidden">TIKTOK</p>
             <p className="pr-[40px] hidden md:block">TIKTOK</p>
             <Image src="/x.svg" width={11} height={18} alt="cross" />
           </a>
