@@ -130,7 +130,7 @@ const Navbar = () => {
             )}
             {/* Dropdown del menú hamburguesa */}
             {isOpen && (
-              <div className="absolute top-0 md:top-[78px] w-[323px] md:left-[140px] left-0 md:w-[200px] h-screen md:h-auto bg-[#182025B2] md:bg-white backdrop-blur-[30px]  text-white z-50 overflow-y-auto md:backdrop-blur-[6px] rounded-[2px] border-[0.5px] md:bg-[#A8A8A81A]">
+              <div className="absolute top-0 md:top-[78px] w-[323px] md:left-[140px] left-0 md:w-[200px] h-screen md:h-auto bg-[#182025B2]  backdrop-blur-[30px]  text-white z-50 overflow-y-auto md:backdrop-blur-[6px] rounded-[2px] border-[0.5px] md:bg-[#A8A8A81A]">
                 <div className="flex flex-col p-4 space-y-2">
                   {/* Colecciones en desktop */}
                   <div className="hidden md:block">
