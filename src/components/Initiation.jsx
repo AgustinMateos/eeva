@@ -87,7 +87,7 @@ const Initiation = () => {
                   SEE PRODUCT
                 </span>
               </div>
-              <h3 className="text-[#FFFFFF] text-center mt-2">{card.title}</h3>
+              <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">{card.title}</h3>
             </Link>
           ))}
         </div>
@@ -148,7 +148,7 @@ const Initiation = () => {
                   SEE PRODUCT
                 </span>
               </div>
-              <h3 className="text-[#FFFFFF] text-center mt-2">{card.title}</h3>
+              <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">{card.title}</h3>
             </Link>
           ))}
         </div>

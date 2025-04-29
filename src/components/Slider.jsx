@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // Importa Link de Next.js
+import Link from 'next/link';
 
 const options = [
   { id: 1, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
@@ -17,11 +17,22 @@ export default function Slider() {
   const [previousIndex, setPreviousIndex] = useState(2);
   const [transitionProgress, setTransitionProgress] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const extendedOptions = [...options.slice(-2), ...options, ...options.slice(0, 2)];
   const totalItems = extendedOptions.length;
 
-  const handleClick = (index) => {
+  // Detect if the device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleInteraction = (index) => {
     if (index === currentIndex || isTransitioning) return;
 
     setPreviousIndex(currentIndex);
@@ -97,14 +108,18 @@ export default function Slider() {
                 key={`${option.id}-${index}`}
                 className={`w-[20%] flex-shrink-0 px-4 transition-all duration-300 cursor-pointer
                   ${index === currentIndex ? 'scale-110 z-10' : 'scale-90 opacity-70'}`}
-                onClick={() => handleClick(index)} // Mantienes el cambio de índice
+                onTouchStart={() => isMobile && handleInteraction(index)} // Mobile tap
+                onClick={() => !isMobile && handleInteraction(index)} // Desktop click
               >
-                <div  className="block">
+                <div className="block">
                   <div className="text-[#FFFFFF] rounded-lg p-4 text-center">
                     <h3 className="text-lg font-semibold uppercase">{option.name}</h3>
                     <p>{option.estado}</p>
-                    <Link href={option.link}>{index === currentIndex && <p>{option.estadoAccion}</p>}</Link>
-                    
+                    {index === currentIndex && (
+                      <Link href={option.link}>
+                        <p>{option.estadoAccion}</p>
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -126,7 +141,6 @@ export default function Slider() {
             }}
           />
         ))}
-
         <div
           className="absolute h-[4px] bg-[#F2F2F2] transition-transform duration-500 ease-in-out"
           style={{
