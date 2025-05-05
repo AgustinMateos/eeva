@@ -3,7 +3,7 @@ const AboutUs = () => {
     return (
         <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
             <div className="w-[80%]">
-                <div className="w-[100%] md:w-[720px] text-[#F2F2F2]">
+                <div className="w-[100%] md:w-[720px] text-[#F2F2F2] text-justify">
                     <div >
                         <h3 className="font-normal text-[28px] leading-[64px] tracking-[-0.04em]">OBJETIVO</h3>
                         <br />

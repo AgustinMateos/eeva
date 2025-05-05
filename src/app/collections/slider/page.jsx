@@ -1,4 +1,4 @@
-import Initiation from '@/components/Initiation'
+import Initiation from '@/components/Initiation2'
 import Slider from '@/components/Slider'
 import React from 'react'
 
