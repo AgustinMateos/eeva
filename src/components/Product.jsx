@@ -94,7 +94,7 @@ const Product = () => {
 
   return (
     <div className="h-[1022px] flex justify-center items-center">
-      <div className="h-[800px] w-[1232px] flex justify-between">
+      <div className="h-[800px] max-w-[1232px] flex justify-between flex-col md:flex-row">
 
 
         {/*modelo */}
