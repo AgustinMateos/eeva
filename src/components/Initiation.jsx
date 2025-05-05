@@ -24,16 +24,16 @@ const Initiation = () => {
     const fetchInitiationCollection = async () => {
       try {
         const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections');
-        // Buscar la colección INITIATION
+        // Buscar la colección 
         const initiationCollection = response.data.find(
           (collection) => collection.title.toUpperCase() === 'INITIATION'
         );
         if (initiationCollection && initiationCollection.products) {
-          // Mapear productos al formato esperado
+         
           const formattedProducts = initiationCollection.products.map((product) => ({
             id: product._id,
             title: product.displayName || product.name || 'Producto sin título',
-            image: `/${product.image}`,
+            image: `/${product.models.images.static}`,
           }));
           setProducts(formattedProducts);
           setDescription(initiationCollection.description || 'Descripción no disponible');
@@ -100,7 +100,7 @@ const Initiation = () => {
       </div>
 
       <div className="w-full max-w-[90%] mx-auto mt-[60px]">
-        {/* Primer grid de tarjetas */}
+        {/* Primer grid de tarjetas de productos */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {products.map((card) => (
             <Link

@@ -111,7 +111,7 @@ const Product = () => {
             <div className="w-[200px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
               {Array.from({ length: 40 }, (_, index) => {
                 // Definir diferentes rangos de altura máxima de forma aleatoria
-                const maxHeightOptions = [30, 40, 50, 60]; // Diferentes alturas máximas (mitad, 2/3, completo)
+                const maxHeightOptions = [5, 10, 15, 30]; // Diferentes alturas máximas (mitad, 2/3, completo)
                 const maxHeight = maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)]; // Selecciona un máximo aleatorio
                 const animationClass = `animate-pulseHeight-${maxHeight}`; // Clase de animación según la altura máxima
                 const delay = Math.random() * 2; // Retraso aleatorio entre 0 y 2 segundos
@@ -306,11 +306,9 @@ const Product = () => {
             {isDetailsOpen && (
               <div className="font-normal text-[12px] leading-[100%] tracking-[-0.04em] text-justify align-middle">
                 <p>
-                  Campera técnica de mujer, confeccionada en 100% nylon, con una silueta abombada que aporta volumen y una construcción marcada por múltiples rectores en ángulos rectos, reforzando una estética de fuerza y modernidad. Diseñada para definir la silueta y transmitir precisión visual, cuenta con cuello alto y cierre medio, equilibrando funcionalidad y estilo. Su diseño en blanco hueso y negro resalta los contrastes y potencia su impacto visual.
+                {product.details}
                 </p>
-                <p>
-                  Las telas fueron cuidadosamente seleccionadas para garantizar la mejor calidad y durabilidad, utilizando materiales importados que elevan el nivel de la prenda.
-                </p>
+                
               </div>
             )}
           </div>
@@ -331,17 +329,14 @@ const Product = () => {
             {isProductCareOpen && (
               <div className="font-normal text-[12px] leading-[100%] tracking-[-0.04em] text-justify align-middle">
                 <p>
-                  Campera técnica de mujer, confeccionada en 100% nylon, con una silueta abombada que aporta volumen y una construcción marcada por múltiples rectores en ángulos rectos, reforzando una estética de fuerza y modernidad. Diseñada para definir la silueta y transmitir precisión visual, cuenta con cuello alto y cierre medio, equilibrando funcionalidad y estilo. Su diseño en blanco hueso y negro resalta los contrastes y potencia su impacto visual.
+                {product.productCare}
                 </p>
-                <p>
-                  Las telas fueron cuidadosamente seleccionadas para garantizar la mejor calidad y durabilidad, utilizando materiales importados que elevan el nivel de la prenda.
-                </p>
+               
               </div>
             )}
           </div>
         </div>
       </div>
-      {/* Modal de Shop Look */}
       {isShopLookOpen && (
   <div
     className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50"
@@ -370,96 +365,75 @@ const Product = () => {
 
       <div className="flex w-full h-[523px] justify-center items-center">
         <div className="h-full w-full flex flex-col items-center justify-between">
-          {/* Contenedor de productos */}
+          {/* Contenedor de productos looks */}
           <div className="flex justify-between w-full h-[400px]">
-            {/* Producto 1 */}
-            <div className="w-[300px] h-full rounded-[6px] flex flex-col items-center justify-between p-4">
-              <Image
-                src="/product1.jpg" // Reemplaza con la ruta de la imagen del producto 1
-                alt="Product 1"
-                width={200}
-                height={250}
-                className="object-cover"
-              />
-              <p className="text-white text-[14px] uppercase mt-2">Native Iron Trunk</p>
-              <p className="text-white text-[14px]">ARS $128.000</p>
-              <div className="flex space-x-2 mt-2">
-                <div className="w-4 h-4  rounded-full"></div>
-                <div className="w-4 h-4  rounded-full"></div>
-                <div className="w-4 h-4  rounded-full"></div>
-              </div>
-              <div className="flex space-x-2 mt-2">
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">S</button>
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">M</button>
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">L</button>
-              </div>
-              <div className='w-[207px] mt-[20px] h-[40px] px-[20px] py-[6px] gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]'>
-                <button className="w-full   text-white  uppercase">
-                + Add
-              </button></div>
-            </div>
+            {product.looks && product.looks.length > 0 ? (
+              product.looks.map((look, index) => {
+                // Calcular precio con descuento
+                const discountedPrice = look.discount
+                  ? look.price - (look.price * (look.discount / 100))
+                  : look.price;
 
-            {/* Producto 2 */}
-            <div className="w-[300px] h-full  rounded-[6px] flex flex-col items-center justify-between p-4">
-              <Image
-                src="/product2.jpg" // Reemplaza con la ruta de la imagen del producto 2
-                alt="Product 2"
-                width={200}
-                height={250}
-                className="object-cover"
-              />
-              <p className="text-white text-[14px] uppercase mt-2">Native Iron Trunk</p>
-              <p className="text-white text-[14px]">ARS $128.000</p>
-              <div className="flex space-x-2 mt-2">
-                <div className="w-4 h-4  rounded-full"></div>
-                <div className="w-4 h-4  rounded-full"></div>
-                <div className="w-4 h-4 bg-white rounded-full"></div>
-              </div>
-              <div className="flex space-x-2 mt-2">
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">S</button>
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">M</button>
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">L</button>
-              </div>
-              <div className='w-[207px] mt-[20px] h-[40px] px-[20px] py-[6px] gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]'>
-                <button className="w-full   text-white  uppercase">
-                + Add
-              </button></div>
-            </div>
+                // Obtener tallas disponibles
+                const lookSizes = look.colors.flatMap((c) => c.sizes);
 
-            {/* Producto 3 */}
-            <div className="w-[300px] h-full  rounded-[6px] flex flex-col items-center justify-between p-4">
-              <Image
-                src="/product3.jpg" // Reemplaza con la ruta de la imagen del producto 3
-                alt="Product 3"
-                width={200}
-                height={250}
-                className="object-cover"
-              />
-              <p className="text-white text-[14px] uppercase mt-2">Native Iron Trunk</p>
-              <p className="text-white text-[14px]">ARS $128.000</p>
-              <div className="flex space-x-2 mt-2">
-                <div className="w-4 h-4  rounded-full"></div>
-                <div className="w-4 h-4  rounded-full"></div>
-                <div className="w-4 h-4  rounded-full"></div>
-              </div>
-              <div className="flex space-x-2 mt-2 ">
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">S</button>
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">M</button>
-                <button className="w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white">L</button>
-              </div>
-              <div className='w-[207px] mt-[20px] h-[40px] px-[20px] py-[6px] gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]'>
-                <button className="w-full   text-white  uppercase">
-                + Add
-              </button></div>
-              
-            </div>
+                return (
+                  <div
+                    key={index}
+                    className="w-[300px] h-full rounded-[6px] flex flex-col items-center justify-between p-4"
+                  >
+                    <Image
+                      src={`/${look.image}`} // Asegúrate de que la ruta de la imagen sea correcta
+                      alt={look.displayName}
+                      width={200}
+                      height={250}
+                      className="object-cover"
+                    />
+                    <p className="text-white text-[14px] uppercase mt-2">{look.displayName}</p>
+                    <p className="text-white text-[14px]">
+                      ARS ${discountedPrice.toFixed(2)}
+                      {look.discount > 0 && (
+                        <span className="line-through text-gray-400 ml-2">
+                          ${look.price.toFixed(2)}
+                        </span>
+                      )}
+                    </p>
+                    <div className="flex space-x-2 mt-2">
+                      {['S', 'M', 'L'].map((size, sizeIndex) => {
+                        const sizeData = lookSizes.find((s) => s.size === size);
+                        const stock = sizeData ? sizeData.stock : 0;
+                        return (
+                          <button
+                            key={sizeIndex}
+                            className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
+                              stock <= 0 ? 'line-through opacity-50' : ''
+                            }`}
+                            disabled={stock <= 0}
+                          >
+                            {size}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="w-[207px] mt-[20px] h-[40px] px-[20px] py-[6px] gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
+                      <button className="w-full text-white uppercase">+ Add</button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="text-white">No hay looks disponibles</p>
+            )}
           </div>
 
           {/* Botón Finish Adding */}
-          <div className='w-[889px] flex justify-end'> <button className="w-[208px] h-[40px] px-[20px] py-[6px] gap-2 rounded-[2px] bg-[#0D0D0DE5] backdrop-blur-[6px]">
-            <p className='font-medium text-[14px] leading-[14px] tracking-[0.1em] uppercase text-[#F2F2F2]'>Finish Adding</p>
-          </button> </div>
-          
+          <div className="w-[889px] flex justify-end">
+            <button className="w-[208px] h-[40px] px-[20px] py-[6px] gap-2 rounded-[2px] bg-[#0D0D0DE5] backdrop-blur-[6px]">
+              <p className="font-medium text-[14px] leading-[14px] tracking-[0.1em] uppercase text-[#F2F2F2]">
+                Finish Adding
+              </p>
+            </button>
+          </div>
         </div>
       </div>
     </div>

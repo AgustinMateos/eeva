@@ -1,10 +1,10 @@
 
-import InitiationBack from '@/components/Initiation'
+import InitiationBack from '@/components/Initiation2'
 import React from 'react'
 
 const page = () => {
   return (
-    <div><InitiationBack/></div>
+    <div><Initiation2/></div>
   )
 }
 
