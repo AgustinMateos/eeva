@@ -6,16 +6,12 @@ import Link from 'next/link';
 import Axios from 'axios';
 import Footer from './Footer';
 
-const ImgMiddle = [
-  { id: 1, image: '/InitiationMiddle.svg' },
-  { id: 2, image: '/InitiationMiddle2.svg' },
-];
-
 const Initiation = () => {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
   const [products, setProducts] = useState([]);
   const [description, setDescription] = useState('');
+  const [middleImages, setMiddleImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,8 +24,8 @@ const Initiation = () => {
         const initiationCollection = response.data.find(
           (collection) => collection.title.toUpperCase() === 'INITIATION'
         );
-        if (initiationCollection && initiationCollection.products) {
-         
+        if (initiationCollection) {
+          // Formatear productos
           const formattedProducts = initiationCollection.products.map((product) => ({
             id: product._id,
             title: product.displayName || product.name || 'Producto sin título',
@@ -37,6 +33,12 @@ const Initiation = () => {
           }));
           setProducts(formattedProducts);
           setDescription(initiationCollection.description || 'Descripción no disponible');
+          // Formatear imágenes middle
+          const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
+            id: index + 1, // Generar ID único basado en el índice
+            image: `/${image}`, // Asegúrate de que las imágenes estén en /public o ajusta la ruta
+          }));
+          setMiddleImages(formattedMiddleImages);
         } else {
           setError('Colección INITIATION no encontrada');
         }
@@ -63,9 +65,9 @@ const Initiation = () => {
     return <div className="text-white text-center pt-[150px]">{error}</div>;
   }
 
-  // Si está cargando, no renderizar nada (o renderizar el contenido principal directamente)
+  // Si está cargando, no renderizar nada
   if (loading) {
-    return null; // No muestra nada mientras carga
+    return null;
   }
 
   return (
@@ -129,7 +131,7 @@ const Initiation = () => {
         <div className="mt-[60px] mb-[60px]">
           {/* Slider para móvil */}
           <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-            {ImgMiddle.map((card) => (
+            {middleImages.map((card) => (
               <div
                 key={card.id}
                 className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2"
@@ -146,7 +148,7 @@ const Initiation = () => {
           </div>
           {/* Grid para escritorio */}
           <div className="hidden md:grid md:grid-cols-2 md:gap-6">
-            {ImgMiddle.map((card) => (
+            {middleImages.map((card) => (
               <div key={card.id} className="flex justify-center items-center h-auto">
                 <Image
                   src={card.image}
