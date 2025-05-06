@@ -17,31 +17,45 @@ const Product = () => {
   const [isShopLookOpen, setIsShopLookOpen] = useState(false);
 
   // Magnifier states
-  const images = [
-    '/rotate1.svg', // Frente
-    '/rotate2.svg',
-    '/rotate3.svg',
-    '/rotate4.svg',
-    '/rotate5.svg',
-    '/rotate6.svg',
-  ];
+  const [images, setImages] = useState([]); // Array of image paths
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMagnifying, setIsMagnifying] = useState(false);
   const [lensPosition, setLensPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
 
-  // Fetch product data
+  // Fetch product data and set images
   useEffect(() => {
     if (!id) return;
 
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`https://eeva-api.vercel.app/api/v1/products/${id}`);
-        setProduct(response.data);
+        const fetchedProduct = response.data;
+        setProduct(fetchedProduct);
         setLoading(false);
-        if (response.data.colors && response.data.colors.length > 0) {
-          setSelectedColor(response.data.colors[0].color.name);
+
+        // Set images from static field with numbered suffixes
+        if (fetchedProduct.models?.images?.gif360) {
+          setImages([
+            `/${fetchedProduct.models.images.gif360}.svg`,
+            `/${fetchedProduct.models.images.gif360}2.svg`,
+            `/${fetchedProduct.models.images.gif360}3.svg`,
+            `/${fetchedProduct.models.images.gif360}4.svg`,
+            `/${fetchedProduct.models.images.gif360}5.svg`
+          ]);
+        } else {
+          setImages([
+            '/rotate1.svg',
+            '/rotate2.svg',
+            '/rotate3.svg',
+            '/rotate4.svg',
+            '/rotate5.svg'
+          ]);
+        }
+
+        if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
+          setSelectedColor(fetchedProduct.colors[0].color.name);
         }
       } catch (err) {
         setError('Error al cargar el producto');
@@ -54,7 +68,7 @@ const Product = () => {
 
   // Ciclar imágenes para el efecto de rotación
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || images.length === 0) return;
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -149,46 +163,48 @@ const Product = () => {
         {/* Modelo */}
         <div className="w-[519px] h-[600px] relative flex flex-col items-center">
           {/* Contenedor de la imagen */}
-          <div
-            className="relative"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleCloseMagnifier}
-          >
-            <Image
-              ref={imageRef}
-              src={images[currentImageIndex]}
-              alt={`Mannequin rotation ${currentImageIndex + 1}`}
-              width={545}
-              height={800}
-              className="object-contain"
-              priority
-            />
-            {/* Lupa */}
-            {isMagnifying && (
-              <div
-                className="absolute rounded-md shadow-lg bg-white bg-opacity-10"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  top: `${lensPosition.y - 60 - 20}px`, // Desplazar 20px arriba
-                  left: `${lensPosition.x - 60}px`,
-                  backgroundImage: `url(${images[currentImageIndex]})`,
-                  backgroundSize: `${545 * 2}px ${800 * 2}px`, // Zoom x2 basado en 545x800
-                  backgroundPosition: `-${lensPosition.x * 2 - 60}px -${
-                    lensPosition.y * 2 - 60
-                  }px`,
-                  pointerEvents: 'none',
-                  zIndex: 20,
-                }}
+          {images.length > 0 && (
+            <div
+              className="relative"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleCloseMagnifier}
+            >
+              <Image
+                ref={imageRef}
+                src={images[currentImageIndex] || '/rotate1.svg'} // Fallback si images está vacío
+                alt={`Product image ${currentImageIndex + 1}`}
+                width={545}
+                height={800}
+                className="object-contain"
+                priority
               />
-            )}
-          </div>
+              {/* Lupa */}
+              {isMagnifying && (
+                <div
+                  className="absolute rounded-md shadow-lg bg-white bg-opacity-10"
+                  style={{
+                    width: '120px',
+                    height: '120px',
+                    top: `${lensPosition.y - 60 - 20}px`, // Desplazar 20px arriba
+                    left: `${lensPosition.x - 60}px`,
+                    backgroundImage: `url(${images[currentImageIndex] || '/rotate1.svg'})`,
+                    backgroundSize: `${545 * 2}px ${800 * 2}px`, // Zoom x2 basado en 545x800
+                    backgroundPosition: `-${lensPosition.x * 2 - 60}px -${
+                      lensPosition.y * 2 - 60
+                    }px`,
+                    pointerEvents: 'none',
+                    zIndex: 20,
+                  }}
+                />
+              )}
+            </div>
+          )}
 
           {/* Botones de lupa */}
           <div className="flex flex-col items-center mt-4">
             <button
               onClick={handleMagnifyClick}
-              className="flex items-center text-white  px-4 py-2 rounded-lg  transition"
+              className="flex items-center text-white  px-4 py-2 "
               aria-label="Activate magnifying glass to pause and zoom"
               disabled={isMagnifying}
             >
@@ -206,12 +222,12 @@ const Product = () => {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-            
+             
             </button>
             {isMagnifying && (
               <button
                 onClick={handleCloseMagnifier}
-                className="mt-2 text-white bg-gray-800 px-4 py-2 rounded-lg hover:bg-gray-700 transition"
+                className="mt-2 text-white  px-4 py-2  transition"
                 aria-label="Close magnifying glass"
               >
                 <Image src="/XMenuIcon.svg" width={24} height={24} alt="close lupa" />
