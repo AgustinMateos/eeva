@@ -29,14 +29,14 @@ const Initiation = () => {
           const formattedProducts = initiationCollection.products.map((product) => ({
             id: product._id,
             title: product.displayName || product.name || 'Producto sin título',
-            image: `/${product.models.images.static}`,
+            image: `/${product.models.images.static}.svg`,
           }));
           setProducts(formattedProducts);
           setDescription(initiationCollection.description || 'Descripción no disponible');
           // Formatear imágenes middle
           const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
             id: index + 1, // Generar ID único basado en el índice
-            image: `/${image}`, // Asegúrate de que las imágenes estén en /public o ajusta la ruta
+            image: `/${image}.svg`, // Asegúrate de que las imágenes estén en /public o ajusta la ruta
           }));
           setMiddleImages(formattedMiddleImages);
         } else {

@@ -485,7 +485,7 @@ const Product = () => {
                           className="w-[300px] h-full rounded-[6px] flex flex-col items-center justify-between p-4"
                         >
                           <Image
-                            src={`/${look.image}`}
+                            src={`/${look.image}.png`}
                             alt={look.displayName}
                             width={200}
                             height={250}
