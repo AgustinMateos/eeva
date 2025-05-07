@@ -113,8 +113,8 @@ const Navbar = () => {
   return (
     <div className="absolute w-full">
       <div className="flex justify-around h-[90px] items-center">
-        <div className="w-[90px] md:w-[324px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
-          {/* Botón hamburguesa */}
+        <div className="min-w-[90px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
+          {/* Botón hamburguesa w-[90px] md:w-[324px]  */}
           <div ref={menuRef}>
             <button onClick={toggleDropdown} className={`${style.menuIcon} focus:outline-none`}>
               <Image
@@ -318,10 +318,11 @@ const Navbar = () => {
               <p>Collection</p>
               <span>07-07-2025</span>
               </div>
-              
-              <span className="text-[16px] font-medium">
+              <div>
+                <span className="text-[16px] font-medium">
                 {currentCollection.name}
-              </span>
+              </span></div>
+              
             </div>
           )}
           {/* Botones Hombre y Mujer fuera del menú hamburguesa (solo en desktop) */}
