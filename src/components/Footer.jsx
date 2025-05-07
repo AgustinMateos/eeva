@@ -12,15 +12,15 @@ const Footer = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center px-4 space-y-6 md:space-y-8">
       {/* Sección de logos y redes sociales (desktop y móvil) */}
-      <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center text-[#F9F9F9] space-y-4 md:space-y-0">
+      <div className="w-full max-w-5xl md:max-w-[72rem] 2xl:max-w-[92rem]  flex flex-col md:flex-row justify-between items-center text-[#F9F9F9] space-y-4 md:space-y-0">
         {/* Logos (e2.svg) */}
-        <div className="justify-center order-2 md:order-1 md:block hidden">
+        <div className="justify-center order-2 md:order-1 md:w-[260px] xl:w-[250px]  md:block hidden">
           <Image
             src="/e2.svg"
             width={143}
             height={89}
             alt="eevaLogo"
-            className="w-auto h-12 md:h-16"
+            className="w-auto h-12 md:h-16 "
           />
         </div>
 

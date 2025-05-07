@@ -11,6 +11,7 @@ const Initiation = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [products, setProducts] = useState([]);
   const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(''); // New state for title
   const [middleImages, setMiddleImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +21,7 @@ const Initiation = () => {
     const fetchInitiationCollection = async () => {
       try {
         const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections');
-        // Buscar la colección 
+        // Buscar la colección
         const initiationCollection = response.data.find(
           (collection) => collection.title.toUpperCase() === 'INITIATION'
         );
@@ -33,10 +34,11 @@ const Initiation = () => {
           }));
           setProducts(formattedProducts);
           setDescription(initiationCollection.description || 'Descripción no disponible');
+          setTitle(initiationCollection.title || 'Sin título'); // Set the title
           // Formatear imágenes middle
           const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
-            id: index + 1, // Generar ID único basado en el índice
-            image: `/${image}.svg`, // Asegúrate de que las imágenes estén en /public o ajusta la ruta
+            id: index + 1,
+            image: `/${image}.svg`,
           }));
           setMiddleImages(formattedMiddleImages);
         } else {
@@ -72,9 +74,11 @@ const Initiation = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px]">INITIATION</h1>
+      <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">
+        {title}
+      </h1>
       <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-2xl uppercase">
-        “INITIATION” Invierno 2025 reinterpreta el futuro.
+        “{title}” Invierno 2025 reinterpreta el futuro.
       </p>
       {/* Descripción obtenida del endpoint */}
       <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-[1250px] mb-8 uppercase">
@@ -122,7 +126,9 @@ const Initiation = () => {
                   SEE PRODUCT
                 </span>
               </div>
-              <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">{card.title}</h3>
+              <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">
+                {card.title}
+              </h3>
             </Link>
           ))}
         </div>
@@ -185,7 +191,9 @@ const Initiation = () => {
                   VER PRODUCTO
                 </span>
               </div>
-              <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">{card.title}</h3>
+              <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">
+                {card.title}
+              </h3>
             </Link>
           ))}
         </div>
@@ -200,7 +208,7 @@ const Initiation = () => {
           className="object-cover"
         />
         <div className="absolute top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px]">
-          <h5 className="text-sm md:text-lg font-semibold flex justify-end">INITIATION</h5>
+          <h5 className="text-sm md:text-lg font-semibold flex justify-end">{title}</h5>
           <div className="text-[8px] text-end md:text-[12px] w-[100%] flex justify-end md:w-[480px]">
             <p className="w-[281px] md:w-[480px]">
               Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla

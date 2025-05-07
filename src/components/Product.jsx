@@ -299,22 +299,22 @@ const Product = () => {
               ></div>
               <div className="pl-[20px]">
                 <div className="flex justify-between">
-                  <p>Nombre</p> <p className="w-[48px]">{product.models.name}</p>
+                  <p>Nombre</p> <p className="w-[48px] lowercase">{product.models.name}</p>
                 </div>
                 <div className="flex justify-between">
-                  <p>Altura</p> <p className="w-[48px]">{product.models.height}</p>
+                  <p>Altura</p> <p className="w-[48px] lowercase">{product.models.height}</p>
                 </div>
                 <div className="flex justify-between">
-                  <p>Peso</p> <p className="w-[48px]">{product.models.weight} kg.</p>
+                  <p>Peso</p> <p className="w-[48px] lowercase">{product.models.weight} kg.</p>
                 </div>
                 <div className="flex justify-between">
-                  <p>Talle</p> <p className="w-[48px]">{product.models.size.name}</p>
+                  <p>Talle</p> <p className="w-[48px] lowercase">{product.models.size.name}</p>
                 </div>
                 <div className="flex justify-between">
-                  <p>Piel</p> <p className="w-[48px]">{product.models.skin}</p>
-                </div>
+                  <p>Piel</p> <p className="w-[48px] lowercase">{product.models.skin}</p>
+                </div> 
                 <div className="flex justify-between">
-                  <p>Género</p> <p className="w-[48px]">{product.models.gender}</p>
+                  <p>Género</p> <p className="w-[48px] lowercase">{product.models.gender}</p>
                 </div>
               </div>
             </div>

@@ -31,7 +31,7 @@ const Marquee = () => {
   const images = isHovered ? hoverImages : defaultImages;
 
   return (
-    <div className="w-full overflow-hidden py-8 flex justify-center">
+    <div className="w-full overflow-hidden py-8 flex justify-center md:h-[400px]">
       <div className="w-[80%]">
         <div className="text-[#FFFFFF] font-normal text-base leading-[64px] tracking-[-4%] align-middle">
           YOU ALSO MAY LIKE
