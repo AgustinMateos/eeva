@@ -327,7 +327,7 @@ const Navbar = () => {
           )}
           {/* Botones Hombre y Mujer fuera del menú hamburguesa (solo en desktop) */}
           <div className="hidden md:flex">
-            <div className="flex w-[180px] justify-around">
+            <div className="flex w-[140px] justify-around">
               <div ref={hombreRef} className="relative">
                 <button
                   onClick={toggleHombreDropdown}
