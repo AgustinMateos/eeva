@@ -42,7 +42,8 @@ const Product = () => {
             `/${fetchedProduct.models.images.gif360}2.svg`,
             `/${fetchedProduct.models.images.gif360}3.svg`,
             `/${fetchedProduct.models.images.gif360}4.svg`,
-            `/${fetchedProduct.models.images.gif360}5.svg`
+            `/${fetchedProduct.models.images.gif360}5.svg`,
+             `/${fetchedProduct.models.images.gif360}6.svg`
           ]);
         } else {
           setImages([

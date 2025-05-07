@@ -313,13 +313,13 @@ const Navbar = () => {
           </div>
           {/* Renderizar el nombre de la colección en desktop si existe */}
           {currentCollection && (
-            <div className="hidden md:flex items-center text-white">
-              <div>
-              <p>Collection</p>
-              <span>07-07-2025</span>
+            <div className="hidden md:flex text-[12px] h-[34px] items-center text-white">
+              <div className='h-fukk'>
+              <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase ">Collection</p>
+              <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]  ">07-07-2025</span>
               </div>
-              <div>
-                <span className="text-[16px] font-medium">
+              <div className='flex h-full'>
+                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase ">
                 {currentCollection.name}
               </span></div>
               
