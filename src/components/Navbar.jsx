@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import style from '@/app/ui/navbar.module.css';
-
+import { usePathname } from 'next/navigation';
 const colecciones = [
-  { name: "New Asia", link: "/collections/initiation", age: "new" },
+  { name: "Initiation", link: "/collections/initiation", age: "new" },
   { name: "Amsterdam", link: "/collections/amsterdam", age: "'24" },
   { name: "New York", link: "/collections/new-york", age: "'27" },
   { name: "Groenlandia", link: "/collections/groenlandia", age: "'20" },
@@ -41,7 +41,10 @@ const Navbar = () => {
   const [isColeccionesOpen, setIsColeccionesOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const pathname = usePathname();
+  const currentCollection = colecciones.find((coleccion) =>
+    pathname.startsWith(coleccion.link)
+  );
   const menuRef = useRef(null);
   const hombreRef = useRef(null);
   const mujerRef = useRef(null);
@@ -308,7 +311,19 @@ const Navbar = () => {
               </div>
             )}
           </div>
-
+          {/* Renderizar el nombre de la colección en desktop si existe */}
+          {currentCollection && (
+            <div className="hidden md:flex items-center text-white">
+              <div>
+              <p>Collection</p>
+              <span>07-07-2025</span>
+              </div>
+              
+              <span className="text-[16px] font-medium">
+                {currentCollection.name}
+              </span>
+            </div>
+          )}
           {/* Botones Hombre y Mujer fuera del menú hamburguesa (solo en desktop) */}
           <div className="hidden md:flex">
             <div className="flex w-[180px] justify-around">
