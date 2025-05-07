@@ -100,7 +100,7 @@ const Initiation = () => {
           onClick={toggleSound}
           className="absolute bottom-4 flex justify-center items-center left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded-md text-sm"
         >
-          {isMuted ? 'Activar Sonido' : 'Desactivar Sonido'}
+          {isMuted ? 'ALLOW SOUND' : 'DENY SOUND'}
           <Image src="/sound.svg" alt="Control de Sonido" width={32} height={32} />
         </button>
       </div>
