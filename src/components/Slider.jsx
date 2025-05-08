@@ -5,16 +5,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const options = [
-  { id: 1, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
-  { id: 2, name: 'New Asia', bgImage: '/slide2.svg', estado: 'archive', link: '/new-asia' },
-  { id: 3, name: 'New York', bgImage: '/slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/new-york' },
+  
+  { id: 1, name: 'New Asia', bgImage: '/slide2.svg', estado: 'archive', link: '/new-asia' },
+  { id: 2, name: 'New York', bgImage: '/slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/new-york' },
+  { id: 3, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
   { id: 4, name: 'Tokio', bgImage: '/slide2.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/tokio' },
   { id: 5, name: 'Opción 5', bgImage: '/slide1.svg', estado: '09|05|25', estadoAccion: 'Shop', link: '/option-5' },
 ];
 
 export default function Slider() {
-  const [currentIndex, setCurrentIndex] = useState(2);
-  const [previousIndex, setPreviousIndex] = useState(2);
+  const [currentIndex, setCurrentIndex] = useState(4); // Cambia de 2 a 4
+  const [previousIndex, setPreviousIndex] = useState(4); // Ajusta también previousIndex
   const [transitionProgress, setTransitionProgress] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

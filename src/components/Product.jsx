@@ -8,7 +8,6 @@ import Image from 'next/image';
 const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isProductCareOpen, setIsProductCareOpen] = useState(false);
@@ -33,7 +32,6 @@ const Product = () => {
         const response = await axios.get(`https://eeva-api.vercel.app/api/v1/products/${id}`);
         const fetchedProduct = response.data;
         setProduct(fetchedProduct);
-        setLoading(false);
 
         // Set images from static field with numbered suffixes
         if (fetchedProduct.models?.images?.gif360) {
@@ -43,7 +41,7 @@ const Product = () => {
             `/${fetchedProduct.models.images.gif360}3.svg`,
             `/${fetchedProduct.models.images.gif360}4.svg`,
             `/${fetchedProduct.models.images.gif360}5.svg`,
-             `/${fetchedProduct.models.images.gif360}6.svg`
+            `/${fetchedProduct.models.images.gif360}6.svg`
           ]);
         } else {
           setImages([
@@ -60,7 +58,6 @@ const Product = () => {
         }
       } catch (err) {
         setError('Error al cargar el producto');
-        setLoading(false);
       }
     };
 
@@ -107,9 +104,8 @@ const Product = () => {
     setIsPaused(false);
   };
 
-  if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
-  if (!product) return <div>No se encontró el producto</div>;
+  if (!product) return null;
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -205,7 +201,7 @@ const Product = () => {
           <div className="flex flex-col items-center mt-4">
             <button
               onClick={handleMagnifyClick}
-              className="flex items-center text-white  px-4 py-2 "
+              className="flex items-center text-white px-4 py-2"
               aria-label="Activate magnifying glass to pause and zoom"
               disabled={isMagnifying}
             >
@@ -223,12 +219,11 @@ const Product = () => {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-             
             </button>
             {isMagnifying && (
               <button
                 onClick={handleCloseMagnifier}
-                className="mt-2 text-white  px-4 py-2  transition"
+                className="mt-2 text-white px-4 py-2 transition"
                 aria-label="Close magnifying glass"
               >
                 <Image src="/XMenuIcon.svg" width={24} height={24} alt="close lupa" />
