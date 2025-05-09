@@ -365,6 +365,19 @@ const Product = () => {
             </div>
             <div>
               <p className="uppercase">Size</p>
+              <button
+                  onClick={() => setIsSizeGuideOpen(true)}
+                  className="text-white cursor-pointer flex w-full justify-between mt-2"
+                >
+                  Size guide
+                  <Image
+                    src="/flechamobilediagonal.svg"
+                    width={24}
+                    height={24}
+                    alt="diagonal arrow"
+                    className="ml-2"
+                  />
+                </button>
               <div>
                 <div className="flex gap-2 mt-2">
                   {allSizes.map((size, index) => {
@@ -382,19 +395,7 @@ const Product = () => {
                     );
                   })}
                 </div>
-                <button
-                  onClick={() => setIsSizeGuideOpen(true)}
-                  className="text-white cursor-pointer flex w-full justify-between mt-2"
-                >
-                  Size guide
-                  <Image
-                    src="/flechamobilediagonal.svg"
-                    width={24}
-                    height={24}
-                    alt="diagonal arrow"
-                    className="ml-2"
-                  />
-                </button>
+               
               </div>
             </div>
           </div></div>
@@ -412,7 +413,8 @@ const Product = () => {
             </button>
           </div>
 
-          {/* Dropdown para Details */}
+          <div className='w-[80%] md:w-full flex flex-col justify-center'>
+            {/* Dropdown para Details */}
           <div className="mt-2">
             <button
               onClick={() => setIsDetailsOpen(!isDetailsOpen)}
@@ -452,6 +454,7 @@ const Product = () => {
                 <p>{product.productCare}</p>
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>
