@@ -158,7 +158,7 @@ const Product = () => {
     <div className="h-[1022px] flex justify-center items-center">
       <div className="h-[800px] max-w-[1232px] flex justify-between flex-col md:flex-row">
         {/* Modelo */}
-        <div className="w-[519px] h-[600px] relative flex flex-col items-center">
+        <div className="w-auto md:w-[519px] h-[600px] relative flex flex-col items-center">
           {/* Contenedor de la imagen */}
           {images.length > 0 && (
             <div
@@ -172,7 +172,7 @@ const Product = () => {
                 alt={`Product image ${currentImageIndex + 1}`}
                 width={545}
                 height={800}
-                className="object-contain"
+                className="object-contain h-[535px] md-[800px]"
                 priority
               />
               {/* Lupa */}
@@ -198,7 +198,7 @@ const Product = () => {
           )}
 
           {/* Botones de lupa */}
-          <div className="flex flex-col items-center mt-4">
+          <div className=" md:block hidden flex-col items-center mt-4">
             <button
               onClick={handleMagnifyClick}
               className="flex items-center text-white px-4 py-2"
@@ -232,99 +232,100 @@ const Product = () => {
           </div>
 
           {/* Info modelo */}
-          <div className="absolute top-[-10px] md:top-[20px] left-[90px] md:left-[-10px] w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
-            <div className="w-[200px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
-              {Array.from({ length: 40 }, (_, index) => {
-                const maxHeightOptions = [5, 10, 15, 30];
-                const maxHeight = maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)];
-                const animationClass = `animate-pulseHeight-${maxHeight}`;
-                const delay = Math.random() * 2;
+          <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
+  <div className="w-[190px] md:w-[200px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
+    {Array.from({ length: 40 }, (_, index) => {
+      const maxHeightOptions = [5, 10, 15, 30]; // Keep original heights
+      const maxHeight = maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)];
+      const animationClass = `animate-pulseHeight-${maxHeight}`;
+      const delay = Math.random() * 2;
 
-                return (
-                  <div
-                    key={index}
-                    className={`bg-white w-[2px] mx-[2px] transition-all ${animationClass}`}
-                    style={{
-                      height: `${Math.floor(Math.random() * maxHeight) + 10}px`,
-                      animationDelay: `${delay}s`,
-                    }}
-                  ></div>
-                );
-              })}
-            </div>
+      return (
+        <div
+          key={index}
+          className={`bg-white w-[1px] md:w-[2px] mx-[1px] md:mx-[2px] transition-all ${animationClass}`}
+          style={{
+            height: `${Math.floor(Math.random() * maxHeight) + 10}px`,
+            animationDelay: `${delay}s`,
+          }}
+        ></div>
+      );
+    })}
+  </div>
 
-            <style jsx>{`
-              @keyframes pulseHeight-5 {
-                0% { height: 10px; }
-                50% { height: 5px; }
-                100% { height: 10px; }
-              }
-              .animate-pulseHeight-5 {
-                animation: pulseHeight-5 2s ease-in-out infinite;
-              }
-              @keyframes pulseHeight-10 {
-                0% { height: 10px; }
-                50% { height: 10px; }
-                100% { height: 10px; }
-              }
-              .animate-pulseHeight-10 {
-                animation: pulseHeight-10 2s ease-in-out infinite;
-              }
-              @keyframes pulseHeight-15 {
-                0% { height: 10px; }
-                50% { height: 15px; }
-                100% { height: 10px; }
-              }
-              .animate-pulseHeight-15 {
-                animation: pulseHeight-15 2s ease-in-out infinite;
-              }
-              @keyframes pulseHeight-30 {
-                0% { height: 10px; }
-                50% { height: 30px; }
-                100% { height: 10px; }
-              }
-              .animate-pulseHeight-30 {
-                animation: pulseHeight-30 2s ease-in-out infinite;
-              }
-            `}</style>
+  <style jsx>{`
+    @keyframes pulseHeight-5 {
+      0% { height: 10px; }
+      50% { height: 5px; }
+      100% { height: 10px; }
+    }
+    .animate-pulseHeight-5 {
+      animation: pulseHeight-5 2s ease-in-out infinite;
+    }
+    @keyframes pulseHeight-10 {
+      0% { height: 10px; }
+      50% { height: 10px; }
+      100% { height: 10px; }
+    }
+    .animate-pulseHeight-10 {
+      animation: pulseHeight-10 2s ease-in-out infinite;
+    }
+    @keyframes pulseHeight-15 {
+      0% { height: 10px; }
+      50% { height: 15px; }
+      100% { height: 10px; }
+    }
+    .animate-pulseHeight-15 {
+      animation: pulseHeight-15 2s ease-in-out infinite;
+    }
+    @keyframes pulseHeight-30 {
+      0% { height: 10px; }
+      50% { height: 30px; }
+      100% { height: 10px; }
+    }
+    .animate-pulseHeight-30 {
+      animation: pulseHeight-30 2s ease-in-out infinite;
+    }
+  `}</style>
 
-            <div className="relative">
-              <div
-                className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]"
-                style={{ height: '100%' }}
-              ></div>
-              <div className="pl-[20px]">
-                <div className="flex justify-between">
-                  <p>Nombre</p> <p className="w-[48px] lowercase">{product.models.name}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Altura</p> <p className="w-[48px] lowercase">{product.models.height}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Peso</p> <p className="w-[48px] lowercase">{product.models.weight} kg.</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Talle</p> <p className="w-[48px] lowercase">{product.models.size.name}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Piel</p> <p className="w-[48px] lowercase">{product.models.skin}</p>
-                </div> 
-                <div className="flex justify-between">
-                  <p>Género</p> <p className="w-[48px] lowercase">{product.models.gender}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="relative">
+    <div
+      className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]"
+      style={{ height: '100%' }}
+    ></div>
+    <div className="pl-[20px]">
+      <div className="flex justify-between">
+        <p>Nombre</p> <p className="w-[48px] lowercase">{product.models.name}</p>
+      </div>
+      <div className="flex justify-between">
+        <p>Altura</p> <p className="w-[48px] lowercase">{product.models.height}</p>
+      </div>
+      <div className="flex justify-between">
+        <p>Peso</p> <p className="w-[48px] lowercase">{product.models.weight} kg.</p>
+      </div>
+      <div className="flex justify-between">
+        <p>Talle</p> <p className="w-[48px] lowercase">{product.models.size.name}</p>
+      </div>
+      <div className="flex justify-between">
+        <p>Piel</p> <p className="w-[48px] lowercase">{product.models.skin}</p>
+      </div>
+      <div className="flex justify-between">
+        <p>Género</p> <p className="w-[48px] lowercase">{product.models.gender}</p>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
 
         {/* Detalles del producto */}
-        <div className="text-[#FCFDFD] w-[519px] flex flex-col">
-          <div className="flex items-center">
-            <p className="h-[40px] w-[100%] px-4 border uppercase flex items-center">
+        <div className="text-[#FCFDFD] w-auto md:w-[519px] flex flex-col">
+          <div className="flex items-center justify-center md:justify-start">
+            <p className="h-[40px] w-[85%] md:w-[100%] px-4 border uppercase flex items-center">
               {product.displayName || 'Camisa Oversize'}
             </p>
           </div>
-          <div className="h-[120px] flex justify-evenly flex-col">
+          <div className='flex flex-row md:flex-col'>
+            <div className="h-[120px] flex justify-evenly flex-col">
             <div className="flex items-center">
               <div className="w-[60px] h-[25px] px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
                 <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
@@ -396,7 +397,8 @@ const Product = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div></div>
+          
 
           <div className="flex h-[90px] md:h-auto flex-col items-center md:flex-row justify-between">
             <p className="w-[315px] pb-[10px] md:w-[344px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] uppercase text-center">
