@@ -324,17 +324,17 @@ const Product = () => {
               {product.displayName || 'Camisa Oversize'}
             </p>
           </div>
-          <div className='flex flex-row md:flex-col '>
-            <div className="h-[120px] flex justify-evenly flex-col">
+          <div className='flex flex-row md:flex-col justify-center'>
+            <div className=" h-[120px] md:h-[174px] w-[43%] md:w-full flex justify-evenly flex-col">
             <div className="flex items-center">
-              <div className="w-[60px] h-[25px] px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
+              <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
                 <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
                   {product.discount || 30}%
                 </p>
               </div>
-              <div className="flex items-baseline">
-                <p className="uppercase mr-1">Ars $</p>
-                <span className="line-through text-gray-400">{product.price.toFixed(2)}</span>
+              <div className="flex items-baseline w-full">
+                
+                <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex "> <p className="uppercase mr-1 w-auto">Ars $</p> {product.price.toFixed(2)}</span>
               </div>
             </div>
             <div className="flex items-baseline">
@@ -345,10 +345,10 @@ const Product = () => {
               <p>3 cuotas sin interés en bancos seleccionados</p>
             </div>
           </div>
-          <div className="h-[213px] w-full">
+          <div className="h-[213px] flex flex-col justify-around w-[43%] md:w-full">
             <div>
               <p className="uppercase">Color</p>
-              <div className="flex w-[17%] justify-between mt-2">
+              <div className="flex w-[50%] md:w-[17%] justify-between mt-2">
                 {product.colors.map((color, index) => (
                   <button
                     key={index}
