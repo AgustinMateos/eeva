@@ -324,7 +324,7 @@ const Product = () => {
               {product.displayName || 'Camisa Oversize'}
             </p>
           </div>
-          <div className='flex flex-row md:flex-col'>
+          <div className='flex flex-row md:flex-col '>
             <div className="h-[120px] flex justify-evenly flex-col">
             <div className="flex items-center">
               <div className="w-[60px] h-[25px] px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
