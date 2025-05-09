@@ -413,9 +413,9 @@ const Product = () => {
             </button>
           </div>
 
-          <div className='w-[80%] md:w-full flex flex-col justify-center'>
+          <div className='w-full flex flex-col items-center'>
             {/* Dropdown para Details */}
-          <div className="mt-2">
+          <div className="mt-2 w-[80%] md:w-full">
             <button
               onClick={() => setIsDetailsOpen(!isDetailsOpen)}
               className="w-full text-left flex justify-between h-[30px] items-center uppercase"
@@ -436,7 +436,7 @@ const Product = () => {
           </div>
 
           {/* Dropdown para Product Care */}
-          <div className="mt-2">
+          <div className="mt-2 w-[80%] md:w-full">
             <button
               onClick={() => setIsProductCareOpen(!isProductCareOpen)}
               className="w-full text-left flex justify-between items-center uppercase h-[30px]"
