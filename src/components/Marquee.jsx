@@ -1,34 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Axios from 'axios';
 
 const Marquee = () => {
+  const [products, setProducts] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Conjunto de imágenes predeterminadas con URLs y nombres
-  const defaultImages = [
-    { src: '/costado.svg', url: '/collections/initiation/product/67f935200f9bad0183343d27', name: 'Producto Test' },
-    { src: '/costado.svg', url: '/products/2', name: 'Producto Pablo' },
-    { src: '/costado.svg', url: '/products/3', name: 'Producto Ana' },
-    { src: '/costado.svg', url: '/products/4', name: 'Camisa Oversize' },
-    { src: '/costado.svg', url: '/products/5', name: 'Pantalón Cargo' },
-    { src: '/costado.svg', url: '/products/6', name: 'Accesorio Minimal' },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await Axios.get('https://eeva-api.vercel.app/api/v1/products');
+        setProducts(response.data);
+      } catch (err) {
+        setError('Failed to fetch products');
+      }
+    };
 
-  // Conjunto de imágenes al hacer hover con URLs y nombres
-  const hoverImages = [
-    { src: '/front.svg', url: '/collections/initiation/product/67f935200f9bad0183343d27', name: 'Producto Test' },
-    { src: '/front.svg', url: '/products/2', name: 'Producto Pablo' },
-    { src: '/front.svg', url: '/products/3', name: 'Producto Ana' },
-    { src: '/front.svg', url: '/products/4', name: 'Camisa Oversize' },
-    { src: '/front.svg', url: '/products/5', name: 'Pantalón Cargo' },
-    { src: '/front.svg', url: '/products/6', name: 'Accesorio Minimal' },
-  ];
+    fetchProducts();
+  }, []);
 
-  // Seleccionar el conjunto de imágenes según el estado de hover
-  const images = isHovered ? hoverImages : defaultImages;
+  if (error) {
+    return <div className="text-red-500 text-center py-8">{error}</div>;
+  }
 
   return (
     <div className="w-full overflow-hidden py-8 flex justify-center md:h-[400px]">
@@ -37,52 +34,82 @@ const Marquee = () => {
           YOU ALSO MAY LIKE
         </div>
         <div
-          className="marquee-wrapper"
+          className="marquee-wrapper overflow-x-auto md:overflow-hidden scrollbar-hide snap-x snap-mandatory"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <div className="marquee flex items-center">
-            {[...images, ...images].map((item, index) => (
-              <Link
-                key={index}
-                href={item.url}
-                className="flex-shrink-0 mx-4 flex flex-col items-center"
-              >
-                <Image
-                  src={item.src}
-                  alt={item.name}
-                  width={200}
-                  height={200}
-                  className="object-cover rounded-lg"
-                />
-                <p className="text-white text-[12px] uppercase mt-2 text-center">{item.name}</p>
-              </Link>
-            ))}
+          <div className="marquee flex items-center md:animate-marquee md:[&:hover]:animation-play-state-paused">
+            {products.length > 0 ? (
+              [...products, ...products].map((product, index) => (
+                <Link
+                  key={`${product._id}-${index}`}
+                  href={`/collections/initiation/product/${product._id}`}
+                  className="flex-shrink-0 mx-4 flex flex-col items-center snap-center"
+                >
+                  <Image
+                    src={
+                      // On mobile, always use static image; on desktop, toggle based on hover
+                      window.innerWidth < 768
+                        ? `/${product.models.images.static}.svg`
+                        : isHovered
+                        ? `/${product.models.images.gif360}.svg`
+                        : `/${product.models.images.static}.svg`
+                    }
+                    alt={product.displayName}
+                    width={200}
+                    height={200}
+                    className="object-cover rounded-lg"
+                    onError={() => `/images/placeholder.svg`} // Fallback image
+                  />
+                  <p className="text-white text-[12px] uppercase mt-2 text-center">{product.displayName}</p>
+                </Link>
+              ))
+            ) : (
+              <p className="text-white text-center w-full">No products available</p>
+            )}
           </div>
         </div>
 
         <style jsx>{`
           .marquee-wrapper {
             width: 100%;
-            overflow: hidden;
           }
 
-          .marquee {
-            display: flex;
-            animation: marquee 20s linear infinite;
-            white-space: nowrap;
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
           }
 
-          .marquee:hover {
-            animation-play-state: paused;
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
           }
 
-          @keyframes marquee {
-            0% {
-              transform: translateX(-50%);
+          .snap-x {
+            scroll-snap-type: x mandatory;
+          }
+
+          .snap-center {
+            scroll-snap-align: center;
+          }
+
+          @media (min-width: 768px) {
+            .marquee {
+              display: flex;
+              animation: marquee 20s linear infinite;
+              white-space: nowrap;
             }
-            100% {
-              transform: translateX(0);
+
+            .animation-play-state-paused {
+              animation-play-state: paused;
+            }
+
+            @keyframes marquee {
+              0% {
+                transform: translateX(-50%);
+              }
+              100% {
+                transform: translateX(0);
+              }
             }
           }
         `}</style>
