@@ -51,7 +51,7 @@ export default function Topg() {
             products.map((product) => (
               <Link
                 key={product._id}
-                href={`/products/${product._id}`}
+                href={`/collections/initiation/product/${product._id}`}
                 className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
               >
                 <Image
