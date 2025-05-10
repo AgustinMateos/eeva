@@ -558,7 +558,7 @@ const Product = () => {
                           <button
                             key={index}
                             onClick={() => handleDotClick(index)}
-                            className={`w-2 h-2 rounded-full ${
+                            className={`w-[20px] h-[3px] rounded-[2px] ${
                               currentSlide === index ? 'bg-white' : 'bg-gray-500'
                             }`}
                           />
