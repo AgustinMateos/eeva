@@ -327,12 +327,12 @@ const Product = () => {
         </div>
         <div className="text-[#FCFDFD] w-auto md:w-[519px] flex flex-col">
           <div className="flex items-center justify-center md:justify-start">
-            <p className="h-[40px] w-[85%] md:w-[100%] px-4 border uppercase flex items-center">
+            <p className="h-[40px] w-[90%] md:w-[100%] px-4 border uppercase flex items-center">
               {product.displayName || 'Camisa Oversize'}
             </p>
           </div>
           <div className='flex flex-row md:flex-col justify-center'>
-            <div className="h-[120px] md:h-[174px] w-[43%] md:w-full flex justify-evenly flex-col">
+            <div className="h-[120px] md:h-[174px] w-[45%] md:w-full flex justify-evenly flex-col">
               <div className="flex items-center">
                 <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
                   <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
@@ -353,7 +353,7 @@ const Product = () => {
                 <p>3 cuotas sin interés en bancos seleccionados</p>
               </div>
             </div>
-            <div className="h-[213px] flex flex-col justify-around w-[43%] md:w-full">
+            <div className="h-[213px] flex flex-col justify-around w-[45%] md:w-full">
               <div>
                 <p className="uppercase">Color</p>
                 <div className="flex w-[50%] md:w-[17%] justify-between mt-2">
@@ -638,76 +638,71 @@ const Product = () => {
         </div>
       )}
       {isSizeGuideOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50"
-          onClick={handleOverlayClick}
-        >
-          <div className="w-[1062px] h-[524px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative">
-            <div className="w-full h-[60px] mt-[40px] flex justify-center items-center">
-              <div className="w-[950px] h-[32px]">
-                <h2 className="font-medium text-[14px] leading-[14px] tracking-[0.1em] uppercase text-[#f2f2f2]">
-                  Size Guide
-                </h2>
-                <button
-                  onClick={() => setIsSizeGuideOpen(false)}
-                  className="absolute top-[55px] right-[40px] text-gray-500 hover:text-gray-700"
-                >
-                  <Image
-                    src="/crossSize.svg"
-                    width={16}
-                    height={16}
-                    alt="close modal"
-                    className="ml-2"
-                  />
-                </button>
-              </div>
-            </div>
-            <div className="flex w-full h-[400px] justify-center items-center">
-              <div className="h-[356px] w-[1002px] flex">
-                <div
-                  className="w-[40%] h-[100%]"
-                  style={{
-                    backgroundImage: "url('/sizeguidepantalon.svg')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                  }}
-                ></div>
-                <div className="w-[60%] h-[100%] overflow-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="text-white">
-                        {tableHeaders.map((header, index) => (
-                          <th
-                            key={index}
-                            className="px-4 py-2 font-medium text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                          >
-                            {header}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tableData.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="text-white">
-                          {row.map((cell, cellIndex) => (
-                            <td
-                              key={cellIndex}
-                              className="px-4 py-2 font-normal text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                            >
-                              {cell}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+  <div
+    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
+    onClick={handleOverlayClick}
+  >
+    <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[300px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
+      <div className="w-full h-[60px] flex justify-center items-center">
+        <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
+          <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
+            Size Guide
+          </h2>
+          <button
+            onClick={() => setIsSizeGuideOpen(false)}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <Image
+              src="/crossSize.svg"
+              width={16}
+              height={16}
+              alt="close modal"
+              className="ml-2"
+            />
+          </button>
+        </div>
+      </div>
+      <div className="w-full flex justify-center items-center mt-4">
+        <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
+          <div
+            className="w-full md:w-[40%] h-[400px] md:h-full bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/sizeguidepantalon.svg')" }}
+          ></div>
+          <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="text-white">
+                  {tableHeaders.map((header, index) => (
+                    <th
+                      key={index}
+                      className="px-2 py-1 sm:px-4 sm:py-2 font-medium text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {tableData.map((row, rowIndex) => (
+                  <tr key={rowIndex} className="text-white">
+                    {row.map((cell, cellIndex) => (
+                      <td
+                        key={cellIndex}
+                        className="px-2 py-1 sm:px-4 sm:py-2 font-normal text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
