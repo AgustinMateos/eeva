@@ -40,7 +40,7 @@ export default function Topg() {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <p className="text-white text-lg w-full max-w-[75rem] border-b border-[#AEAEAE] uppercase">
+      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w-[95rem]  border-b border-[#AEAEAE] uppercase">
         TOP - MEN
       </p>
 
