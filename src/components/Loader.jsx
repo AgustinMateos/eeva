@@ -19,7 +19,7 @@ const Loader = () => {
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-[20ms] ease-linear"
         style={{
-          backgroundImage: 'url(/loadereeva.jpg)',
+          backgroundImage: 'url(/lineasCodigo.svg)',
           clipPath: `polygon(0 0, 100% 0, 100% ${progress}%, 0 ${progress}%)`,
         }}
       ></div>
