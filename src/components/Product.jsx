@@ -302,6 +302,7 @@ const Product = () => {
                 className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]"
                 style={{ height: '100%' }}
               ></div>
+              {/*info modelo */}
               <div className="pl-[20px]">
                 <div className="flex justify-between">
                   <p>Nombre</p> <p className="w-[48px] lowercase">{product.models.name}</p>

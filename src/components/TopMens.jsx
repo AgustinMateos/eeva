@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Axios from 'axios';
 import Footer from './Footer';
+import Loader from './Loader';
 
 export default function Topg() {
   const [products, setProducts] = useState([]);
@@ -31,7 +32,7 @@ export default function Topg() {
   }, []);
 
   if (loading) {
-    return <div className="text-white text-center">Loading...</div>;
+    return <div ><Loader/></div>;
   }
 
   if (error) {
