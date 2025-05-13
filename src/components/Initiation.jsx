@@ -11,7 +11,8 @@ const Initiation = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [products, setProducts] = useState([]);
   const [description, setDescription] = useState('');
-  const [title, setTitle] = useState(''); // New state for title
+  const [title, setTitle] = useState('');
+  const [subtitle, setSubtitle] = useState(''); // Nuevo estado para subtitle
   const [middleImages, setMiddleImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,11 +31,13 @@ const Initiation = () => {
           const formattedProducts = initiationCollection.products.map((product) => ({
             id: product._id,
             title: product.displayName || product.name || 'Producto sin título',
+            subtitle: product.subtitle,
             image: `/${product.models.images.static}.svg`,
           }));
           setProducts(formattedProducts);
           setDescription(initiationCollection.description || 'Descripción no disponible');
-          setTitle(initiationCollection.title || 'Sin título'); // Set the title
+          setTitle(initiationCollection.title || 'Sin título');
+          setSubtitle(initiationCollection.subtitle || 'Subtítulo no disponible'); // Guardar el subtitle
           // Formatear imágenes middle
           const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
             id: index + 1,
@@ -78,14 +81,14 @@ const Initiation = () => {
         {title}
       </h1>
       <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-2xl uppercase">
-        “{title}” Invierno 2025 reinterpreta el futuro.
+        {subtitle}
       </p>
       {/* Descripción obtenida del endpoint */}
       <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-[1250px] mb-8 uppercase">
         {description}
       </p>
 
-      {/* Contenedor del video */}
+      {/* Resto del JSX sin cambios */}
       <div className="relative h-[610px] w-full">
         <video
           ref={videoRef}
