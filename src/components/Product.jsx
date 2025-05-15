@@ -669,36 +669,36 @@ const Product = () => {
             className="w-full md:w-[40%] h-[400px] md:h-full bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: "url('/sizeguidepantalon.svg')" }}
           ></div>
-          <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="text-white">
-                  {tableHeaders.map((header, index) => (
-                    <th
-                      key={index}
-                      className="px-2 py-1 sm:px-4 sm:py-2 font-medium text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
+        <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="text-white">
+                {tableHeaders.map((header, index) => (
+                  <th
+                    key={index}
+                    className="px-2 py-1 sm:px-4 sm:py-2 font-medium text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row, rowIndex) => (
+                <tr key={rowIndex} className="text-white">
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className="px-2 py-1 sm:px-4 sm:py-2 font-normal text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
                     >
-                      {header}
-                    </th>
+                      {cell}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {tableData.map((row, rowIndex) => (
-                  <tr key={rowIndex} className="text-white">
-                    {row.map((cell, cellIndex) => (
-                      <td
-                        key={cellIndex}
-                        className="px-2 py-1 sm:px-4 sm:py-2 font-normal text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
         </div>
       </div>
     </div>
