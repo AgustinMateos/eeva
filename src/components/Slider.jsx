@@ -123,7 +123,7 @@ export default function Slider() {
   }, [isTransitioning]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-[100vh] md:h-screen overflow-hidden bg-black">
       {/* Fondo anterior */}
       <Image
         src={extendedOptions[previousIndex]?.bgImage}
