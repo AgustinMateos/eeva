@@ -37,7 +37,7 @@ const Product = () => {
 
         if (fetchedProduct.models?.images?.gif360) {
           setImages([
-            `/${fetchedProduct.models.images.gif360}.svg`,
+            `/${fetchedProduct.models.images.gif360}.webp`,
             `/${fetchedProduct.models.images.gif360}2.svg`,
             `/${fetchedProduct.models.images.gif360}3.svg`,
             `/${fetchedProduct.models.images.gif360}4.svg`,
@@ -138,11 +138,11 @@ const Product = () => {
 
   const sizeStockMap = selectedColor
     ? product.colors
-        .find((color) => color.color.name === selectedColor)
-        ?.sizes.reduce((acc, size) => {
-          acc[size.size.name] = size.stock;
-          return acc;
-        }, {}) || {}
+      .find((color) => color.color.name === selectedColor)
+      ?.sizes.reduce((acc, size) => {
+        acc[size.size.name] = size.stock;
+        return acc;
+      }, {}) || {}
     : {};
 
   const discountedPrice = product.discount
@@ -176,8 +176,8 @@ const Product = () => {
 
   return (
     <div className="h-[1022px] flex justify-center items-center">
-      <div className="h-[800px] max-w-[1232px] flex justify-between flex-col md:flex-row">
-        <div className="w-auto md:w-[519px] h-[600px] relative flex flex-col items-center">
+      <div className="h-[800px] max-w-[1252px] flex justify-between flex-col md:flex-row">
+        <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
           {images.length > 0 && (
             <div
               className="relative"
@@ -189,8 +189,8 @@ const Product = () => {
                 src={images[currentImageIndex] || '/rotate1.svg'}
                 alt={`Product image ${currentImageIndex + 1}`}
                 width={545}
-                height={800}
-                className="object-contain h-[535px] md-[800px]"
+                height={900}
+                className="object-contain h-[535px] md:w-[600px] md:h-[600px]"
                 priority
               />
               {isMagnifying && (
@@ -243,8 +243,8 @@ const Product = () => {
               </button>
             )}
           </div>
-          <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
-            <div className="w-[190px] md:w-[200px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
+          <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] xl:left-[200px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
+            <div className="w-[190px] md:w-[170px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
               {Array.from({ length: 40 }, (_, index) => {
                 const maxHeightOptions = [5, 10, 15, 30];
                 const maxHeight = maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)];
@@ -326,14 +326,14 @@ const Product = () => {
             </div>
           </div>
         </div>
-        <div className="text-[#FCFDFD] w-auto md:w-[519px] flex flex-col">
+        <div className="text-[#FCFDFD] w-auto md:w-[551px] justify-around h-[500px] flex flex-col">
           <div className="flex items-center justify-center md:justify-start">
             <p className="h-[40px] w-[90%] md:w-[100%] px-4 border uppercase flex items-center">
               {product.displayName || 'Camisa Oversize'}
             </p>
           </div>
           <div className='flex flex-row md:flex-col justify-center'>
-            <div className="h-[120px] md:h-[174px] w-[45%] md:w-full flex justify-evenly flex-col">
+            <div className="h-[120px] md:h-[140px] w-[45%] md:w-full flex justify-evenly flex-col">
               <div className="flex items-center">
                 <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
                   <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
@@ -394,9 +394,8 @@ const Product = () => {
                       return (
                         <button
                           key={index}
-                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
-                            stock <= 0 ? 'line-through opacity-50' : ''
-                          }`}
+                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''
+                            }`}
                           disabled={stock <= 0}
                         >
                           {size}
@@ -404,12 +403,16 @@ const Product = () => {
                       );
                     })}
                   </div>
+                  {/* Display "No hay stock disponible" if all sizes have zero stock */}
+                  {Object.values(sizeStockMap).every(stock => stock <= 0) && (
+                    <p className="text-white text-sm mt-2">No hay stock disponible</p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
           <div className="flex h-[90px] md:h-auto flex-col items-center md:flex-row justify-between">
-            <p className="w-[315px] pb-[10px] md:w-[344px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] uppercase text-center">
+            <p className="w-[315px] pb-[10px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] uppercase text-center">
               + Add to bag
             </p>
             <button
@@ -535,9 +538,8 @@ const Product = () => {
                                   return (
                                     <button
                                       key={sizeIndex}
-                                      className={`w-8 h-8 p-2 lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs ${
-                                        stock <= 0 ? 'line-through opacity-50' : ''
-                                      }`}
+                                      className={`w-8 h-8 p-2 lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs ${stock <= 0 ? 'line-through opacity-50' : ''
+                                        }`}
                                       disabled={stock <= 0}
                                     >
                                       {size}
@@ -559,9 +561,8 @@ const Product = () => {
                           <button
                             key={index}
                             onClick={() => handleDotClick(index)}
-                            className={`w-[20px] h-[3px] rounded-[2px] ${
-                              currentSlide === index ? 'bg-white' : 'bg-gray-500'
-                            }`}
+                            className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index ? 'bg-white' : 'bg-gray-500'
+                              }`}
                           />
                         ))}
                       </div>
@@ -603,9 +604,8 @@ const Product = () => {
                                 return (
                                   <button
                                     key={sizeIndex}
-                                    className={`w-10 h-10 p-2 lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm ${
-                                      stock <= 0 ? 'line-through opacity-50' : ''
-                                    }`}
+                                    className={`w-10 h-10 p-2 lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm ${stock <= 0 ? 'line-through opacity-50' : ''
+                                      }`}
                                     disabled={stock <= 0}
                                   >
                                     {size}
@@ -639,71 +639,71 @@ const Product = () => {
         </div>
       )}
       {isSizeGuideOpen && (
-  <div
-    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
-    onClick={handleOverlayClick}
-  >
-    <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[300px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
-      <div className="w-full h-[60px] flex justify-center items-center">
-        <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
-          <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
-            Size Guide
-          </h2>
-          <button
-            onClick={() => setIsSizeGuideOpen(false)}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <Image
-              src="/crossSize.svg"
-              width={16}
-              height={16}
-              alt="close modal"
-              className="ml-2"
-            />
-          </button>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
+          onClick={handleOverlayClick}
+        >
+          <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[300px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
+            <div className="w-full h-[60px] flex justify-center items-center">
+              <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
+                <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
+                  Size Guide
+                </h2>
+                <button
+                  onClick={() => setIsSizeGuideOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <Image
+                    src="/crossSize.svg"
+                    width={16}
+                    height={16}
+                    alt="close modal"
+                    className="ml-2"
+                  />
+                </button>
+              </div>
+            </div>
+            <div className="w-full flex justify-center items-center mt-4">
+              <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
+                <div
+                  className="w-full md:w-[40%] h-[400px] md:h-full bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: "url('/sizeguidepantalon.svg')" }}
+                ></div>
+                <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="text-white">
+                        {tableHeaders.map((header, index) => (
+                          <th
+                            key={index}
+                            className="px-2 py-1 sm:px-4 sm:py-2 font-medium text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
+                          >
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.map((row, rowIndex) => (
+                        <tr key={rowIndex} className="text-white">
+                          {row.map((cell, cellIndex) => (
+                            <td
+                              key={cellIndex}
+                              className="px-2 py-1 sm:px-4 sm:py-2 font-normal text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
+                            >
+                              {cell}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="w-full flex justify-center items-center mt-4">
-        <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
-          <div
-            className="w-full md:w-[40%] h-[400px] md:h-full bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url('/sizeguidepantalon.svg')" }}
-          ></div>
-        <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="text-white">
-                {tableHeaders.map((header, index) => (
-                  <th
-                    key={index}
-                    className="px-2 py-1 sm:px-4 sm:py-2 font-medium text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                  >
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.map((row, rowIndex) => (
-                <tr key={rowIndex} className="text-white">
-                  {row.map((cell, cellIndex) => (
-                    <td
-                      key={cellIndex}
-                      className="px-2 py-1 sm:px-4 sm:py-2 font-normal text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };

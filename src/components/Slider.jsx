@@ -7,7 +7,7 @@ import Link from 'next/link';
 const options = [
   
   { id: 1, name: 'New Asia', bgImage: '/slide2.svg', estado: 'archive', link: '/new-asia' },
-  { id: 2, name: 'New York', bgImage: '/slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/new-york' },
+  { id: 2, name: 'New York', bgImage: '/slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/collections/newyork' },
   { id: 3, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
   { id: 4, name: 'Tokio', bgImage: '/slide2.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/tokio' },
   { id: 5, name: 'Opción 5', bgImage: '/slide1.svg', estado: '09|05|25', estadoAccion: 'Shop', link: '/option-5' },
