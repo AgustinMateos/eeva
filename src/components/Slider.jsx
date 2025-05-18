@@ -143,7 +143,7 @@ export default function Slider() {
       />
 
       {/* Slider */}
-      <div className="absolute top-[450px] md:top-[400px] left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2 h-full flex items-center">
+      <div className="absolute top-[350px] md:top-[400px] left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2 h-full flex items-center">
         <div className="relative w-full   overflow-hidden">
           <div
             ref={sliderRef}
