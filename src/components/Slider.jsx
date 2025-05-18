@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const options = [
-  
   { id: 1, name: 'New Asia', bgImage: '/slide2.svg', estado: 'archive', link: '/new-asia' },
   { id: 2, name: 'New York', bgImage: '/slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/collections/newyork' },
   { id: 3, name: 'Initiation', bgImage: '/slide1.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
@@ -14,25 +13,30 @@ const options = [
 ];
 
 export default function Slider() {
-  const [currentIndex, setCurrentIndex] = useState(4); // Cambia de 2 a 4
-  const [previousIndex, setPreviousIndex] = useState(4); // Ajusta también previousIndex
+  const [currentIndex, setCurrentIndex] = useState(4); // Start at index 4 (Opción 5)
+  const [previousIndex, setPreviousIndex] = useState(4);
   const [transitionProgress, setTransitionProgress] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchOffset, setTouchOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const extendedOptions = [...options.slice(-2), ...options, ...options.slice(0, 2)];
   const totalItems = extendedOptions.length;
+  const sliderRef = useRef(null);
 
   // Detect if the device is mobile
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+      setIsMobile(window.innerWidth <= 768);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Handle desktop click interaction
   const handleInteraction = (index) => {
     if (index === currentIndex || isTransitioning) return;
 
@@ -42,6 +46,50 @@ export default function Slider() {
     setTransitionProgress(0);
   };
 
+  // Handle touch start
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  // Handle touch move
+  const handleTouchMove = (e) => {
+    if (!isDragging || touchStartX === null) return;
+
+    const touchCurrentX = e.touches[0].clientX;
+    const deltaX = touchCurrentX - touchStartX;
+    const slideWidth = sliderRef.current.offsetWidth / 5; // Width of one slide
+    const offsetPercentage = (deltaX / slideWidth) * (100 / 5); // Convert to percentage
+    setTouchOffset(offsetPercentage);
+  };
+
+  // Handle touch end
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+
+    setIsDragging(false);
+    setTouchOffset(0);
+
+    const slideWidth = sliderRef.current.offsetWidth / 5;
+    const swipeDistance = (touchOffset / (100 / 5)) * slideWidth;
+    const swipeThreshold = slideWidth * 0.3; // Swipe must be at least 30% of slide width to trigger change
+
+    let newIndex = currentIndex;
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+      if (swipeDistance > 0) {
+        newIndex = currentIndex - 1; // Swipe right
+      } else {
+        newIndex = currentIndex + 1; // Swipe left
+      }
+    }
+
+    setPreviousIndex(currentIndex);
+    setCurrentIndex(newIndex);
+    setIsTransitioning(true);
+    setTransitionProgress(0);
+  };
+
+  // Handle infinite loop
   useEffect(() => {
     if (currentIndex < 2 || currentIndex >= totalItems - 2) {
       setPreviousIndex(currentIndex);
@@ -52,6 +100,7 @@ export default function Slider() {
     }
   }, [currentIndex]);
 
+  // Handle background transition animation
   useEffect(() => {
     let animationFrame;
     if (isTransitioning) {
@@ -97,19 +146,22 @@ export default function Slider() {
       <div className="absolute top-1/2 left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2">
         <div className="relative w-full overflow-hidden">
           <div
-            className={`flex transition-transform duration-500 ease-in-out ${
-              isTransitioning ? '' : 'transition-none'
+            ref={sliderRef}
+            className={`flex transition-transform duration-300 ease-out touch-none select-none ${
+              isDragging ? 'transition-none' : ''
             }`}
             style={{
-              transform: `translateX(calc(50% - ${currentIndex * (100 / 5)}% - ${50 / 5}%))`,
+              transform: `translateX(calc(50% - ${currentIndex * (100 / 5)}% - ${50 / 5}% + ${touchOffset}%))`,
             }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {extendedOptions.map((option, index) => (
               <div
                 key={`${option.id}-${index}`}
                 className={`w-[20%] flex-shrink-0 px-4 transition-all duration-300 cursor-pointer
                   ${index === currentIndex ? 'scale-110 z-10' : 'scale-90 opacity-70'}`}
-                onTouchStart={() => isMobile && handleInteraction(index)} // Mobile tap
                 onClick={() => !isMobile && handleInteraction(index)} // Desktop click
               >
                 <div className="block">
