@@ -58,8 +58,8 @@ export default function Slider() {
 
     const touchCurrentX = e.touches[0].clientX;
     const deltaX = touchCurrentX - touchStartX;
-    const slideWidth = sliderRef.current.offsetWidth / 5; // Width of one slide
-    const offsetPercentage = (deltaX / slideWidth) * (100 / 5); // Convert to percentage
+    const slideWidth = sliderRef.current.offsetWidth / 5;
+    const offsetPercentage = (deltaX / slideWidth) * (100 / 5);
     setTouchOffset(offsetPercentage);
   };
 
@@ -72,7 +72,7 @@ export default function Slider() {
 
     const slideWidth = sliderRef.current.offsetWidth / 5;
     const swipeDistance = (touchOffset / (100 / 5)) * slideWidth;
-    const swipeThreshold = slideWidth * 0.3; // Swipe must be at least 30% of slide width to trigger change
+    const swipeThreshold = slideWidth * 0.3;
 
     let newIndex = currentIndex;
     if (Math.abs(swipeDistance) > swipeThreshold) {
@@ -123,7 +123,7 @@ export default function Slider() {
   }, [isTransitioning]);
 
   return (
-    <div className="relative w-full h-[90vh] md:h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-[100dvh] overflow-hidden bg-black overscroll-y-none" style={{ touchAction: 'pan-x' }}>
       {/* Fondo anterior */}
       <Image
         src={extendedOptions[previousIndex]?.bgImage}
@@ -143,8 +143,8 @@ export default function Slider() {
       />
 
       {/* Slider */}
-      <div className="absolute top-1/2 left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2">
-        <div className="relative w-full overflow-hidden">
+      <div className="absolute top-1/2 left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2 h-full flex items-center">
+        <div className="relative w-full h-full overflow-hidden">
           <div
             ref={sliderRef}
             className={`flex transition-transform duration-300 ease-out touch-none select-none ${
@@ -162,9 +162,9 @@ export default function Slider() {
                 key={`${option.id}-${index}`}
                 className={`w-[20%] flex-shrink-0 px-4 transition-all duration-300 cursor-pointer
                   ${index === currentIndex ? 'scale-110 z-10' : 'scale-90 opacity-70'}`}
-                onClick={() => !isMobile && handleInteraction(index)} // Desktop click
+                onClick={() => !isMobile && handleInteraction(index)}
               >
-                <div className="block">
+                <div className="block h-full flex items-center justify-center">
                   <div className="text-[#FFFFFF] rounded-lg p-4 text-center">
                     <h3 className="text-lg font-semibold uppercase">{option.name}</h3>
                     <p>{option.estado}</p>
@@ -182,7 +182,7 @@ export default function Slider() {
       </div>
 
       {/* Paginación con líneas animadas */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 w-[30%]">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 w-[30%] pb-4">
         {options.map((_, index) => (
           <div
             key={index}
