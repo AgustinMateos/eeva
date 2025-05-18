@@ -144,7 +144,7 @@ export default function NewYork() {
         />
         {isBlurred && (
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white bg-black bg-opacity-50">
-            <div className="w-full md:w-[580px] flex flex-col text-[#F9F9F9] justify-around items-center space-y-6 md:space-y-8">
+            <div className=" w-[80%] md:w-[580px] flex flex-col text-[#F9F9F9] justify-around items-center space-y-6 md:space-y-8">
               <p className="font-ibm font-medium text-[38px] leading-[100%] tracking-[-0.02em] text-center uppercase text-[#F9F9F9]">
                 {`${countdown.days}:${countdown.hours}:${countdown.minutes}:${countdown.seconds}`}
               </p>
