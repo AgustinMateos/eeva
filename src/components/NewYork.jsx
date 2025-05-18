@@ -144,7 +144,7 @@ export default function NewYork() {
         />
         {isBlurred && (
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white bg-black bg-opacity-50">
-            <div className=" w-[80%] md:w-[580px] flex flex-col text-[#F9F9F9] justify-around items-center space-y-6 md:space-y-8">
+            <div className="w-[80%] md:w-[580px] flex flex-col text-[#F9F9F9] justify-around items-center space-y-6 md:space-y-8">
               <p className="font-ibm font-medium text-[38px] leading-[100%] tracking-[-0.02em] text-center uppercase text-[#F9F9F9]">
                 {`${countdown.days}:${countdown.hours}:${countdown.minutes}:${countdown.seconds}`}
               </p>
@@ -184,11 +184,11 @@ export default function NewYork() {
                 className="group w-full h-auto relative flex flex-col"
               >
                 <Image
-                  src={isBlurred ? '/productBlur.svg' : card.image}
-                  alt={isBlurred ? 'Product Unavailable' : card.title}
+                  src={card.image}
+                  alt={card.title}
                   width={289}
                   height={415}
-                  className="object-cover w-full h-auto"
+                  className={`object-cover w-full h-auto ${isBlurred ? 'filter blur-md' : ''}`}
                 />
                 {!isBlurred && (
                   <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
@@ -250,11 +250,11 @@ export default function NewYork() {
                 className="group w-full h-auto relative flex flex-col"
               >
                 <Image
-                  src={isBlurred ? '/productBlur.svg' : card.image}
-                  alt={isBlurred ? 'Product Unavailable' : card.title}
+                  src={card.image}
+                  alt={card.title}
                   width={289}
                   height={415}
-                  className="object-cover w-full h-auto"
+                  className={`object-cover w-full h-auto ${isBlurred ? 'filter blur-md' : ''}`}
                 />
                 {!isBlurred && (
                   <div className="absolute inset-0 flex justify-center items-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
