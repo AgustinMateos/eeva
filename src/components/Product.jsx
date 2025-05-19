@@ -324,8 +324,8 @@ const Product = () => {
               {product.displayName || 'Camisa Oversize'}
             </p>
           </div>
-          <div className='flex flex-row md:flex-col justify-center'>
-            <div className="h-[120px] md:h-[140px] w-[45%] md:w-full flex justify-evenly flex-col">
+          <div className='flex flex-row md:flex-col justify-around md:justify-center'>
+            <div className="h-auto md:h-[140px] w-[35%] md:w-full flex justify-evenly flex-col">
               <div className="flex items-center">
                 <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
                   <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
