@@ -446,7 +446,7 @@ const Navbar = () => {
         {/* Logo */}
         <div>
           <Link href="/collections/slider">
-            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[600px] '  />
+            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[600px] 2xl:left-[820px] '  />
           </Link>
         </div>
 
