@@ -313,16 +313,15 @@ const Navbar = () => {
           </div>
           {/* Renderizar el nombre de la colección en desktop si existe */}
           {currentCollection && (
-            <div className="hidden md:flex text-[12px] h-[34px] items-center text-white w-[150px] md:justify-between">
+            <div className="hidden md:flex text-[12px] h-[34px] items-center text-white w-[190px] md:justify-evenly">
               <div className='h-full flex flex-col justify-between'>
-              <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[5px]">Collection</p>
+              <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[15px]">Collection</p>
               <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]  ">07-07-2025</span>
               </div>
               <div className='flex h-full'>
                 <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase ">
                 {currentCollection.name}
               </span></div>
-              
             </div>
           )}
           {/* Botones Hombre y Mujer fuera del menú hamburguesa (solo en desktop) */}
@@ -447,7 +446,7 @@ const Navbar = () => {
         {/* Logo */}
         <div>
           <Link href="/collections/slider">
-            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" />
+            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[600px] '  />
           </Link>
         </div>
 

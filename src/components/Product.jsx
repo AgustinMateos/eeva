@@ -190,7 +190,7 @@ const Product = () => {
                 alt={`Product image ${currentImageIndex + 1}`}
                 width={545}
                 height={900}
-                className="object-contain h-[535px] md:w-[600px] md:h-[600px]"
+                className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
                 priority
               />
               {isMagnifying && (
@@ -211,7 +211,7 @@ const Product = () => {
               )}
             </div>
           )}
-          <div className="md:block hidden flex-col items-center mt-4">
+          <div className="md:block hidden absolute bottom-[-35px] flex-col items-center mt-4">
             <button
               onClick={handleMagnifyClick}
               className="flex items-center text-white px-4 py-2"
@@ -233,17 +233,9 @@ const Product = () => {
                 />
               </svg>
             </button>
-            {isMagnifying && (
-              <button
-                onClick={handleCloseMagnifier}
-                className="mt-2 text-white px-4 py-2 transition"
-                aria-label="Close magnifying glass"
-              >
-                <Image src="/XMenuIcon.svg" width={24} height={24} alt="close lupa" />
-              </button>
-            )}
+            
           </div>
-          <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] xl:left-[200px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
+          <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] xl:left-[250px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
             <div className="w-[190px] md:w-[170px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
               {Array.from({ length: 40 }, (_, index) => {
                 const maxHeightOptions = [5, 10, 15, 30];
@@ -357,7 +349,7 @@ const Product = () => {
             <div className="h-[213px] flex flex-col justify-around w-[45%] md:w-full">
               <div>
                 <p className="uppercase">Color</p>
-                <div className="flex w-[50%] md:w-[17%] justify-between mt-2">
+                <div className="flex w-[50%] md:w-[19%] justify-between mt-2">
                   {product.colors.map((color, index) => (
                     <button
                       key={index}
