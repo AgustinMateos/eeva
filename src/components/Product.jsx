@@ -350,18 +350,28 @@ const Product = () => {
               <div>
                 <p className="uppercase">Color</p>
                 <div className="flex w-[50%] md:w-[19%] justify-between mt-2">
-                  {product.colors.map((color, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedColor(color.color.name)}
-                      className="w-[40px] h-[40px] p-1 rounded-[20px] border"
-                      style={{
-                        backgroundColor: getColorBackground(color.color.name),
-                        borderColor: selectedColor === color.color.name ? '#FFFFFF' : 'transparent',
-                        borderWidth: selectedColor === color.color.name ? '2px' : '1px',
-                      }}
-                    />
-                  ))}
+                  
+                {product.colors.map((color, index) => (
+  <button
+    key={index}
+    onClick={() => setSelectedColor(color.color.name)}
+    className="w-[40px] h-[40px] p-1 rounded-[20px] border"
+    style={{
+      borderColor: selectedColor === color.color.name ? '#FFFFFF' : 'transparent',
+      borderWidth: selectedColor === color.color.name ? '0.5px' : '1px',
+    }}
+  >
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: getColorBackground(color.color.name),
+        borderRadius: '18px',
+        padding: selectedColor === color.color.name ? '2px' : '0',
+      }}
+    />
+  </button>
+))}
                 </div>
               </div>
               <div>
