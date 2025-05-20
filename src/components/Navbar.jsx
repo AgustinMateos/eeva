@@ -112,7 +112,7 @@ const Navbar = () => {
 
   return (
     <div className="absolute w-full">
-      <div className="flex justify-around h-[90px] items-center">
+      <div className="flex justify-between md:justify-around h-[90px] items-center">
         <div className="min-w-[90px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
           {/* Botón hamburguesa w-[90px] md:w-[324px]  */}
           <div ref={menuRef}>
@@ -446,7 +446,7 @@ const Navbar = () => {
         {/* Logo */}
         <div>
           <Link href="/collections/slider">
-            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[600px] 2xl:left-[820px] '  />
+            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[50px] md:left-[600px] 2xl:left-[820px] '  />
           </Link>
         </div>
 
