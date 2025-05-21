@@ -80,7 +80,7 @@ const Navbar = () => {
     setIsSearchModalOpen(!isSearchModalOpen);
     setSearchTerm(''); // Limpia el término de búsqueda al abrir/cerrar
   };
-
+ 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target) && isOpen) {
       setIsOpen(false);
@@ -110,6 +110,7 @@ const Navbar = () => {
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  
   return (
     <div className="absolute w-full">
       <div className="flex justify-between md:justify-around h-[90px] items-center">
@@ -330,7 +331,7 @@ const Navbar = () => {
               <div ref={hombreRef} className="relative">
                 <button
                   onClick={toggleHombreDropdown}
-                  className="w-[50px] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                  className="w-[50px]   transition-all duration-200 hover:bg-[#A8A8A84D] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
                 >
                   H
                 </button>
@@ -386,7 +387,7 @@ const Navbar = () => {
               <div ref={mujerRef} className="relative">
                 <button
                   onClick={toggleMujerDropdown}
-                  className="w-[50px] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                  className="w-[50px]   transition-all duration-200 hover:bg-[#A8A8A84D] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
                 >
                   M
                 </button>
@@ -458,16 +459,17 @@ const Navbar = () => {
           <div className="flex w-[188px] md:w-[288px] justify-around items-center">
             <button
               onClick={toggleSearchModal}
-              className="hidden md:flex backdrop-blur-[6px] text-center w-[60px] h-[36px] items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px] focus:outline-none"
+              className="hidden md:flex backdrop-blur-[6px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] text-center w-[60px] h-[36px] items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px] focus:outline-none"
             >
               <Image src={'/lupa.svg'} width={24} height={24} alt="lupa" />
             </button>
             <Link href="/collections/aboutus">
-              <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] justify-center items-center text-center bg-[#A8A8A81A] w-[120px]">
-                ABOUT US
-              </p>
-            </Link>
-            <p className="backdrop-blur-[6px] bg-[#A8A8A81A] text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px]">
+  <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[120px] justify-center items-center text-center bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] ">
+    ABOUT US
+  </p>
+</Link>
+
+            <p className="backdrop-blur-[6px]  text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D]">
               0
             </p>
           </div>

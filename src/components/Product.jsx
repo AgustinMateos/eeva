@@ -410,7 +410,7 @@ const Product = () => {
                 <p className="uppercase">Size</p>
                 <button
                   onClick={() => setIsSizeGuideOpen(true)}
-                  className="text-white cursor-pointer flex w-full justify-between mt-2"
+                  className="text-white cursor-pointer flex w-full justify-between mt-2 "
                 >
                   Size guide
                   <Image
@@ -428,7 +428,7 @@ const Product = () => {
                       return (
                         <button
                           key={index}
-                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''}`}
+                          className={`w-[40px]   transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''}`}
                           disabled={stock <= 0}
                         >
                           {size}
@@ -444,12 +444,12 @@ const Product = () => {
             </div>
           </div>
           <div className="flex h-[90px] md:h-auto flex-col items-center md:flex-row justify-between">
-            <p className="w-[315px] pb-[10px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] uppercase text-center">
+            <p className="w-[315px] pb-[10px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5]   transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center">
               + Add to bag
             </p>
             <button
               onClick={() => setIsShopLookOpen(true)}
-              className="w-[315px] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase"
+              className="w-[315px]   transition-all duration-200 hover:bg-[#A8A8A84D] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase"
             >
               Shop Look
             </button>
@@ -469,7 +469,7 @@ const Product = () => {
                 />
               </button>
               {isDetailsOpen && (
-                <div className="font-normal text-[12px] leading-[100%] tracking-[-0.04em] text-justify align-middle">
+                <div className="font-normal text-[12px] leading-[110%] tracking-[-4%] text-justify align-middle">
                   <p>{product.details}</p>
                 </div>
               )}
@@ -488,7 +488,7 @@ const Product = () => {
                 />
               </button>
               {isProductCareOpen && (
-                <div className="font-normal text-[12px] leading-[100%] tracking-[-0.04em] text-justify align-middle">
+                <div className="font-normal text-[12px] leading-[110%] tracking-[-4%] text-justify align-middle">
                   <p>{product.productCare}</p>
                 </div>
               )}
@@ -753,7 +753,7 @@ const Product = () => {
           <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[300px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
             <div className="w-full h-[60px] flex justify-center items-center">
               <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
-                <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
+                <h2 className="font-medium  text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
                   Size Guide
                 </h2>
                 <button
