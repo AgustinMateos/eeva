@@ -551,7 +551,7 @@ const Product = () => {
                                 alt={look.displayName}
                                 width={200}
                                 height={250}
-                                className="object-cover w-full max-w-[200px] h-auto"
+                                className="object-cover w-full max-w-[200px] h-[200px]"
                               />
                               <p className="text-white text-xs uppercase mt-2 text-center">
                                 {look.displayName}
