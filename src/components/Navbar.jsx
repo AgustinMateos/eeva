@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import style from '@/app/ui/navbar.module.css';
-import { usePathname } from 'next/navigation';
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import style from "@/app/ui/navbar.module.css";
+import { usePathname } from "next/navigation";
+import { useCart } from "./context/CartContext";
 const colecciones = [
   { name: "Initiation", link: "/collections/initiation", age: "new" },
   { name: "Amsterdam", link: "/collections/amsterdam", age: "'24" },
@@ -15,17 +16,17 @@ const colecciones = [
 ];
 
 const products = [
-  { id: 1, title: 'Native Iron Tunk', image: '/NativeIronTunk.svg' },
-  { id: 2, title: 'Century Dashe', image: '/CenturyDashe.svg' },
-  { id: 3, title: 'Native Dark Jean', image: '/NativeDarkJean.svg' },
-  { id: 4, title: 'Paola Wood Shirt', image: '/PaolaWoodShirt.svg' },
-  { id: 5, title: 'Native Iron Tunk', image: '/NativeIronTunk2.svg' },
-  { id: 6, title: 'Century Dashe', image: '/CenturyDashe2.svg' },
-  { id: 7, title: 'Native Dark Jean', image: '/NativeDarkJean2.svg' },
-  { id: 8, title: 'Paola Wood Shirt', image: '/PaolaWoodShirt2.svg' },
-  { id: 9, title: 'Native Iron Tunk', image: '/NativeIronTunk2.svg' },
-  { id: 10, title: 'Native Iron Tunk', image: '/NativeIronTunk2.svg' },
-  { id: 11, title: 'Native Iron Tunk', image: '/NativeIronTunk2.svg' },
+  { id: 1, title: "Native Iron Tunk", image: "/NativeIronTunk.svg" },
+  { id: 2, title: "Century Dashe", image: "/CenturyDashe.svg" },
+  { id: 3, title: "Native Dark Jean", image: "/NativeDarkJean.svg" },
+  { id: 4, title: "Paola Wood Shirt", image: "/PaolaWoodShirt.svg" },
+  { id: 5, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
+  { id: 6, title: "Century Dashe", image: "/CenturyDashe2.svg" },
+  { id: 7, title: "Native Dark Jean", image: "/NativeDarkJean2.svg" },
+  { id: 8, title: "Paola Wood Shirt", image: "/PaolaWoodShirt2.svg" },
+  { id: 9, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
+  { id: 10, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
+  { id: 11, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
 ];
 
 const topSearchedProducts = [
@@ -40,7 +41,7 @@ const Navbar = () => {
   const [isMujerOpen, setIsMujerOpen] = useState(false);
   const [isColeccionesOpen, setIsColeccionesOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const pathname = usePathname();
   const currentCollection = colecciones.find((coleccion) =>
     pathname.startsWith(coleccion.link)
@@ -50,6 +51,9 @@ const Navbar = () => {
   const mujerRef = useRef(null);
   const coleccionesRef = useRef(null);
   const modalRef = useRef(null);
+
+  //Agregado por Pablo para obtener el total del carrito
+  const { totalItems } = useCart();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -78,31 +82,47 @@ const Navbar = () => {
 
   const toggleSearchModal = () => {
     setIsSearchModalOpen(!isSearchModalOpen);
-    setSearchTerm(''); // Limpia el término de búsqueda al abrir/cerrar
+    setSearchTerm(""); // Limpia el término de búsqueda al abrir/cerrar
   };
- 
+
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target) && isOpen) {
       setIsOpen(false);
     }
-    if (hombreRef.current && !hombreRef.current.contains(event.target) && isHombreOpen) {
+    if (
+      hombreRef.current &&
+      !hombreRef.current.contains(event.target) &&
+      isHombreOpen
+    ) {
       setIsHombreOpen(false);
     }
-    if (mujerRef.current && !mujerRef.current.contains(event.target) && isMujerOpen) {
+    if (
+      mujerRef.current &&
+      !mujerRef.current.contains(event.target) &&
+      isMujerOpen
+    ) {
       setIsMujerOpen(false);
     }
-    if (coleccionesRef.current && !coleccionesRef.current.contains(event.target) && isColeccionesOpen) {
+    if (
+      coleccionesRef.current &&
+      !coleccionesRef.current.contains(event.target) &&
+      isColeccionesOpen
+    ) {
       setIsColeccionesOpen(false);
     }
-    if (modalRef.current && !modalRef.current.contains(event.target) && isSearchModalOpen) {
+    if (
+      modalRef.current &&
+      !modalRef.current.contains(event.target) &&
+      isSearchModalOpen
+    ) {
       setIsSearchModalOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, isHombreOpen, isMujerOpen, isColeccionesOpen, isSearchModalOpen]);
 
@@ -110,19 +130,21 @@ const Navbar = () => {
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  
   return (
     <div className="absolute w-full">
       <div className="flex justify-between md:justify-around h-[90px] items-center">
         <div className="min-w-[90px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
           {/* Botón hamburguesa w-[90px] md:w-[324px]  */}
           <div ref={menuRef}>
-            <button onClick={toggleDropdown} className={`${style.menuIcon} focus:outline-none`}>
+            <button
+              onClick={toggleDropdown}
+              className={`${style.menuIcon} focus:outline-none`}
+            >
               <Image
-                src={isOpen ? '/XMenuIcon.svg' : '/IconoHamburguesa.svg'}
+                src={isOpen ? "/XMenuIcon.svg" : "/IconoHamburguesa.svg"}
                 width={50}
                 height={50}
-                alt={isOpen ? 'close menu' : 'menu'}
+                alt={isOpen ? "close menu" : "menu"}
               />
             </button>
             {/* Overlay for mobile when menu is open */}
@@ -157,8 +179,16 @@ const Navbar = () => {
                   {/* Botones en mobile */}
                   <div className="block md:hidden">
                     <div className="flex">
-                      <button onClick={() => setIsOpen(false)} className="focus:outline-none">
-                        <Image src="/XMenuIcon.svg" width={24} height={24} alt="close menu" />
+                      <button
+                        onClick={() => setIsOpen(false)}
+                        className="focus:outline-none"
+                      >
+                        <Image
+                          src="/XMenuIcon.svg"
+                          width={24}
+                          height={24}
+                          alt="close menu"
+                        />
                       </button>
                     </div>
                     <div className="mt-2">
@@ -167,7 +197,12 @@ const Navbar = () => {
                         className="text-center w-[100%] h-[36px] flex items-center justify-between"
                       >
                         <p>BUSCAR</p>
-                        <Image src={'/lupa.svg'} width={24} height={24} alt="lupa" />
+                        <Image
+                          src={"/lupa.svg"}
+                          width={24}
+                          height={24}
+                          alt="lupa"
+                        />
                       </button>
                     </div>
                     <div className="mt-2" ref={coleccionesRef}>
@@ -177,10 +212,14 @@ const Navbar = () => {
                       >
                         Colecciones
                         <Image
-                          src={isColeccionesOpen ? '/flechamobileup.svg' : '/flechamobiledown.svg'}
+                          src={
+                            isColeccionesOpen
+                              ? "/flechamobileup.svg"
+                              : "/flechamobiledown.svg"
+                          }
                           width={24}
                           height={24}
-                          alt={isColeccionesOpen ? 'arrow up' : 'arrow down'}
+                          alt={isColeccionesOpen ? "arrow up" : "arrow down"}
                         />
                       </button>
                       {isColeccionesOpen && (
@@ -210,10 +249,14 @@ const Navbar = () => {
                       >
                         HOMBRE
                         <Image
-                          src={isHombreOpen ? '/flechamobileup.svg' : '/flechamobiledown.svg'}
+                          src={
+                            isHombreOpen
+                              ? "/flechamobileup.svg"
+                              : "/flechamobiledown.svg"
+                          }
                           width={24}
                           height={24}
-                          alt={isHombreOpen ? 'arrow up' : 'arrow down'}
+                          alt={isHombreOpen ? "arrow up" : "arrow down"}
                         />
                       </button>
                       {isHombreOpen && (
@@ -244,17 +287,24 @@ const Navbar = () => {
                         </div>
                       )}
                     </div>
-                    <div ref={mujerRef} className="relative mt-2 border-b border-b-[#47545C]">
+                    <div
+                      ref={mujerRef}
+                      className="relative mt-2 border-b border-b-[#47545C]"
+                    >
                       <button
                         onClick={toggleMujerDropdown}
                         className="w-full flex h-[36px] text-center justify-between"
                       >
                         MUJER
                         <Image
-                          src={isMujerOpen ? '/flechamobileup.svg' : '/flechamobiledown.svg'}
+                          src={
+                            isMujerOpen
+                              ? "/flechamobileup.svg"
+                              : "/flechamobiledown.svg"
+                          }
                           width={24}
                           height={24}
-                          alt={isMujerOpen ? 'arrow up' : 'arrow down'}
+                          alt={isMujerOpen ? "arrow up" : "arrow down"}
                         />
                       </button>
                       {isMujerOpen && (
@@ -315,14 +365,19 @@ const Navbar = () => {
           {/* Renderizar el nombre de la colección en desktop si existe */}
           {currentCollection && (
             <div className="hidden md:flex text-[12px] h-[34px] items-center text-white w-[190px] md:justify-evenly">
-              <div className='h-full flex flex-col justify-between'>
-              <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[15px]">Collection</p>
-              <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]  ">07-07-2025</span>
+              <div className="h-full flex flex-col justify-between">
+                <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[15px]">
+                  Collection
+                </p>
+                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]  ">
+                  07-07-2025
+                </span>
               </div>
-              <div className='flex h-full'>
+              <div className="flex h-full">
                 <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase ">
-                {currentCollection.name}
-              </span></div>
+                  {currentCollection.name}
+                </span>
+              </div>
             </div>
           )}
           {/* Botones Hombre y Mujer fuera del menú hamburguesa (solo en desktop) */}
@@ -446,11 +501,23 @@ const Navbar = () => {
 
         {/* Logo */}
         <div>
-          <Link href="/collections/slider" className='hidden md:block'>
-            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[740px] '  />
+          <Link href="/collections/slider" className="hidden md:block">
+            <Image
+              src={"/LogoFullEEVA.svg"}
+              width={262}
+              height={31}
+              alt="logo"
+              className="absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[740px] "
+            />
           </Link>
-          <Link href="/collections/slider" className='md:hidden'>
-            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className=''  />
+          <Link href="/collections/slider" className="md:hidden">
+            <Image
+              src={"/LogoFullEEVA.svg"}
+              width={262}
+              height={31}
+              alt="logo"
+              className=""
+            />
           </Link>
         </div>
 
@@ -459,19 +526,19 @@ const Navbar = () => {
           <div className="flex w-[188px] md:w-[288px] justify-around items-center">
             <button
               onClick={toggleSearchModal}
-              className="hidden md:flex backdrop-blur-[6px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] text-center w-[60px] h-[36px] items-center justify-center bg-[#A8A8A81A] rounded-[2px] border-[0.5px] focus:outline-none"
+              className="hidden md:flex backdrop-blur-[6px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] text-center w-[60px] h-[36px] items-center justify-center  rounded-[2px] border-[0.5px] focus:outline-none"
             >
-              <Image src={'/lupa.svg'} width={24} height={24} alt="lupa" />
+              <Image src={"/lupa.svg"} width={24} height={24} alt="lupa" />
             </button>
             <Link href="/collections/aboutus">
-  <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[120px] justify-center items-center text-center bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] ">
-    ABOUT US
-  </p>
-</Link>
+              <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[120px] justify-center items-center text-center bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] ">
+                ABOUT US
+              </p>
+            </Link>
 
-            <p className="backdrop-blur-[6px]  text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D]">
-              0
-            </p>
+            <Link href="/cart" className="backdrop-blur-[6px]  text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D]">
+              {totalItems}
+            </Link>
           </div>
         </div>
       </div>
@@ -489,7 +556,7 @@ const Navbar = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full p-2 pr-20 rounded-md bg-[#FFFFFF1A] border-[0.5px] border-white text-white focus:outline-none"
-                style={{ paddingLeft: '40px' }} // Space for the magnifying glass
+                style={{ paddingLeft: "40px" }} // Space for the magnifying glass
               />
               <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
                 <Image
@@ -501,7 +568,7 @@ const Navbar = () => {
               </div>
               {/* Botón Limpiar */}
               <button
-                onClick={() => setSearchTerm('')}
+                onClick={() => setSearchTerm("")}
                 className="absolute right-10 top-1/2 transform -translate-y-1/2 text-white text-sm px-2 py-1 focus:outline-none"
               >
                 LIMPIAR
@@ -511,18 +578,26 @@ const Navbar = () => {
                 onClick={toggleSearchModal}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 focus:outline-none"
               >
-                <Image src="/XMenuIcon.svg" width={24} height={24} alt="close modal" />
+                <Image
+                  src="/XMenuIcon.svg"
+                  width={24}
+                  height={24}
+                  alt="close modal"
+                />
               </button>
             </div>
             <div className="mt-4 w-full bg-[#FFFFFF1A] border-[0.5px] border-white rounded-md p-2 text-white overflow-y-auto max-h-[80vh]">
               {/* Dynamic search results section */}
-              {searchTerm !== '' && (
+              {searchTerm !== "" && (
                 <div className="m-4">
                   <h4 className="uppercase">Resultados</h4>
                   {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       {filteredProducts.map((product) => (
-                        <div key={product.id} className="flex flex-col items-center">
+                        <div
+                          key={product.id}
+                          className="flex flex-col items-center"
+                        >
                           <Image
                             src={product.image}
                             width={150}

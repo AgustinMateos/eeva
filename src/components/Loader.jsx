@@ -15,7 +15,7 @@ const Loader = () => {
   }, []);
 
   return (
-    <div className="relative w-screen h-screen">
+    <div className="fixed inset-0 w-full h-full overflow-hidden z-50 bg-gradient-to-r from-[#303F48] to-[#6D7276]">
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-[20ms] ease-linear"
         style={{

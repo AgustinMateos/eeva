@@ -1,5 +1,6 @@
 import { ibmMono } from "./ui/fonts";
 import "./globals.css";
+import { CartProvider } from "@/components/context/CartContext";
 
 export const metadata = {
   title: "Eeva",
@@ -11,9 +12,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${ibmMono.className} antialiased bg-[#182025]`}>
-        {children}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );
 }
-
