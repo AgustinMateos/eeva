@@ -92,9 +92,9 @@ const Product = () => {
     fetchProduct();
   }, [id]);
 
-  console.log(product)
+  console.log(product);
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (isPaused || images.length === 0) return;
 
     const interval = setInterval(() => {
@@ -102,7 +102,7 @@ const Product = () => {
     }, 700);
 
     return () => clearInterval(interval);
-  }, [images.length, isPaused]); */
+  }, [images.length, isPaused]);
 
   const handleMagnifyClick = () => {
     setIsPaused(true);
@@ -240,7 +240,7 @@ const Product = () => {
   return (
     <div className="h-[1022px] flex justify-center items-center">
       <div className="h-[800px] max-w-[1252px] flex justify-between flex-col md:flex-row">
-        {/* <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
+        <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
           {images.length > 0 && (
             <div
               className="relative"
@@ -419,7 +419,7 @@ const Product = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
         <div className="text-[#FCFDFD] w-auto md:w-[551px] justify-around h-[500px] flex flex-col">
           <div className="flex items-center justify-center md:justify-start">
             <p className="h-[40px] w-[90%] md:w-[100%] px-4 border uppercase flex items-center">
