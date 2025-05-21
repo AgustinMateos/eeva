@@ -572,8 +572,8 @@ const Product = () => {
                                 <span className="uppercase">Ars $</span> {discountedPrice.toFixed(2)}
                               </p>
                               <div>
-                                <p className="uppercase text-xs text-center mt-2">Color</p>
-                                <div className="flex w-[50%] justify-center gap-2 mt-1">
+                                {/* <p className="uppercase text-xs text-center mt-2 text-[#FCFDFD]">Color</p> */}
+                                <div className="flex w-full md:w-[50%] justify-center gap-2 mt-1">
                                   {look.colors.map((color, colorIndex) => (
                                     <button
                                       key={colorIndex}
@@ -598,7 +598,7 @@ const Product = () => {
                                 </div>
                               </div>
                               <div className="flex flex-col items-center mt-2">
-                                <p className="uppercase text-xs text-center">Size</p>
+                                {/* <p className="uppercase text-xs text-center text-[#FCFDFD]">Size</p> */}
                                 <div className="flex gap-2 mt-1">
                                   {allSizes.map((size, sizeIndex) => {
                                     const stock = lookSizeStockMap[size] || 0;
@@ -654,7 +654,7 @@ const Product = () => {
                               alt={look.displayName}
                               width={200}
                               height={250}
-                              className="object-cover w-full max-w-[200px] h-auto"
+                              className="object-cover w-full max-w-[200px] h-[200px]"
                             />
                             <p className="text-white text-sm md:text-[14px] uppercase mt-2 text-center">
                               {look.displayName}
@@ -675,8 +675,8 @@ const Product = () => {
                               <span className="uppercase">Ars $</span> {discountedPrice.toFixed(2)}
                             </p>
                             <div>
-                              <p className="uppercase text-sm md:text-[14px] text-center mt-2">Color</p>
-                              <div className="flex w-[50%] justify-center gap-2 mt-1">
+                              {/* <p className="uppercase text-sm md:text-[14px] text-center mt-2 text-[#FCFDFD]">Color</p> */}
+                              <div className="flex w-[100%] justify-center gap-2 mt-1">
                                 {look.colors.map((color, colorIndex) => (
                                   <button
                                     key={colorIndex}
@@ -701,7 +701,7 @@ const Product = () => {
                               </div>
                             </div>
                             <div className="flex flex-col items-center mt-2">
-                              <p className="uppercase text-sm md:text-[14px] text-center">Size</p>
+                              {/* <p className="uppercase text-sm md:text-[14px] text-center text-[#FCFDFD]">Size</p> */}
                               <div className="flex gap-2 mt-1">
                                 {allSizes.map((size, sizeIndex) => {
                                   const stock = lookSizeStockMap[size] || 0;
