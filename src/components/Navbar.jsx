@@ -446,7 +446,7 @@ const Navbar = () => {
         {/* Logo */}
         <div>
           <Link href="/collections/slider" className='hidden md:block'>
-            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[820px] '  />
+            <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className='absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[740px] '  />
           </Link>
           <Link href="/collections/slider" className='md:hidden'>
             <Image src={'/LogoFullEEVA.svg'} width={262} height={31} alt="logo" className=''  />

@@ -15,6 +15,7 @@ const Product = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [isShopLookOpen, setIsShopLookOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedLookColors, setSelectedLookColors] = useState({});
 
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -35,6 +36,7 @@ const Product = () => {
         const fetchedProduct = response.data;
         setProduct(fetchedProduct);
 
+        // Configurar imágenes
         if (fetchedProduct.models?.images?.gif360) {
           setImages([
             `/${fetchedProduct.models.images.gif360}.webp`,
@@ -54,11 +56,24 @@ const Product = () => {
           ]);
         }
 
+        // Inicializar color del producto
         if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
           setSelectedColor(fetchedProduct.colors[0].color.name);
         }
+
+        // Inicializar colores de los looks
+        if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
+          const initialLookColors = {};
+          fetchedProduct.looks.forEach((look, index) => {
+            if (look.colors && look.colors.length > 0) {
+              initialLookColors[look._id || index] = look.colors[0].color.name;
+            }
+          });
+          setSelectedLookColors(initialLookColors);
+        }
       } catch (err) {
-        setError('Error al cargar el producto');
+        console.error('Error fetching product:', err);
+        setError('Error al cargar el producto. Por favor, intenta de nuevo.');
       }
     };
 
@@ -124,6 +139,13 @@ const Product = () => {
     setCurrentSlide(index);
   };
 
+  const handleLookColorChange = (lookId, colorName) => {
+    setSelectedLookColors((prev) => ({
+      ...prev,
+      [lookId]: colorName
+    }));
+  };
+
   if (error) return <div>{error}</div>;
   if (!product) return null;
 
@@ -148,6 +170,17 @@ const Product = () => {
   const discountedPrice = product.discount
     ? product.price - (product.price * (product.discount / 100))
     : product.price;
+
+  const getLookSizeStockMap = (look, selectedColor) => {
+    return selectedColor
+      ? look.colors
+        .find((color) => color.color.name === selectedColor)
+        ?.sizes.reduce((acc, size) => {
+          acc[size.size.name] = size.stock;
+          return acc;
+        }, {}) || {}
+      : {};
+  };
 
   const tableHeaders = ['REF', 'MEDIDAS (CM)', 'S', 'M', 'L'];
   const tableData = [
@@ -233,7 +266,6 @@ const Product = () => {
                 />
               </svg>
             </button>
-            
           </div>
           <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] xl:left-[250px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
             <div className="w-[190px] md:w-[170px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
@@ -294,7 +326,6 @@ const Product = () => {
                 className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]"
                 style={{ height: '100%' }}
               ></div>
-              {/*info modelo */}
               <div className="pl-[20px]">
                 <div className="flex justify-between">
                   <p>Nombre</p> <p className="w-[48px] lowercase">{product.models.name}</p>
@@ -325,57 +356,54 @@ const Product = () => {
             </p>
           </div>
           <div className='flex flex-row md:flex-col justify-around md:justify-center'>
-          <div className="h-auto md:h-[140px] w-[35%] md:w-full flex justify-evenly flex-col">
-  {product.discount > 0 && (
-    <div className="flex items-center">
-      <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
-        <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
-          {product.discount}%
-        </p>
-      </div>
-      <div className="flex items-baseline w-full">
-        <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
-          <p className="uppercase mr-1 w-auto">Ars $</p> {product.price.toFixed(2)}
-        </span>
-      </div>
-    </div>
-  )}
-  <div className="flex items-baseline">
-    <p className="uppercase mr-1">Ars $</p>
-    <span>{discountedPrice.toFixed(2)}</span>
-  </div>
-  
-    <div>
-      <p>3 cuotas sin interés en bancos seleccionados</p>
-    </div>
-  
-</div>
+            <div className="h-auto md:h-[140px] w-[35%] md:w-full flex justify-evenly flex-col">
+              {product.discount > 0 && (
+                <div className="flex items-center">
+                  <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
+                    <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
+                      {product.discount}%
+                    </p>
+                  </div>
+                  <div className="flex items-baseline w-full">
+                    <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
+                      <p className="uppercase mr-1 w-auto">Ars $</p> {product.price.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-baseline">
+                <p className="uppercase mr-1">Ars $</p>
+                <span>{discountedPrice.toFixed(2)}</span>
+              </div>
+              <div>
+                <p>3 cuotas sin interés en bancos seleccionados</p>
+              </div>
+            </div>
             <div className="h-[213px] flex flex-col justify-around w-[45%] md:w-full">
               <div>
                 <p className="uppercase">Color</p>
                 <div className="flex w-[50%] md:w-[19%] justify-between mt-2">
-                  
-                {product.colors.map((color, index) => (
-  <button
-    key={index}
-    onClick={() => setSelectedColor(color.color.name)}
-    className="w-[40px] h-[40px] p-1 rounded-[20px] border"
-    style={{
-      borderColor: selectedColor === color.color.name ? '#FFFFFF' : 'transparent',
-      borderWidth: selectedColor === color.color.name ? '0.5px' : '1px',
-    }}
-  >
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: getColorBackground(color.color.name),
-        borderRadius: '18px',
-        padding: selectedColor === color.color.name ? '2px' : '0',
-      }}
-    />
-  </button>
-))}
+                  {product.colors.map((color, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedColor(color.color.name)}
+                      className="w-[40px] h-[40px] p-1 rounded-[20px] border"
+                      style={{
+                        borderColor: selectedColor === color.color.name ? '#FFFFFF' : 'transparent',
+                        borderWidth: selectedColor === color.color.name ? '0.5px' : '1px',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: getColorBackground(color.color.name),
+                          borderRadius: '18px',
+                          padding: selectedColor === color.color.name ? '2px' : '0',
+                        }}
+                      />
+                    </button>
+                  ))}
                 </div>
               </div>
               <div>
@@ -400,8 +428,7 @@ const Product = () => {
                       return (
                         <button
                           key={index}
-                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''
-                            }`}
+                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''}`}
                           disabled={stock <= 0}
                         >
                           {size}
@@ -409,7 +436,6 @@ const Product = () => {
                       );
                     })}
                   </div>
-                  {/* Display "No hay stock disponible" if all sizes have zero stock */}
                   {Object.values(sizeStockMap).every(stock => stock <= 0) && (
                     <p className="text-white text-sm mt-2">No hay stock disponible</p>
                   )}
@@ -512,7 +538,8 @@ const Product = () => {
                           const discountedPrice = look.discount
                             ? look.price - (look.price * (look.discount / 100))
                             : look.price;
-                          const lookSizes = look.colors.flatMap((c) => c.sizes);
+                          const selectedLookColor = selectedLookColors[look._id || index];
+                          const lookSizeStockMap = getLookSizeStockMap(look, selectedLookColor);
 
                           return (
                             <div
@@ -529,29 +556,66 @@ const Product = () => {
                               <p className="text-white text-xs uppercase mt-2 text-center">
                                 {look.displayName}
                               </p>
-                              <p className="text-white text-xs text-center">
-                                ARS ${discountedPrice.toFixed(2)}
-                                {look.discount > 0 && (
-                                  <span className="line-through text-gray-400 ml-2">
-                                    ${look.price.toFixed(2)}
+                              {look.discount > 0 && (
+                                <div className="flex items-center justify-center mt-1">
+                                  <div className="w-[43px] flex justify-center h-[25px] px-2 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323]">
+                                    <p className="font-normal text-[12px] tracking-[-0.04em] align-middle">
+                                      {look.discount}%
+                                    </p>
+                                  </div>
+                                  <span className="line-through text-gray-400 text-[12px] ml-2">
+                                    <span className="uppercase">Ars $</span> {look.price.toFixed(2)}
                                   </span>
-                                )}
+                                </div>
+                              )}
+                              <p className="text-white text-xs text-center mt-1">
+                                <span className="uppercase">Ars $</span> {discountedPrice.toFixed(2)}
                               </p>
-                              <div className="flex space-x-2 mt-2">
-                                {['S', 'M', 'L'].map((size, sizeIndex) => {
-                                  const sizeData = lookSizes.find((s) => s.size === size);
-                                  const stock = sizeData ? sizeData.stock : 0;
-                                  return (
+                              <div>
+                                <p className="uppercase text-xs text-center mt-2">Color</p>
+                                <div className="flex w-[50%] justify-center gap-2 mt-1">
+                                  {look.colors.map((color, colorIndex) => (
                                     <button
-                                      key={sizeIndex}
-                                      className={`w-8 h-8 p-2 lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs ${stock <= 0 ? 'line-through opacity-50' : ''
-                                        }`}
-                                      disabled={stock <= 0}
+                                      key={colorIndex}
+                                      onClick={() => handleLookColorChange(look._id || index, color.color.name)}
+                                      className="w-[40px] h-[40px] p-1 rounded-[20px] border"
+                                      style={{
+                                        borderColor: selectedLookColor === color.color.name ? '#FFFFFF' : 'transparent',
+                                        borderWidth: selectedLookColor === color.color.name ? '0.5px' : '1px',
+                                      }}
                                     >
-                                      {size}
+                                      <div
+                                        style={{
+                                          width: '100%',
+                                          height: '100%',
+                                          backgroundColor: getColorBackground(color.color.name),
+                                          borderRadius: '18px',
+                                          padding: selectedLookColor === color.color.name ? '2px' : '0',
+                                        }}
+                                      />
                                     </button>
-                                  );
-                                })}
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-center mt-2">
+                                <p className="uppercase text-xs text-center">Size</p>
+                                <div className="flex gap-2 mt-1">
+                                  {allSizes.map((size, sizeIndex) => {
+                                    const stock = lookSizeStockMap[size] || 0;
+                                    return (
+                                      <button
+                                        key={sizeIndex}
+                                        className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs ${stock <= 0 ? 'line-through opacity-50' : ''}`}
+                                        disabled={stock <= 0}
+                                      >
+                                        {size}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                                {Object.values(lookSizeStockMap).every(stock => stock <= 0) && (
+                                  <p className="text-white text-xs mt-2">No hay stock disponible</p>
+                                )}
                               </div>
                               <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
                                 <button className="w-full text-white uppercase text-xs">
@@ -567,8 +631,7 @@ const Product = () => {
                           <button
                             key={index}
                             onClick={() => handleDotClick(index)}
-                            className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index ? 'bg-white' : 'bg-gray-500'
-                              }`}
+                            className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index ? 'bg-white' : 'bg-gray-500'}`}
                           />
                         ))}
                       </div>
@@ -578,7 +641,8 @@ const Product = () => {
                         const discountedPrice = look.discount
                           ? look.price - (look.price * (look.discount / 100))
                           : look.price;
-                        const lookSizes = look.colors.flatMap((c) => c.sizes);
+                        const selectedLookColor = selectedLookColors[look._id || index];
+                        const lookSizeStockMap = getLookSizeStockMap(look, selectedLookColor);
 
                         return (
                           <div
@@ -595,29 +659,66 @@ const Product = () => {
                             <p className="text-white text-sm md:text-[14px] uppercase mt-2 text-center">
                               {look.displayName}
                             </p>
-                            <p className="text-white text-sm md:text-[14px] text-center">
-                              ARS ${discountedPrice.toFixed(2)}
-                              {look.discount > 0 && (
-                                <span className="line-through text-gray-400 ml-2">
-                                  ${look.price.toFixed(2)}
+                            {look.discount > 0 && (
+                              <div className="flex items-center justify-center mt-1">
+                                <div className="w-[43px] flex justify-center h-[25px] px-2 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323]">
+                                  <p className="font-normal text-[12px] tracking-[-0.04em] align-middle">
+                                    {look.discount}%
+                                  </p>
+                                </div>
+                                <span className="line-through text-gray-400 text-[12px] md:text-[14px] ml-2">
+                                  <span className="uppercase">Ars $</span> {look.price.toFixed(2)}
                                 </span>
-                              )}
+                              </div>
+                            )}
+                            <p className="text-white text-sm md:text-[14px] text-center mt-1">
+                              <span className="uppercase">Ars $</span> {discountedPrice.toFixed(2)}
                             </p>
-                            <div className="flex space-x-2 mt-2">
-                              {['S', 'M', 'L'].map((size, sizeIndex) => {
-                                const sizeData = lookSizes.find((s) => s.size === size);
-                                const stock = sizeData ? sizeData.stock : 0;
-                                return (
+                            <div>
+                              <p className="uppercase text-sm md:text-[14px] text-center mt-2">Color</p>
+                              <div className="flex w-[50%] justify-center gap-2 mt-1">
+                                {look.colors.map((color, colorIndex) => (
                                   <button
-                                    key={sizeIndex}
-                                    className={`w-10 h-10 p-2 lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm ${stock <= 0 ? 'line-through opacity-50' : ''
-                                      }`}
-                                    disabled={stock <= 0}
+                                    key={colorIndex}
+                                    onClick={() => handleLookColorChange(look._id || index, color.color.name)}
+                                    className="w-[40px] h-[40px] p-1 rounded-[20px] border"
+                                    style={{
+                                      borderColor: selectedLookColor === color.color.name ? '#FFFFFF' : 'transparent',
+                                      borderWidth: selectedLookColor === color.color.name ? '0.5px' : '1px',
+                                    }}
                                   >
-                                    {size}
+                                    <div
+                                      style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        backgroundColor: getColorBackground(color.color.name),
+                                        borderRadius: '18px',
+                                        padding: selectedLookColor === color.color.name ? '2px' : '0',
+                                      }}
+                                    />
                                   </button>
-                                );
-                              })}
+                                ))}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center mt-2">
+                              <p className="uppercase text-sm md:text-[14px] text-center">Size</p>
+                              <div className="flex gap-2 mt-1">
+                                {allSizes.map((size, sizeIndex) => {
+                                  const stock = lookSizeStockMap[size] || 0;
+                                  return (
+                                    <button
+                                      key={sizeIndex}
+                                      className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm ${stock <= 0 ? 'line-through opacity-50' : ''}`}
+                                      disabled={stock <= 0}
+                                    >
+                                      {size}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                              {Object.values(lookSizeStockMap).every(stock => stock <= 0) && (
+                                <p className="text-white text-sm mt-2">No hay stock disponible</p>
+                              )}
                             </div>
                             <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
                               <button className="w-full text-white uppercase text-sm">
