@@ -502,7 +502,7 @@ const Product = () => {
           onClick={handleOverlayClick}
         >
           <div className="w-full max-w-[1062px] mx-4 my-8 sm:mx-6 md:mx-8 bg-[#83838366] border-[#f2f2f2] border-[0.5px] rounded-[6px] pt-8 pb-6 px-4 sm:px-6 md:px-10 gap-6 backdrop-blur-[30px] relative min-h-[300px] max-h-[90vh] overflow-y-auto">
-            <div className="w-full h-[60px] flex justify-center items-center">
+            <div className="w-full h-[30px] md:h-[60px] flex justify-center items-center">
               <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center px-4">
                 <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
                   SHOP ALL THE LOOK
