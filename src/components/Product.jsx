@@ -325,27 +325,31 @@ const Product = () => {
             </p>
           </div>
           <div className='flex flex-row md:flex-col justify-around md:justify-center'>
-            <div className="h-auto md:h-[140px] w-[35%] md:w-full flex justify-evenly flex-col">
-              <div className="flex items-center">
-                <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
-                  <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
-                    {product.discount || 30}%
-                  </p>
-                </div>
-                <div className="flex items-baseline w-full">
-                  <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
-                    <p className="uppercase mr-1 w-auto">Ars $</p> {product.price.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-baseline">
-                <p className="uppercase mr-1">Ars $</p>
-                <span>{discountedPrice.toFixed(2)}</span>
-              </div>
-              <div>
-                <p>3 cuotas sin interés en bancos seleccionados</p>
-              </div>
-            </div>
+          <div className="h-auto md:h-[140px] w-[35%] md:w-full flex justify-evenly flex-col">
+  {product.discount > 0 && (
+    <div className="flex items-center">
+      <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
+        <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
+          {product.discount}%
+        </p>
+      </div>
+      <div className="flex items-baseline w-full">
+        <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
+          <p className="uppercase mr-1 w-auto">Ars $</p> {product.price.toFixed(2)}
+        </span>
+      </div>
+    </div>
+  )}
+  <div className="flex items-baseline">
+    <p className="uppercase mr-1">Ars $</p>
+    <span>{discountedPrice.toFixed(2)}</span>
+  </div>
+  
+    <div>
+      <p>3 cuotas sin interés en bancos seleccionados</p>
+    </div>
+  
+</div>
             <div className="h-[213px] flex flex-col justify-around w-[45%] md:w-full">
               <div>
                 <p className="uppercase">Color</p>
