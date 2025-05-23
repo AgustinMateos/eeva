@@ -60,22 +60,16 @@ export default function CartPage() {
                     <div className="flex gap-2 items-center text-white">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
-                        ${totalPrice.toFixed(2)}
+                        ${totalPrice.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col md:flex-row gap-1 mt-4">
-                    <Link
-                      href="/order"
-                      className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition flex-1 text-center min-w-[100px]"
+                    <button
+                      className="px-4 py-2 bg-black text-gray-400 rounded flex-1 text-center min-w-[100px]"
+                      disabled
                     >
                       CHECKOUT
-                    </Link>
-                    <button
-                      onClick={clearCart}
-                      className="px-4 py-2 border text-white border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
-                    >
-                      Vaciar
                     </button>
                   </div>
                 </div>
@@ -136,7 +130,7 @@ export default function CartPage() {
                     <div className="flex gap-2 items-center">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
-                        ${item.price.toFixed(2)}
+                        ${item.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                     <div className="flex flex-col items-center">
@@ -144,7 +138,7 @@ export default function CartPage() {
                         Precios sin inpuestos:
                       </span>
                       <span className="font-medium text-xs text-[#A2A2A2]">
-                        ${(item.price / 1.21).toFixed(2)}
+                        ${(item.price / 1.21).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
@@ -186,7 +180,7 @@ export default function CartPage() {
                     <div className="flex gap-2 items-center text-white">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
-                        ${totalPrice.toFixed(2)}
+                        ${totalPrice.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
