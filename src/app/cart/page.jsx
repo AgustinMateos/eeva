@@ -18,14 +18,16 @@ export default function CartPage() {
   return (
     <div className="space-y-6 w-full mx-20">
       {cart.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-lg mb-4">Tu carrito está vacío </p>
+        <div className="text-center py-12 border-b border-b-[#D7D7D7]">
+          <p className="text-lg mb-4 uppercase text-white ">Your cart is empty </p>
+          <div className="flex justify-center text-white">
           <Link
             href="/"
-            className="inline-block px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition"
+            className="text-white underline pr-[7px]"
           >
-            Seguir comprando
+            Continue shopping 
           </Link>
+           <p> to add items to your cart.</p>  </div>
         </div>
       ) : (
         <div className="flex flex-col gap-10 w-full">
@@ -63,13 +65,13 @@ export default function CartPage() {
                         onClick={() => updateQuantity(index, item.quantity + 1)}
                         className="px-2"
                       >
-                        Agregar
+                        Add
                       </button>
                       <button
                         onClick={() => updateQuantity(index, item.quantity - 1)}
                         className="px-2"
                       >
-                        Eliminar
+                        Remove
                       </button>
                     </div>
                   </div>
