@@ -138,7 +138,7 @@ export default function CartPage() {
                     </Link>
                     <button
                       onClick={clearCart}
-                      className="px-4 py-2 border text-white border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
+                      className="px-4 py-2 border text-white border-white rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
                     >
                       Vaciar
                     </button>
