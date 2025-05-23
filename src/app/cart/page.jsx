@@ -18,16 +18,73 @@ export default function CartPage() {
   return (
     <div className="space-y-6 w-full mx-20">
       {cart.length === 0 ? (
-        <div className="text-center py-12 border-b border-b-[#D7D7D7]">
-          <p className="text-lg mb-4 uppercase text-white ">Your cart is empty </p>
-          <div className="flex justify-center text-white">
-          <Link
-            href="/"
-            className="text-white underline pr-[7px]"
-          >
-            Continue shopping 
-          </Link>
-           <p> to add items to your cart.</p>  </div>
+        <div className="flex flex-col gap-10 w-full">
+          <div>
+            <div className="divide-y divide-gray-400 mt-10 text-white">
+              <div className="text-center py-12">
+                <p className="text-lg mb-4">Tu carrito está vacío</p>
+                <Link
+                  href="/"
+                  className="inline-block pr-2 text-white underline hover:text-gray-400 transition"
+                >
+                  Seguir comprando
+                </Link>
+                para agregar artículos a su carrito.
+              </div>
+            </div>
+            <div className="border-gray-400 border-t pt-10 mb-10">
+              <div className="w-full flex items-start justify-between px-10">
+                <div className="flex-2 flex gap-4 items-start">
+                  <div className="flex flex-col gap-2 max-w-[250px]">
+                    <span className="text-sm font-light text-white">
+                      Shipping
+                    </span>
+                    <span className="font-medium text-[10px] text-[#A2A2A2]">
+                      Orders are normally dispatched within 24 hours Monday to
+                      Friday.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-2 max-w-[250px]">
+                    <span className="text-sm font-light text-white">
+                      Returns
+                    </span>
+                    <span className="font-medium text-[10px] text-[#A2A2A2]">
+                      We offer returns for items in unworn condition within 14
+                      days of delivery.
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col items-end">
+                  <div className="w-full max-w-[250px] flex gap-2 items-center justify-between text-white">
+                    <span className="text-sm font-light">Subtotal</span>
+                    <div className="flex gap-2 items-center text-white">
+                      <h3 className="font-medium text-md">ARS</h3>
+                      <span className="text-lg font-medium text-md">
+                        ${totalPrice.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-1 mt-4">
+                    <Link
+                      href="/order"
+                      className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition flex-1 text-center min-w-[100px]"
+                    >
+                      CHECKOUT
+                    </Link>
+                    <button
+                      onClick={clearCart}
+                      className="px-4 py-2 border text-white border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
+                    >
+                      Vaciar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-full mb-4">
+            <Footer />
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-10 w-full">
@@ -65,13 +122,13 @@ export default function CartPage() {
                         onClick={() => updateQuantity(index, item.quantity + 1)}
                         className="px-2"
                       >
-                        Add
+                        Agregar
                       </button>
                       <button
                         onClick={() => updateQuantity(index, item.quantity - 1)}
                         className="px-2"
                       >
-                        Remove
+                        Eliminar
                       </button>
                     </div>
                   </div>
@@ -105,14 +162,18 @@ export default function CartPage() {
               <div className="w-full flex items-start justify-between px-10">
                 <div className="flex-2 flex gap-4 items-start">
                   <div className="flex flex-col gap-2 max-w-[250px]">
-                    <span className="text-sm font-light text-white">Shipping</span>
+                    <span className="text-sm font-light text-white">
+                      Shipping
+                    </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
                       Orders are normally dispatched within 24 hours Monday to
                       Friday.
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 max-w-[250px]">
-                    <span className="text-sm font-light text-white">Returns</span>
+                    <span className="text-sm font-light text-white">
+                      Returns
+                    </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
                       We offer returns for items in unworn condition within 14
                       days of delivery.
@@ -138,7 +199,7 @@ export default function CartPage() {
                     </Link>
                     <button
                       onClick={clearCart}
-                      className="px-4 py-2 border text-white border-white rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
+                      className="px-4 py-2 border text-white border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
                     >
                       Vaciar
                     </button>
