@@ -1,5 +1,4 @@
-"use client";
-
+"use client"; // Added to make the component a client component
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -14,10 +13,11 @@ const Product = () => {
   const [isProductCareOpen, setIsProductCareOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [isShopLookOpen, setIsShopLookOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedLookColors, setSelectedLookColors] = useState({});
-
+  const [selectedLookSizes, setSelectedLookSizes] = useState({}); // New state for look sizes
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -27,13 +27,9 @@ const Product = () => {
   const sliderRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
-
-  // Agregado por Pablo para la sección de tallas
-  const [selectedSize, setSelectedSize] = useState(null);
-
-  // Agregado por Pablo para agregar productos al carrito
   const { addToCart } = useCart();
-
+  const [lookAddCounts, setLookAddCounts] = useState({});
+  const [addCount, setAddCount] = useState(0);
   useEffect(() => {
     if (!id) return;
 
@@ -65,23 +61,49 @@ const Product = () => {
           ]);
         }
 
-        // Inicializar color del producto
+        // Inicializar color y talle con stock disponible para el producto principal
         if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
-          setSelectedColor(fetchedProduct.colors[0].color.name);
-
-          // Agregados de Pablo para inicializar en size
-          setSelectedSize(fetchedProduct.colors[0].sizes[0].size.name);
+          const firstAvailableColor = fetchedProduct.colors.find(color =>
+            color.sizes.some(size => size.stock > 0)
+          );
+          if (firstAvailableColor) {
+            setSelectedColor(firstAvailableColor.color.name);
+            const firstAvailableSize = firstAvailableColor.sizes.find(
+              size => size.stock > 0
+            );
+            setSelectedSize(firstAvailableSize ? firstAvailableSize.size.name : null);
+          } else {
+            setSelectedColor(fetchedProduct.colors[0].color.name);
+            setSelectedSize(null);
+          }
         }
 
-        // Inicializar colores de los looks
+        // Inicializar colores y talles de los looks
         if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
           const initialLookColors = {};
+          const initialLookSizes = {};
           fetchedProduct.looks.forEach((look, index) => {
             if (look.colors && look.colors.length > 0) {
-              initialLookColors[look._id || index] = look.colors[0].color.name;
+              const lookId = look._id || index;
+              // Seleccionar el primer color con stock
+              const firstAvailableColor = look.colors.find(color =>
+                color.sizes.some(size => size.stock > 0)
+              );
+              initialLookColors[lookId] = firstAvailableColor
+                ? firstAvailableColor.color.name
+                : look.colors[0].color.name;
+              // Seleccionar el primer talle con stock para ese color
+              const selectedColor = firstAvailableColor || look.colors[0];
+              const firstAvailableSize = selectedColor.sizes.find(
+                size => size.stock > 0
+              );
+              initialLookSizes[lookId] = firstAvailableSize
+                ? firstAvailableSize.size.name
+                : null;
             }
           });
           setSelectedLookColors(initialLookColors);
+          setSelectedLookSizes(initialLookSizes);
         }
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -92,7 +114,45 @@ const Product = () => {
     fetchProduct();
   }, [id]);
 
-  console.log(product);
+  // Actualizar selectedSize cuando cambia selectedColor para el producto principal
+  useEffect(() => {
+    if (!product || !selectedColor) return;
+
+    const selectedColorData = product.colors.find(
+      color => color.color.name === selectedColor
+    );
+    if (selectedColorData) {
+      const availableSize = selectedColorData.sizes.find(size => size.stock > 0);
+      setSelectedSize(availableSize ? availableSize.size.name : null);
+    } else {
+      setSelectedSize(null);
+    }
+  }, [selectedColor, product]);
+
+  // Actualizar selectedLookSizes cuando cambia selectedLookColors
+  useEffect(() => {
+    if (!product || !product.looks) return;
+
+    setSelectedLookSizes(prevSizes => {
+      const updatedSizes = { ...prevSizes };
+      product.looks.forEach((look, index) => {
+        const lookId = look._id || index;
+        const selectedColor = selectedLookColors[lookId];
+        if (selectedColor) {
+          const selectedColorData = look.colors.find(
+            color => color.color.name === selectedColor
+          );
+          if (selectedColorData) {
+            const availableSize = selectedColorData.sizes.find(size => size.stock > 0);
+            updatedSizes[lookId] = availableSize ? availableSize.size.name : null;
+          } else {
+            updatedSizes[lookId] = null;
+          }
+        }
+      });
+      return updatedSizes;
+    });
+  }, [selectedLookColors, product]);
 
   useEffect(() => {
     if (isPaused || images.length === 0) return;
@@ -166,6 +226,85 @@ const Product = () => {
     }));
   };
 
+  // Handler para seleccionar talle del producto principal
+  const handleSizeSelect = (size) => {
+    const stock = sizeStockMap[size] || 0;
+    if (stock > 0) {
+      setSelectedSize(size);
+    }
+  };
+
+  // Handler para seleccionar talle de un look
+  const handleLookSizeSelect = (lookId, size, lookSizeStockMap) => {
+    const stock = lookSizeStockMap[size] || 0;
+    if (stock > 0) {
+      setSelectedLookSizes((prev) => ({
+        ...prev,
+        [lookId]: size,
+      }));
+    }
+  };
+
+  // Handler para agregar un look al carrito
+  const handleAddLookToCart = (look, lookId) => {
+    const selectedColor = selectedLookColors[lookId];
+    const selectedSize = selectedLookSizes[lookId];
+    if (!selectedColor || !selectedSize) {
+      alert("Por favor selecciona color y talla para el look");
+      return;
+    }
+    const lookSizeStockMap = getLookSizeStockMap(look, selectedColor);
+    const stock = lookSizeStockMap[selectedSize] || 0;
+    if (stock <= 0) {
+      alert("El talle seleccionado no tiene stock");
+      return;
+    }
+
+    // Log the selected look details
+    console.log("Producto seleccionado en Shop Look:", {
+      lookId: look._id || lookId,
+      displayName: look.displayName,
+      selectedColor,
+      selectedSize,
+      stock,
+      price: look.discount
+        ? look.price - look.price * (look.discount / 100)
+        : look.price,
+      image: `/${look.image}.png`,
+    });
+
+    const lookImages = [`/${look.image}.png`];
+    addToCart(look, selectedColor, selectedSize, lookImages);
+
+    // Increment the count for this specific look
+    setLookAddCounts((prevCounts) => ({
+      ...prevCounts,
+      [lookId]: (prevCounts[lookId] || 0) + 1,
+    }));
+  };
+
+  // New handler for "Finish Adding" button to log all selected looks
+  const handleFinishAdding = () => {
+    console.log("Todos los looks seleccionados:", {
+      selectedLookColors,
+      selectedLookSizes,
+      looks: product.looks.map((look, index) => {
+        const lookId = look._id || index;
+        const selectedColor = selectedLookColors[lookId];
+        const selectedSize = selectedLookSizes[lookId];
+        const lookSizeStockMap = getLookSizeStockMap(look, selectedColor);
+        return {
+          lookId: look._id || lookId,
+          displayName: look.displayName,
+          selectedColor,
+          selectedSize,
+          stock: selectedSize ? lookSizeStockMap[selectedSize] || 0 : "N/A",
+        };
+      }),
+    });
+    setIsShopLookOpen(false); // Close the modal
+  };
+
   if (error) return <div>{error}</div>;
   if (!product) return null;
 
@@ -180,11 +319,11 @@ const Product = () => {
 
   const sizeStockMap = selectedColor
     ? product.colors
-        .find((color) => color.color.name === selectedColor)
-        ?.sizes.reduce((acc, size) => {
-          acc[size.size.name] = size.stock;
-          return acc;
-        }, {}) || {}
+      .find((color) => color.color.name === selectedColor)
+      ?.sizes.reduce((acc, size) => {
+        acc[size.size.name] = size.stock;
+        return acc;
+      }, {}) || {}
     : {};
 
   const discountedPrice = product.discount
@@ -194,11 +333,11 @@ const Product = () => {
   const getLookSizeStockMap = (look, selectedColor) => {
     return selectedColor
       ? look.colors
-          .find((color) => color.color.name === selectedColor)
-          ?.sizes.reduce((acc, size) => {
-            acc[size.size.name] = size.stock;
-            return acc;
-          }, {}) || {}
+        .find((color) => color.color.name === selectedColor)
+        ?.sizes.reduce((acc, size) => {
+          acc[size.size.name] = size.stock;
+          return acc;
+        }, {}) || {}
       : {};
   };
 
@@ -227,14 +366,18 @@ const Product = () => {
     }
   };
 
-  // Agregado por Pablo para agregar items al carrito
   const handleAddToCart = () => {
     if (!product || !selectedColor || !selectedSize) {
       alert("Por favor selecciona color y talla");
       return;
     }
-
+    const stock = sizeStockMap[selectedSize] || 0;
+    if (stock <= 0) {
+      alert("El talle seleccionado no tiene stock");
+      return;
+    }
     addToCart(product, selectedColor, selectedSize, images);
+    setAddCount((prevCount) => prevCount + 1); // Increment the count
   };
 
   return (
@@ -264,13 +407,11 @@ const Product = () => {
                     height: "120px",
                     top: `${lensPosition.y - 60 - 20}px`,
                     left: `${lensPosition.x - 60}px`,
-                    backgroundImage: `url(${
-                      images[currentImageIndex] || "/rotate1.svg"
-                    })`,
+                    backgroundImage: `url(${images[currentImageIndex] || "/rotate1.svg"
+                      })`,
                     backgroundSize: `${545 * 2}px ${800 * 2}px`,
-                    backgroundPosition: `-${lensPosition.x * 2 - 60}px -${
-                      lensPosition.y * 2 - 60
-                    }px`,
+                    backgroundPosition: `-${lensPosition.x * 2 - 60}px -${lensPosition.y * 2 - 60
+                      }px`,
                     pointerEvents: "none",
                     zIndex: 20,
                   }}
@@ -307,7 +448,7 @@ const Product = () => {
                 const maxHeightOptions = [5, 10, 15, 30];
                 const maxHeight =
                   maxHeightOptions[
-                    Math.floor(Math.random() * maxHeightOptions.length)
+                  Math.floor(Math.random() * maxHeightOptions.length)
                   ];
                 const animationClass = `animate-pulseHeight-${maxHeight}`;
                 const delay = Math.random() * 2;
@@ -487,7 +628,7 @@ const Product = () => {
                 <p className="uppercase">Size</p>
                 <button
                   onClick={() => setIsSizeGuideOpen(true)}
-                  className="text-white cursor-pointer flex w-full justify-between mt-2 "
+                  className="text-white cursor-pointer flex w-full justify-between mt-2"
                 >
                   Size guide
                   <Image
@@ -505,9 +646,9 @@ const Product = () => {
                       return (
                         <button
                           key={index}
-                          className={`w-[40px]   transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
-                            stock <= 0 ? "line-through opacity-50" : ""
-                          }`}
+                          onClick={() => handleSizeSelect(size)}
+                          className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? "line-through opacity-50" : ""
+                            } ${selectedSize === size ? "bg-[#E7E7E766]" : ""}`}
                           disabled={stock <= 0}
                         >
                           {size}
@@ -525,15 +666,15 @@ const Product = () => {
             </div>
           </div>
           <div className="flex h-[90px] md:h-auto flex-col items-center md:flex-row justify-between">
-            <p
+            <button
               onClick={handleAddToCart}
-              className="w-[315px] pb-[10px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5]   transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
+              className="w-[315px] pb-[10px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
             >
-              + Add to bag
-            </p>
+              {addCount > 0 ? `(${addCount}) Added` : '+ Add to Bag'}
+            </button>
             <button
               onClick={() => setIsShopLookOpen(true)}
-              className="w-[315px]   transition-all duration-200 hover:bg-[#A8A8A84D] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase"
+              className="w-[315px] transition-all duration-200 hover:bg-[#A8A8A84D] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase"
             >
               Shop Look
             </button>
@@ -632,8 +773,9 @@ const Product = () => {
                           const discountedPrice = look.discount
                             ? look.price - look.price * (look.discount / 100)
                             : look.price;
-                          const selectedLookColor =
-                            selectedLookColors[look._id || index];
+                          const lookId = look._id || index;
+                          const selectedLookColor = selectedLookColors[lookId];
+                          const selectedLookSize = selectedLookSizes[lookId];
                           const lookSizeStockMap = getLookSizeStockMap(
                             look,
                             selectedLookColor
@@ -672,14 +814,13 @@ const Product = () => {
                                 {discountedPrice.toFixed(2)}
                               </p>
                               <div>
-                                {/* <p className="uppercase text-xs text-center mt-2 text-[#FCFDFD]">Color</p> */}
                                 <div className="flex w-full md:w-[50%] justify-center gap-2 mt-1">
                                   {look.colors.map((color, colorIndex) => (
                                     <button
                                       key={colorIndex}
                                       onClick={() =>
                                         handleLookColorChange(
-                                          look._id || index,
+                                          lookId,
                                           color.color.name
                                         )
                                       }
@@ -705,7 +846,7 @@ const Product = () => {
                                           borderRadius: "18px",
                                           padding:
                                             selectedLookColor ===
-                                            color.color.name
+                                              color.color.name
                                               ? "2px"
                                               : "0",
                                         }}
@@ -715,18 +856,22 @@ const Product = () => {
                                 </div>
                               </div>
                               <div className="flex flex-col items-center mt-2">
-                                {/* <p className="uppercase text-xs text-center text-[#FCFDFD]">Size</p> */}
                                 <div className="flex gap-2 mt-1">
                                   {allSizes.map((size, sizeIndex) => {
                                     const stock = lookSizeStockMap[size] || 0;
                                     return (
                                       <button
                                         key={sizeIndex}
-                                        className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs ${
-                                          stock <= 0
-                                            ? "line-through opacity-50"
+                                        onClick={() =>
+                                          handleLookSizeSelect(lookId, size, lookSizeStockMap)
+                                        }
+                                        className={`w-[40px] h-[40px] p[M10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0
+                                          ? "line-through opacity-50"
+                                          : ""
+                                          } ${selectedLookSize === size
+                                            ? "bg-[#E7E7E766]"
                                             : ""
-                                        }`}
+                                          }`}
                                         disabled={stock <= 0}
                                       >
                                         {size}
@@ -737,14 +882,17 @@ const Product = () => {
                                 {Object.values(lookSizeStockMap).every(
                                   (stock) => stock <= 0
                                 ) && (
-                                  <p className="text-white text-xs mt-2">
-                                    No hay stock disponible
-                                  </p>
-                                )}
+                                    <p className="text-white text-xs mt-2">
+                                      No hay stock disponible
+                                    </p>
+                                  )}
                               </div>
                               <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
-                                <button className="w-full text-white uppercase text-xs">
-                                  + Add
+                                <button
+                                  onClick={() => handleAddLookToCart(look, lookId)}
+                                  className="w-full text-white uppercase text-xs"
+                                >
+                                  {lookAddCounts[lookId] > 0 ? `(${lookAddCounts[lookId]}) Added` : '+ Add'}
                                 </button>
                               </div>
                             </div>
@@ -756,11 +904,10 @@ const Product = () => {
                           <button
                             key={index}
                             onClick={() => handleDotClick(index)}
-                            className={`w-[20px] h-[3px] rounded-[2px] ${
-                              currentSlide === index
-                                ? "bg-white"
-                                : "bg-gray-500"
-                            }`}
+                            className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index
+                              ? "bg-white"
+                              : "bg-gray-500"
+                              }`}
                           />
                         ))}
                       </div>
@@ -770,8 +917,9 @@ const Product = () => {
                         const discountedPrice = look.discount
                           ? look.price - look.price * (look.discount / 100)
                           : look.price;
-                        const selectedLookColor =
-                          selectedLookColors[look._id || index];
+                        const lookId = look._id || index;
+                        const selectedLookColor = selectedLookColors[lookId];
+                        const selectedLookSize = selectedLookSizes[lookId];
                         const lookSizeStockMap = getLookSizeStockMap(
                           look,
                           selectedLookColor
@@ -810,14 +958,13 @@ const Product = () => {
                               {discountedPrice.toFixed(2)}
                             </p>
                             <div>
-                              {/* <p className="uppercase text-sm md:text-[14px] text-center mt-2 text-[#FCFDFD]">Color</p> */}
                               <div className="flex w-[100%] justify-center gap-2 mt-1">
                                 {look.colors.map((color, colorIndex) => (
                                   <button
                                     key={colorIndex}
                                     onClick={() =>
                                       handleLookColorChange(
-                                        look._id || index,
+                                        lookId,
                                         color.color.name
                                       )
                                     }
@@ -852,18 +999,22 @@ const Product = () => {
                               </div>
                             </div>
                             <div className="flex flex-col items-center mt-2">
-                              {/* <p className="uppercase text-sm md:text-[14px] text-center text-[#FCFDFD]">Size</p> */}
                               <div className="flex gap-2 mt-1">
                                 {allSizes.map((size, sizeIndex) => {
                                   const stock = lookSizeStockMap[size] || 0;
                                   return (
                                     <button
                                       key={sizeIndex}
-                                      className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm ${
-                                        stock <= 0
-                                          ? "line-through opacity-50"
+                                      onClick={() =>
+                                        handleLookSizeSelect(lookId, size, lookSizeStockMap)
+                                      }
+                                      className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0
+                                        ? "line-through opacity-50"
+                                        : ""
+                                        } ${selectedLookSize === size
+                                          ? "bg-[#E7E7E766]"
                                           : ""
-                                      }`}
+                                        }`}
                                       disabled={stock <= 0}
                                     >
                                       {size}
@@ -874,14 +1025,17 @@ const Product = () => {
                               {Object.values(lookSizeStockMap).every(
                                 (stock) => stock <= 0
                               ) && (
-                                <p className="text-white text-sm mt-2">
-                                  No hay stock disponible
-                                </p>
-                              )}
+                                  <p className="text-white text-sm mt-2">
+                                    No hay stock disponible
+                                  </p>
+                                )}
                             </div>
                             <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
-                              <button className="w-full text-white uppercase text-sm">
-                                + Add
+                              <button
+                                onClick={() => handleAddLookToCart(look, lookId)}
+                                className="w-full text-white uppercase text-sm"
+                              >
+                                {lookAddCounts[lookId] > 0 ? `(${lookAddCounts[lookId]}) Added` : '+ Add'}
                               </button>
                             </div>
                           </div>
@@ -895,7 +1049,10 @@ const Product = () => {
                   </p>
                 )}
                 <div className="w-full flex justify-end mt-4">
-                  <button className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] backdrop-blur-[6px]">
+                  <button
+                    onClick={handleFinishAdding} // Updated to call handleFinishAdding
+                    className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] backdrop-blur-[6px]"
+                  >
                     <p className="font-medium text-xs sm:text-sm md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#F2F2F2]">
                       Finish Adding
                     </p>
@@ -914,7 +1071,7 @@ const Product = () => {
           <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[300px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
             <div className="w-full h-[60px] flex justify-center items-center">
               <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
-                <h2 className="font-medium  text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
+                <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
                   Size Guide
                 </h2>
                 <button

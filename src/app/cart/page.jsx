@@ -30,7 +30,7 @@ export default function CartPage() {
       ) : (
         <div className="flex flex-col gap-10 w-full">
           <div>
-            <div className="divide-y divide-gray-400 mt-10">
+            <div className="divide-y divide-gray-400 mt-10 text-white">
               {cart.map((item, index) => (
                 <div
                   key={`${item.id}-${item.color}-${item.size}`}
@@ -103,14 +103,14 @@ export default function CartPage() {
               <div className="w-full flex items-start justify-between px-10">
                 <div className="flex-2 flex gap-4 items-start">
                   <div className="flex flex-col gap-2 max-w-[250px]">
-                    <span className="text-sm font-light">Shipping</span>
+                    <span className="text-sm font-light text-white">Shipping</span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
                       Orders are normally dispatched within 24 hours Monday to
                       Friday.
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 max-w-[250px]">
-                    <span className="text-sm font-light">Returns</span>
+                    <span className="text-sm font-light text-white">Returns</span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
                       We offer returns for items in unworn condition within 14
                       days of delivery.
@@ -118,9 +118,9 @@ export default function CartPage() {
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col items-end">
-                  <div className="w-full max-w-[250px] flex gap-2 items-center justify-between">
+                  <div className="w-full max-w-[250px] flex gap-2 items-center justify-between text-white">
                     <span className="text-sm font-light">Subtotal</span>
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center text-white">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
                         ${totalPrice.toFixed(2)}
@@ -129,14 +129,14 @@ export default function CartPage() {
                   </div>
                   <div className="flex flex-col md:flex-row gap-1 mt-4">
                     <Link
-                      href="/checkout"
+                      href="/order"
                       className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition flex-1 text-center min-w-[100px]"
                     >
                       CHECKOUT
                     </Link>
                     <button
                       onClick={clearCart}
-                      className="px-4 py-2 border border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
+                      className="px-4 py-2 border text-white border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
                     >
                       Vaciar
                     </button>
