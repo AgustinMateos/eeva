@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Loader from "@/components/Loader";
-import Footer from "@/components/Footer";
 
 export default function CartLayout({ children }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,13 +22,10 @@ export default function CartLayout({ children }) {
         <Navbar />
       </nav>
       <main>
-        <div className="flex justify-center items-start pt-20 pb-20 w-full">
+        <div className="flex justify-center items-start pt-20 pb-10 w-full">
           {isLoading ? <Loader /> : children}
         </div>
       </main>
-      <div className="fixed bottom-0 left-0 w-full mb-4">
-        <Footer />
-      </div>
     </div>
   );
 }
