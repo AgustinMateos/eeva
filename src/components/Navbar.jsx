@@ -6,6 +6,7 @@ import Link from "next/link";
 import style from "@/app/ui/navbar.module.css";
 import { usePathname } from "next/navigation";
 import { useCart } from "./context/CartContext";
+
 const colecciones = [
   { name: "Initiation", link: "/collections/initiation", age: "new" },
   { name: "Amsterdam", link: "/collections/amsterdam", age: "'24" },
@@ -51,10 +52,9 @@ const Navbar = () => {
   const mujerRef = useRef(null);
   const coleccionesRef = useRef(null);
   const modalRef = useRef(null);
-
-  //Agregado por Pablo para obtener el total del carrito
   const { totalItems } = useCart();
 
+  // Toggle functions
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
     setIsHombreOpen(false);
@@ -82,9 +82,10 @@ const Navbar = () => {
 
   const toggleSearchModal = () => {
     setIsSearchModalOpen(!isSearchModalOpen);
-    setSearchTerm(""); // Limpia el término de búsqueda al abrir/cerrar
+    setSearchTerm("");
   };
 
+  // Handle click outside to close dropdowns
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target) && isOpen) {
       setIsOpen(false);
@@ -132,9 +133,15 @@ const Navbar = () => {
 
   return (
     <div className="absolute w-full">
+      <style jsx>{`
+        .dropdown-active {
+          background-color: #FFFFFF4D !important;
+          transition: background-color 0.3s ease;
+        }
+      `}</style>
       <div className="flex justify-between md:justify-around h-[90px] items-center">
         <div className="min-w-[90px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
-          {/* Botón hamburguesa w-[90px] md:w-[324px]  */}
+          {/* Botón hamburguesa */}
           <div ref={menuRef}>
             <button
               onClick={toggleDropdown}
@@ -156,7 +163,7 @@ const Navbar = () => {
             )}
             {/* Dropdown del menú hamburguesa */}
             {isOpen && (
-              <div className="absolute top-0 md:top-[78px] w-[323px] md:left-[140px] left-0 md:w-[200px] h-screen md:h-auto bg-[#182025B2]  backdrop-blur-[30px]  text-white z-50 overflow-y-auto md:backdrop-blur-[6px] rounded-[2px] border-[0.5px] md:bg-[#A8A8A81A]">
+              <div className="absolute top-0 md:top-[78px] w-[323px] md:left-[140px] left-0 md:w-[200px] h-screen md:h-auto bg-[#182025B2] backdrop-blur-[30px] text-white z-50 overflow-y-auto md:backdrop-blur-[6px] rounded-[2px] border-[0.5px] md:bg-[#A8A8A81A]">
                 <div className="flex flex-col p-4 space-y-2">
                   {/* Colecciones en desktop */}
                   <div className="hidden md:block">
@@ -369,12 +376,12 @@ const Navbar = () => {
                 <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[15px]">
                   Collection
                 </p>
-                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]  ">
+                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]">
                   07-07-2025
                 </span>
               </div>
               <div className="flex h-full">
-                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase ">
+                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase">
                   {currentCollection.name}
                 </span>
               </div>
@@ -386,7 +393,9 @@ const Navbar = () => {
               <div ref={hombreRef} className="relative">
                 <button
                   onClick={toggleHombreDropdown}
-                  className="w-[50px]   transition-all duration-200 hover:bg-[#A8A8A84D] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                  className={`w-[50px] transition-all duration-200 ${
+                    isHombreOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
+                  } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
                 >
                   H
                 </button>
@@ -442,7 +451,9 @@ const Navbar = () => {
               <div ref={mujerRef} className="relative">
                 <button
                   onClick={toggleMujerDropdown}
-                  className="w-[50px]   transition-all duration-200 hover:bg-[#A8A8A84D] backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                  className={`w-[50px] transition-all duration-200 ${
+                    isMujerOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
+                  } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
                 >
                   M
                 </button>
@@ -507,7 +518,7 @@ const Navbar = () => {
               width={262}
               height={31}
               alt="logo"
-              className="absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[740px] "
+              className="absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[740px]"
             />
           </Link>
           <Link href="/collections/slider" className="md:hidden">
@@ -526,17 +537,19 @@ const Navbar = () => {
           <div className="flex w-[188px] md:w-[288px] justify-around items-center">
             <button
               onClick={toggleSearchModal}
-              className="hidden md:flex backdrop-blur-[6px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] text-center w-[60px] h-[36px] items-center justify-center  rounded-[2px] border-[0.5px] focus:outline-none"
+              className="hidden md:flex backdrop-blur-[6px] bg-[#A8A8A81A] transition-all duration-200 hover:bg-[#A8A8A84D] text-center w-[60px] h-[36px] items-center justify-center rounded-[2px] border-[0.5px] focus:outline-none"
             >
               <Image src={"/lupa.svg"} width={24} height={24} alt="lupa" />
             </button>
             <Link href="/collections/aboutus">
-              <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[120px] justify-center items-center text-center bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D] ">
+              <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[120px] justify-center items-center text-center bg-[#A8A8A81A] transition-all duration-200 hover:bg-[#A8A8A84D]">
                 ABOUT US
               </p>
             </Link>
-
-            <Link href="/cart" className="backdrop-blur-[6px]  text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]  transition-all duration-200 hover:bg-[#A8A8A84D]">
+            <Link
+              href="/cart"
+              className="backdrop-blur-[6px] text-center w-[60px] h-[36px] flex items-center justify-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] transition-all duration-200 hover:bg-[#A8A8A84D]"
+            >
               {totalItems}
             </Link>
           </div>
@@ -556,7 +569,7 @@ const Navbar = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full p-2 pr-20 rounded-md bg-[#FFFFFF1A] border-[0.5px] border-white text-white focus:outline-none"
-                style={{ paddingLeft: "40px" }} // Space for the magnifying glass
+                style={{ paddingLeft: "40px" }}
               />
               <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
                 <Image
@@ -566,14 +579,12 @@ const Navbar = () => {
                   alt="search icon"
                 />
               </div>
-              {/* Botón Limpiar */}
               <button
                 onClick={() => setSearchTerm("")}
                 className="absolute right-10 top-1/2 transform -translate-y-1/2 text-white text-sm px-2 py-1 focus:outline-none"
               >
                 LIMPIAR
               </button>
-              {/* Botón Cerrar */}
               <button
                 onClick={toggleSearchModal}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 focus:outline-none"
@@ -587,7 +598,6 @@ const Navbar = () => {
               </button>
             </div>
             <div className="mt-4 w-full bg-[#FFFFFF1A] border-[0.5px] border-white rounded-md p-2 text-white overflow-y-auto max-h-[80vh]">
-              {/* Dynamic search results section */}
               {searchTerm !== "" && (
                 <div className="m-4">
                   <h4 className="uppercase">Resultados</h4>
@@ -614,7 +624,6 @@ const Navbar = () => {
                   )}
                 </div>
               )}
-              {/* Fixed top searched products section */}
               <div className="md:m-4">
                 <p className="mb-2 font-semibold uppercase">Más buscado</p>
                 <ul className="grid grid-cols-2 gap-2 w-full sm:flex sm:w-[55%] sm:items-center sm:justify-evenly">

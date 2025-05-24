@@ -731,7 +731,7 @@ const Product = () => {
       </div>
       {isShopLookOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
+          className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
           onClick={handleOverlayClick}
         >
           <div className="w-full max-w-[1062px] mx-4 my-8 sm:mx-6 md:mx-8 bg-[#83838366] border-[#f2f2f2] border-[0.5px] rounded-[6px] pt-8 pb-6 px-4 sm:px-6 md:px-10 gap-6 backdrop-blur-[30px] relative min-h-[300px] max-h-[90vh] overflow-y-auto">
@@ -887,7 +887,7 @@ const Product = () => {
                                     </p>
                                   )}
                               </div>
-                              <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
+                              <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
                                 <button
                                   onClick={() => handleAddLookToCart(look, lookId)}
                                   className="w-full text-white uppercase text-xs"
@@ -1030,7 +1030,7 @@ const Product = () => {
                                   </p>
                                 )}
                             </div>
-                            <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A]">
+                            <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
                               <button
                                 onClick={() => handleAddLookToCart(look, lookId)}
                                 className="w-full text-white uppercase text-sm"
@@ -1051,7 +1051,7 @@ const Product = () => {
                 <div className="w-full flex justify-end mt-4">
                   <button
                     onClick={handleFinishAdding} // Updated to call handleFinishAdding
-                    className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] backdrop-blur-[6px]"
+                    className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5]  backdrop-blur-[6px]"
                   >
                     <p className="font-medium text-xs sm:text-sm md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#F2F2F2]">
                       Finish Adding
@@ -1065,10 +1065,10 @@ const Product = () => {
       )}
       {isSizeGuideOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
+          className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
           onClick={handleOverlayClick}
         >
-          <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[300px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
+          <div className="w-full max-w-[90%] md:max-w-[1062px] h-[685px] md:h-[500px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
             <div className="w-full h-[60px] flex justify-center items-center">
               <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
                 <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
@@ -1091,10 +1091,15 @@ const Product = () => {
             <div className="w-full flex justify-center items-center mt-4">
               <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
                 <div
-                  className="w-full md:w-[40%] h-[400px] md:h-full bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: "url('/sizeguidepantalon.svg')" }}
+                  className="w-full md:w-[40%] h-[300px] md:h-full bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: "url('/sizeguantes.png')" }}
                 ></div>
-                <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
+                 <div
+                  className="w-full md:w-[40%] h-auto md:h-full bg-cover bg-center bg-no-repeat"
+                  // style={{ backgroundImage: "url('/sizeguantestabla.png')" }}
+                  
+                > <Image src={'/sizeguantestabla.png'} width={350} height={150} alt="img" className="md:w-[600px]  md:h-[396px]"/></div>
+                {/* <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="text-white">
@@ -1123,7 +1128,7 @@ const Product = () => {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
