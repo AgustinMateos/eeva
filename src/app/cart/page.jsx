@@ -22,14 +22,14 @@ export default function CartPage() {
           <div>
             <div className="divide-y divide-gray-400 mt-10 text-white">
               <div className="text-center py-12">
-                <p className="text-lg mb-4">Tu carrito está vacío</p>
+                <p className=" mb-4 font-ibm-mono font-normal text-[32px] leading-[64px] tracking-[-0.04em] text-center align-middle uppercase">Your cart is empty</p>
                 <Link
                   href="/"
                   className="inline-block pr-2 text-white underline hover:text-gray-400 transition"
                 >
-                  Seguir comprando
+                  Continue shopping 
                 </Link>
-                para agregar artículos a su carrito.
+                to add items to your cart.
               </div>
             </div>
             <div className="border-gray-400 border-t pt-10 mb-10">
@@ -116,13 +116,13 @@ export default function CartPage() {
                         onClick={() => updateQuantity(index, item.quantity + 1)}
                         className="px-2"
                       >
-                        Agregar
+                        Add
                       </button>
                       <button
                         onClick={() => updateQuantity(index, item.quantity - 1)}
                         className="px-2"
                       >
-                        Eliminar
+                        Remove
                       </button>
                     </div>
                   </div>
@@ -193,7 +193,7 @@ export default function CartPage() {
                     </Link>
                     <button
                       onClick={clearCart}
-                      className="px-4 py-2 border text-white border-black rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
+                      className="px-4 py-2 border text-white border-white rounded hover:bg-gray-100 hover:text-black transition min-w-[100px]"
                     >
                       Vaciar
                     </button>
