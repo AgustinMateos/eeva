@@ -47,7 +47,7 @@ const AboutUs = () => {
                         <br />
                         <p >
 
-                            ada decisión nos permite seguir innovando y evolucionando, creando piezas cada vez más únicas y elevando la experiencia del consumidor. Desde la confección hasta el empaquetado, todo en EEVA STUDIOS está diseñado para destacar, para ofrecer algo más que ropa: una identidad, una visión, un estándar de calidad que trasciende el producto.
+                            Cada decisión nos permite seguir innovando y evolucionando, creando piezas cada vez más únicas y elevando la experiencia del consumidor. Desde la confección hasta el empaquetado, todo en EEVA STUDIOS está diseñado para destacar, para ofrecer algo más que ropa: una identidad, una visión, un estándar de calidad que trasciende el producto.
                         </p>
                         <br />
                         <p>Entendemos que el diseño no se detiene. Si bien buscamos la excelencia en cada colección, siempre hay espacio para mejorar, para experimentar y para sorprender. Es este compromiso con la evolución lo que nos mantiene en constante crecimiento, asegurando que cada prenda no solo vista, sino que comunique algo más.</p>
