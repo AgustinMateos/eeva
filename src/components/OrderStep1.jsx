@@ -119,16 +119,16 @@ const OrderStep1 = () => {
         }
       `}</style>
 
-      <div className="w-[85%] flex">
-        <div className="w-[70%] border-r border-r-[#D7D7D780]">
+      <div className="w-[100%] flex-col-reverse md:w-[85%] flex md:flex-row">
+        <div className="w-[100%] md:w-[70%] border-r border-r-[#D7D7D780]">
           <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
             INFORMACIÓN
           </h2>
           {!showAdditionalInputs ? (
             <div className="flex flex-col gap-8">
-              <div className="h-[256px] flex flex-col justify-between">
+              <div className="h-[256px] flex flex-col justify-between items-center md:items-start">
                 <input
-                  className="w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="nombres"
                   value={info.nombres}
@@ -136,7 +136,7 @@ const OrderStep1 = () => {
                   placeholder="Nombres"
                 />
                 <input
-                  className="w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="apellidos"
                   value={info.apellidos}
@@ -144,7 +144,7 @@ const OrderStep1 = () => {
                   placeholder="Apellidos"
                 />
                 <input
-                  className="w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="email"
                   name="correo"
                   value={info.correo}
@@ -157,9 +157,9 @@ const OrderStep1 = () => {
                 <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
                   DIRECCIÓN DE ENVÍO
                 </h2>
-                <div className="flex justify-between w-[713px]">
+                <div className="flex justify-between w-[90%] md:w-[713px]">
                   <select
-                    className="w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[109px] md:w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     name="codigoArea"
                     value={address.codigoArea}
                     onChange={handleAddressChange}
@@ -178,9 +178,9 @@ const OrderStep1 = () => {
                     placeholder="Teléfono / Celular"
                   />
                 </div>
-                <div className="flex justify-between w-[713px]">
+                <div className="flex justify-between w-[90%] md:w-[713px]">
                   <select
-                    className="w-[139px] text-white h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50"
+                    className="w-[109px] md:w-[139px]  text-white h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50"
                     name="tipoDocumento"
                     value={address.tipoDocumento}
                     onChange={handleAddressChange}
@@ -198,7 +198,7 @@ const OrderStep1 = () => {
                   />
                 </div>
                 <input
-                  className="w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="pais"
                   value={address.pais}
@@ -206,16 +206,16 @@ const OrderStep1 = () => {
                   placeholder="País / Región"
                 />
                 <input
-                  className="w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="region"
                   value={address.region}
                   onChange={handleAddressChange}
                   placeholder="Región / Provincia"
                 />
-                <div className="flex justify-between w-[713px]">
+                <div className="flex justify-between w-[90%] md:w-[713px]">
                   <select
-                    className="w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[109px] md:w-[139px]  h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     name="codigoPostal"
                     value={address.codigoPostal}
                     onChange={handleAddressChange}
@@ -239,7 +239,7 @@ const OrderStep1 = () => {
           ) : (
             <div className="mt-8 flex flex-col gap-4">
               {/* Sección de Contacto y Enviar a */}
-              <div className="flex justify-between items-center w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
+              <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
                 <div className="flex flex-row">
                   <span className="font-ibm-mono font-semibold text-[14px]  tracking-[-0.04em] align-middle pr-3">Contacto</span>
                   <span className="text-sm">{info.correo}</span>
@@ -251,7 +251,7 @@ const OrderStep1 = () => {
                   Cambiar
                 </button>
               </div>
-              <div className="flex justify-between items-center w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
+              <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
                 <div className="flex flex-row">
                   <span className="font-ibm-mono font-semibold text-[14px]  tracking-[-0.04em] align-middle pr-3">Enviar a</span>
                   <span className="text-sm">{formattedAddress}</span>
@@ -290,7 +290,7 @@ const OrderStep1 = () => {
                   </p> */}
 
                   {/* Opción 2: Correo Argentino a Domicilio */}
-                  <div className="flex justify-between items-center w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
+                  <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
                     <div className="flex items-center gap-2">
                       <input
                         type="radio"
@@ -331,7 +331,7 @@ const OrderStep1 = () => {
             </div>
           )}
 
-          <div className="w-[713px] pt-[60px] flex justify-between">
+          <div className="w-[100%] md:w-[713px] pt-[60px] flex-col-reverse h-[113px] md:flex-row flex items-center justify-between">
             {showAdditionalInputs ? (
               <button
                 onClick={handleBack}
@@ -349,13 +349,13 @@ const OrderStep1 = () => {
             )}
             <button
               onClick={handleContinue}
-              className="text-white w-[160px] pb-[10px] md:w-[160px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
+              className="text-white w-[90%] pb-[10px] md:w-[160px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
             >
               Continuar
             </button>
           </div>
         </div>
-        <div className="w-[30%] pl-6">
+        <div className="w-[90%] md:w-[30%] pl-6">
           {/* Cart Products Section */}
           <div className="divide-y divide-gray-400 text-white">
             {cart.map((item, index) => (
