@@ -30,6 +30,9 @@ const Product = () => {
   const { addToCart } = useCart();
   const [lookAddCounts, setLookAddCounts] = useState({});
   const [addCount, setAddCount] = useState(0);
+  const lensWidth = 120;
+  const lensHeight = 120;
+  const zoomFactor = 2;
   useEffect(() => {
     if (!id) return;
 
@@ -173,18 +176,17 @@ const Product = () => {
     if (!isMagnifying || !imageRef.current) return;
 
     const rect = imageRef.current.getBoundingClientRect();
+    const imageWidth = rect.width; // Ancho real de la imagen renderizada
+    const imageHeight = rect.height; // Alto real de la imagen renderizada
+
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const lensSize = 20;
-    const boundedX = Math.max(
-      lensSize / 2,
-      Math.min(x, rect.width - lensSize / 2)
-    );
-    const boundedY = Math.max(
-      lensSize / 2,
-      Math.min(y, rect.height - lensSize / 2)
-    );
+    const halfLensWidth = lensWidth / 2;
+    const halfLensHeight = lensHeight / 2;
+
+    const boundedX = Math.max(halfLensWidth, Math.min(x, imageWidth - halfLensWidth));
+    const boundedY = Math.max(halfLensHeight, Math.min(y, imageHeight - halfLensHeight));
 
     setLensPosition({ x: boundedX, y: boundedY });
   };
@@ -398,20 +400,23 @@ const Product = () => {
                 height={900}
                 className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
                 priority
+                onLoad={(e) => {
+                  const img = e.target;
+                  console.log("Image dimensions:", img.naturalWidth, img.naturalHeight); // Depuración
+                }}
               />
               {isMagnifying && (
                 <div
                   className="absolute rounded-md shadow-lg bg-white bg-opacity-10"
                   style={{
-                    width: "120px",
-                    height: "120px",
-                    top: `${lensPosition.y - 60 - 20}px`,
-                    left: `${lensPosition.x - 60}px`,
-                    backgroundImage: `url(${images[currentImageIndex] || "/rotate1.svg"
-                      })`,
-                    backgroundSize: `${545 * 2}px ${800 * 2}px`,
-                    backgroundPosition: `-${lensPosition.x * 2 - 60}px -${lensPosition.y * 2 - 60
-                      }px`,
+                    width: `${lensWidth}px`,
+                    height: `${lensHeight}px`,
+                    top: `${lensPosition.y - lensHeight / 2}px`,
+                    left: `${lensPosition.x - lensWidth / 2}px`,
+                    backgroundImage: `url(${images[currentImageIndex] || "/rotate1.svg"})`,
+                    backgroundSize: `${imageRef.current?.getBoundingClientRect().width * zoomFactor}px ${imageRef.current?.getBoundingClientRect().height * zoomFactor}px`,
+                    backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor}px -${(lensPosition.y - lensHeight / 2) * zoomFactor}px`,
+                    backgroundRepeat: "no-repeat", // Asegurar que no se repita la imagen
                     pointerEvents: "none",
                     zIndex: 20,
                   }}
