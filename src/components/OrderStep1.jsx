@@ -121,7 +121,7 @@ const OrderStep1 = () => {
 
       <div className="w-[100%] flex-col-reverse md:w-[85%] flex md:flex-row">
         <div className="w-[100%] md:w-[70%] border-r border-r-[#D7D7D780]">
-          <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
+          <h2 className="font-ibm w-[90%] md:w-[713px] text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
             INFORMACIÓN
           </h2>
           {!showAdditionalInputs ? (
@@ -153,11 +153,11 @@ const OrderStep1 = () => {
                 />
               </div>
 
-              <div className="h-[400px] flex flex-col justify-between">
-                <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
+              <div className="h-[400px] flex flex-col justify-between items-center md:items-start">
+                <h2 className="font-ibm text-[22px] w-[90%] md:w-[713px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
                   DIRECCIÓN DE ENVÍO
                 </h2>
-                <div className="flex justify-between w-[90%] md:w-[713px]">
+                <div className="flex justify-between  w-[90%] md:w-[713px]">
                   <select
                     className="w-[109px] md:w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     name="codigoArea"
@@ -170,7 +170,7 @@ const OrderStep1 = () => {
                     {/* Agrega más opciones según sea necesario */}
                   </select>
                   <input
-                    className="w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[205px] md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     type="text"
                     name="telefono"
                     value={address.telefono}
@@ -189,7 +189,7 @@ const OrderStep1 = () => {
                     <option value="Pasaporte">Pasaporte</option>
                   </select>
                   <input
-                    className="w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[205px] md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     type="text"
                     name="numeroDocumento"
                     value={address.numeroDocumento}
@@ -226,7 +226,7 @@ const OrderStep1 = () => {
                     {/* Agrega más opciones según sea necesario */}
                   </select>
                   <input
-                    className="w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[205px] md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     type="text"
                     name="calle"
                     value={address.calle}
@@ -331,7 +331,7 @@ const OrderStep1 = () => {
             </div>
           )}
 
-          <div className="w-[100%] md:w-[713px] pt-[60px] flex-col-reverse h-[113px] md:flex-row flex items-center justify-between">
+          <div className="w-[100%] md:w-[713px] pt-[60px] flex-col-reverse h-[150px] md:flex-row flex items-center justify-between">
             {showAdditionalInputs ? (
               <button
                 onClick={handleBack}
