@@ -60,7 +60,11 @@ export default function CartPage() {
                     <div className="flex gap-2 items-center text-white">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
-                        ${totalPrice.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        $
+                        {totalPrice.toLocaleString("es-ES", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                   </div>
@@ -83,13 +87,31 @@ export default function CartPage() {
       ) : (
         <div className="flex flex-col gap-10 w-full">
           <div>
-            <div className="divide-y divide-gray-400 mt-10 text-white">
+            <div className="divide-y divide-gray-400 mt-10 text-white w-[90%] lg:w-full mx-auto">
               {cart.map((item, index) => (
                 <div
                   key={`${item.id}-${item.color}-${item.size}`}
-                  className="relative w-full py-4 flex justify-between gap-4 px-10 pt-10"
+                  className="relative w-full py-4 flex flex-col lg:flex-row lg:justify-between items-center gap-4 px-10 pt-10"
                 >
-                  <div className="w-24 h-24 relative">
+                  <div className="flex gap-4 lg:flex-row lg:gap-20 lg:hidden">
+                    <div className="w-24 h-24 relative">
+                      <Image
+                        src={"/" + item.image + ".png"}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-4">
+                      <h3 className="font-medium">{item.name.toUpperCase()}</h3>
+                      <div className="flex gap-2 items-center">
+                        <p className="text-xs">{item.color}</p>
+                        <p className="text-sm">|</p>
+                        <p className="text-xs">{item.size}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="hidden lg:flex w-24 h-24 relative">
                     <Image
                       src={"/" + item.image + ".png"}
                       alt={item.name}
@@ -97,7 +119,7 @@ export default function CartPage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className="hidden lg:flex flex-col gap-4">
                     <h3 className="font-medium">{item.name.toUpperCase()}</h3>
                     <div className="flex gap-2 items-center">
                       <p className="text-xs">{item.color}</p>
@@ -106,7 +128,7 @@ export default function CartPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-4">
+                  <div className="flex lg:flex-col gap-4">
                     <div className="flex gap-2 items-center">
                       <h3 className="font-medium text-sm">Item:</h3>
                       <span className="px-4">{item.quantity}</span>
@@ -130,7 +152,11 @@ export default function CartPage() {
                     <div className="flex gap-2 items-center">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
-                        ${item.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        $
+                        {item.price.toLocaleString("es-ES", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex flex-col items-center">
@@ -138,7 +164,11 @@ export default function CartPage() {
                         Precios sin inpuestos:
                       </span>
                       <span className="font-medium text-xs text-[#A2A2A2]">
-                        ${(item.price / 1.21).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        $
+                        {(item.price / 1.21).toLocaleString("es-ES", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                   </div>
@@ -153,8 +183,8 @@ export default function CartPage() {
             </div>
 
             <div className="border-gray-400 border-t pt-10 mb-10">
-              <div className="w-full flex items-start justify-between px-10">
-                <div className="flex-2 flex gap-4 items-start">
+              <div className="w-full flex flex-col-reverse lg:flex-row items-center lg:items-start justify-between px-10">
+                <div className="flex-2 flex flex-wrap gap-4 items-center justify-center pt-10 lg:pt-0 lg:items-start">
                   <div className="flex flex-col gap-2 max-w-[250px]">
                     <span className="text-sm font-light text-white">
                       Shipping
@@ -174,17 +204,21 @@ export default function CartPage() {
                     </span>
                   </div>
                 </div>
-                <div className="flex-1 flex flex-col items-end">
+                <div className="flex-1 flex flex-col md:flex-row lg:flex-col items-end md:items-center lg:items-end gap-4 lg:gap-0">
                   <div className="w-full max-w-[250px] flex gap-2 items-center justify-between text-white">
                     <span className="text-sm font-light">Subtotal</span>
                     <div className="flex gap-2 items-center text-white">
                       <h3 className="font-medium text-md">ARS</h3>
                       <span className="text-lg font-medium text-md">
-                        ${totalPrice.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        $
+                        {totalPrice.toLocaleString("es-ES", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col md:flex-row gap-1 mt-4">
+                  <div className="flex flex-row gap-4 lg:gap-1 mt-4 md:mt-0 lg:mt-4">
                     <Link
                       href="/order"
                       className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition flex-1 text-center min-w-[100px]"
