@@ -44,12 +44,14 @@ const Product = () => {
         // Configurar imágenes
         if (fetchedProduct.models?.images?.gif360) {
           setImages([
-            `/${fetchedProduct.models.images.gif360}.webp`,
-            `/${fetchedProduct.models.images.gif360}2.svg`,
-            `/${fetchedProduct.models.images.gif360}3.svg`,
-            `/${fetchedProduct.models.images.gif360}4.svg`,
-            `/${fetchedProduct.models.images.gif360}5.svg`,
-            `/${fetchedProduct.models.images.gif360}6.svg`,
+            `/360/${fetchedProduct.models.images.gif360}-1.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-2.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-3.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-4.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-5.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-6.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-7.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-8.webp`,
           ]);
         } else {
           setImages([
