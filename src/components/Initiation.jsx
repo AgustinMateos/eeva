@@ -32,7 +32,7 @@ const Initiation = () => {
             id: product._id,
             title: product.displayName || product.name || 'Producto sin título',
             subtitle: product.subtitle,
-            image: `/${product.models.images.static}.svg`,
+            image: `/static/${product.models.images.static}.webp`,
           }));
           setProducts(formattedProducts);
           setDescription(initiationCollection.description || 'Descripción no disponible');
