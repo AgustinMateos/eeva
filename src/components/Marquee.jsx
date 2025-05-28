@@ -50,10 +50,10 @@ const Marquee = () => {
                     src={
                       // On mobile, always use static image; on desktop, toggle based on hover
                       window.innerWidth < 768
-                        ? `/${product.models.images.static}.webp`
+                        ? `/360/${product.models.images.gif360}-1.webp`
                         : isHovered
-                        ? `/${product.models.images.gif360}.webp`
-                        : `/${product.models.images.static}.svg`
+                        ? `/360/${product.models.images.gif360}-7.webp`
+                        : `/360/${product.models.images.gif360}-1.webp`
                     }
                     alt={product.displayName}
                     width={200}
