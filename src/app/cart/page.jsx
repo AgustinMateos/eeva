@@ -96,7 +96,7 @@ export default function CartPage() {
                   <div className="flex gap-4 lg:flex-row lg:gap-20 lg:hidden">
                     <div className="w-24 h-24 relative">
                       <Image
-                        src={"/products/" + item.image + ".png"}
+                        src={"/products/" + item.image + ".webp"}
                         alt={item.name}
                         fill
                         className="object-cover"
@@ -113,7 +113,7 @@ export default function CartPage() {
                   </div>
                   <div className="hidden lg:flex w-24 h-24 relative">
                     <Image
-                      src={"/products/" + item.image + ".png"}
+                      src={"/products/" + item.image + ".webp"}
                       alt={item.name}
                       fill
                       className="object-cover"
