@@ -274,10 +274,10 @@ const Product = () => {
       price: look.discount
         ? look.price - look.price * (look.discount / 100)
         : look.price,
-      image: `/${look.image}.png`,
+      image: `/${look.image}.webp`,
     });
 
-    const lookImages = [`/${look.image}.png`];
+    const lookImages = [`/${look.image}.webp`];
     addToCart(look, selectedColor, selectedSize, lookImages);
 
     // Increment the count for this specific look
@@ -794,7 +794,7 @@ const Product = () => {
                               className="w-full flex-shrink-0 flex flex-col items-center justify-between p-4"
                             >
                               <Image
-                                src={`/${look.image}.png`}
+                                src={`/${look.image}.webp`}
                                 alt={look.displayName}
                                 width={200}
                                 height={250}
@@ -938,7 +938,7 @@ const Product = () => {
                             className="w-[300px] h-auto rounded-[6px] flex flex-col items-center justify-between p-4"
                           >
                             <Image
-                              src={`/${look.image}.png`}
+                              src={`/${look.image}.webp`}
                               alt={look.displayName}
                               width={200}
                               height={250}
