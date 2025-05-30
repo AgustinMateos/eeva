@@ -41,7 +41,7 @@ const Initiation = () => {
           // Formatear imágenes middle
           const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
             id: index + 1,
-            image: `/${image}.svg`,
+            image: `/${image}.jpg`,
           }));
           setMiddleImages(formattedMiddleImages);
         } else {
