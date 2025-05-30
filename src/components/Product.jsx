@@ -794,7 +794,7 @@ const Product = () => {
                               className="w-full flex-shrink-0 flex flex-col items-center justify-between p-4"
                             >
                               <Image
-                                src={`/${look.image}.webp`}
+                                src={`/products/${look.image}.webp`}
                                 alt={look.displayName}
                                 width={200}
                                 height={250}
@@ -938,7 +938,7 @@ const Product = () => {
                             className="w-[300px] h-auto rounded-[6px] flex flex-col items-center justify-between p-4"
                           >
                             <Image
-                              src={`/${look.image}.webp`}
+                               src={`/products/${look.image}.webp`}
                               alt={look.displayName}
                               width={200}
                               height={250}
