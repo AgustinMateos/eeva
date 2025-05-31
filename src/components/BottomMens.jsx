@@ -55,7 +55,7 @@ export default function Topg() {
                 className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
               >
                 <Image
-                  src={`/${product.models.images.static}.svg`} // Adjust image path as per your setup
+                  src={`/static/${product.models.images.static}.webp`} // Adjust image path as per your setup
                   alt={product.displayName}
                   width={289}
                   height={415}
