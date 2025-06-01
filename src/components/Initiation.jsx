@@ -157,7 +157,7 @@ const Initiation = () => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={900}
-                      className="object-cover w-full h-auto"
+                      className="object-cover w-full h-[400px] md:h-auto"
                     />
                   </div>
                 ))}

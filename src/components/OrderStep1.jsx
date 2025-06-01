@@ -121,9 +121,9 @@ const OrderStep1 = () => {
 
       <div className="w-[100%] flex-col-reverse md:w-[85%] flex md:flex-row">
         <div className="w-[100%] md:w-[70%] border-r border-r-[#D7D7D780]">
-          <h2 className="font-ibm w-[90%] md:w-[713px] text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
+           <div className='w-full flex justify-center md:justify-start'> <h2 className="font-ibm w-[90%] md:w-[713px] text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
             INFORMACIÓN
-          </h2>
+          </h2></div>
           {!showAdditionalInputs ? (
             <div className="flex flex-col gap-8">
               <div className="h-[256px] flex flex-col justify-between items-center md:items-start">

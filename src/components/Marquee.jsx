@@ -28,13 +28,13 @@ const Marquee = () => {
   }
 
   return (
-    <div className="w-full overflow-hidden py-8 flex justify-center md:h-[400px]">
-      <div className="w-[80%]">
-        <div className="text-[#FFFFFF] font-normal text-base leading-[64px] tracking-[-4%] align-middle">
+    <div className="w-full overflow-hidden py-8 flex justify-center md:h-[500px]">
+      <div className="w-[100%]">
+        <div className="text-[rgb(255,255,255)] pl-[140px] font-normal text-base leading-[64px] tracking-[-4%] align-middle">
           YOU ALSO MAY LIKE
         </div>
         <div
-          className="marquee-wrapper overflow-x-auto md:overflow-hidden scrollbar-hide snap-x snap-mandatory"
+          className="marquee-wrapper w-full overflow-x-auto md:overflow-hidden scrollbar-hide snap-x snap-mandatory"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -50,10 +50,10 @@ const Marquee = () => {
                     src={
                       // On mobile, always use static image; on desktop, toggle based on hover
                       window.innerWidth < 768
-                        ? `/360/${product.models.images.gif360}-1.webp`
-                        : isHovered
                         ? `/360/${product.models.images.gif360}-7.webp`
-                        : `/360/${product.models.images.gif360}-1.webp`
+                        : isHovered
+                        ? `/360/${product.models.images.gif360}-1.webp`
+                        : `/360/${product.models.images.gif360}-7.webp`
                     }
                     alt={product.displayName}
                     width={200}

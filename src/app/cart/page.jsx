@@ -37,20 +37,18 @@ export default function CartPage() {
                 <div className="flex-2 flex gap-4 items-start">
                   <div className="flex flex-col gap-2 max-w-[250px]">
                     <span className="text-sm font-light text-white">
-                      Shipping
+                      Envíos
                     </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
-                      Orders are normally dispatched within 24 hours Monday to
-                      Friday.
+                    Los pedidos normalmente se envían dentro de los 3 días habiles.
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 max-w-[250px]">
                     <span className="text-sm font-light text-white">
-                      Returns
+                    Devoluciones
                     </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
-                      We offer returns for items in unworn condition within 14
-                      days of delivery.
+                    Ofrecemos devoluciones de artículos sin usar dentro de los 30 días posteriores a la entrega.
                     </span>
                   </div>
                 </div>
@@ -136,15 +134,15 @@ export default function CartPage() {
                     <div className="flex items-center text-xs">
                       <button
                         onClick={() => updateQuantity(index, item.quantity + 1)}
-                        className="px-2"
+                        className="pr-2"
                       >
-                        Add
+                        Agregar
                       </button>
                       <button
                         onClick={() => updateQuantity(index, item.quantity - 1)}
                         className="px-2"
                       >
-                        Remove
+                        Eliminar
                       </button>
                     </div>
                   </div>
@@ -187,20 +185,18 @@ export default function CartPage() {
                 <div className="flex-2 flex flex-wrap gap-4 items-center justify-center pt-10 lg:pt-0 lg:items-start">
                   <div className="flex flex-col gap-2 max-w-[250px]">
                     <span className="text-sm font-light text-white">
-                      Shipping
+                      Envíos
                     </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
-                      Orders are normally dispatched within 24 hours Monday to
-                      Friday.
+                    Los pedidos normalmente se envían dentro de los 3 días habiles.
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 max-w-[250px]">
                     <span className="text-sm font-light text-white">
-                      Returns
+                      Devoluciones
                     </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
-                      We offer returns for items in unworn condition within 14
-                      days of delivery.
+                    Ofrecemos devoluciones de artículos sin usar dentro de los 30 días posteriores a la entrega.
                     </span>
                   </div>
                 </div>

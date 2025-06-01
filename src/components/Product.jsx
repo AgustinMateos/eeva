@@ -385,7 +385,7 @@ const Product = () => {
   };
 
   return (
-    <div className="h-[1022px] flex justify-center items-center">
+    <div className="h-[1222px] md:h-[1022px] flex justify-center items-center">
       <div className="h-[800px] max-w-[1252px] flex justify-between flex-col md:flex-row">
         <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
           {images.length > 0 && (
@@ -556,10 +556,10 @@ const Product = () => {
                     {product.models.size.name}
                   </p>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <p>Piel</p>{" "}
                   <p className="w-[48px] lowercase">{product.models.skin}</p>
-                </div>
+                </div> */}
                 <div className="flex justify-between">
                   <p>Género</p>{" "}
                   <p className="w-[48px] lowercase">{product.models.gender}</p>
