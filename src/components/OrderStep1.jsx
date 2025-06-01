@@ -365,7 +365,7 @@ const OrderStep1 = () => {
               >
                 <div className="w-24 h-24 relative">
                   <Image
-                    src={"/" + item.image + ".webp"}
+                    src={"/products/" + item.image + ".webp"}
                     alt={item.name}
                     fill
                     className="object-cover"
