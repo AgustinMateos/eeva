@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Axios from 'axios';
 import Footer from './Footer';
-import Loader from './Loader'; // Import the Loader component
+import Loader from './Loader';
 
 const Initiation = () => {
   const videoRef = useRef(null);
@@ -13,6 +13,7 @@ const Initiation = () => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [middleImages, setMiddleImages] = useState([]);
+  const [footerImage, setFooterImage] = useState('/evvaprevfooter.svg'); // Initialize with fallback
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -60,6 +61,7 @@ const Initiation = () => {
             image: `/${image}.jpg`,
           }));
           setMiddleImages(formattedMiddleImages);
+          setFooterImage(initiationCollection.images.footer ? `/${initiationCollection.images.footer}.webp` : '/evvaprevfooter.svg');
         } else {
           setError('Colección INITIATION no encontrada');
         }
@@ -145,6 +147,7 @@ const Initiation = () => {
             </div>
 
             {/* Segundo grid con imágenes centradas (slider en móvil) */}
+            {/* Segundo grid con imágenes centradas (slider en móvil) */}
            {/* Segundo grid con imágenes centradas (slider en móvil) */}
 <div className="mt-[60px] mb-[60px]">
   {/* Mobile slider */}
@@ -221,24 +224,28 @@ const Initiation = () => {
             )}
           </div>
 
-          <div className="relative h-[410px] md:h-[667px] w-full mt-[40px]">
-            <Image
-              src="/evvaprevfooter.svg"
-              alt="Fondo Initiation"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px]">
-              <h5 className="text-sm md:text-lg font-semibold flex justify-end">{title}</h5>
-              <div className="text-[8px] text-end md:text-[12px] w-[100%] flex justify-end md:w-[480px]">
-                <p className="w-[281px] md:w-[480px]">
-                  Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla
-                  eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor
-                  hendrerit.
-                </p>
+          {/* Footer image section */}
+          {footerImage && (
+            <div className="relative h-[410px] md:h-[667px] w-full mt-[40px]">
+              <Image
+                src={footerImage}
+                alt="Fondo Initiation"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px]">
+                <h5 className="text-sm md:text-lg font-semibold flex justify-end">{title}</h5>
+                <div className="text-[8px] text-end md:text-[12px] w-[100%] flex justify-end md:w-[480px]">
+                  <p className="w-[281px] md:w-[480px]">
+                    Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla
+                    eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor
+                    hendrerit.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="h-[315px] md:h-[415px] flex md:min-w-[1315px]">
             <Footer />
