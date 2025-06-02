@@ -13,7 +13,7 @@ const Initiation = () => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [middleImages, setMiddleImages] = useState([]);
-  const [footerImage, setFooterImage] = useState('/evvaprevfooter.svg'); // Initialize with fallback
+  const [footerImage, setFooterImage] = useState(''); // Initialize with fallback
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
