@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import { useCart } from "./context/CartContext";
+import Marquee from "./Marquee";
 
 const Product = () => {
   const { id } = useParams();
@@ -385,7 +386,7 @@ const Product = () => {
   };
 
   return (
-    <div className="h-[1222px] md:h-[1022px] flex justify-center items-center">
+    <div className="h-[1322px] md:h-[1480px] w-full flex flex-col justify-center md:justify-end items-center">
       <div className="h-[800px] max-w-[1252px] flex justify-between flex-col md:flex-row">
         <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
           {images.length > 0 && (
@@ -728,14 +729,16 @@ const Product = () => {
                 />
               </button>
               {isProductCareOpen && (
-                <div className="font-normal text-[12px] leading-[110%] tracking-[-4%] text-justify align-middle">
+                <div className="font-normal h-[90px] text-[12px] leading-[110%] tracking-[-4%] text-justify align-middle">
                   <p>{product.productCare}</p>
                 </div>
               )}
             </div>
           </div>
         </div>
+        
       </div>
+       <div className="h-[70vh] w-[100%] mt-[40px]"><Marquee/></div> 
       {isShopLookOpen && (
         <div
           className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
@@ -1141,6 +1144,7 @@ const Product = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
