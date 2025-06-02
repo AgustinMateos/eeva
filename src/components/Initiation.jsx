@@ -171,19 +171,19 @@ const Initiation = () => {
   {/* Desktop grid */}
   <div className="hidden md:grid md:grid-cols-2 md:gap-6">
     {middleImages.map((card, index) => (
-      <div key={card.id} className="flex flex-col justify-center items-center h-auto">
+      <div key={card.id} className="flex flex-col  items-center h-auto">
         <Image
           src={card.image}
           alt={`Imagen central ${card.id}`}
           width={500}
           height={900}
-          className="object-cover w-full max-w-[500px] h-auto md:h-[900px] md:max-w-[550px]"
+          className="object-cover w-full max-w-[500px] h-auto md:h-[900px] md:max-w-[550px] xl:max-w-[560px]"
         />
         {/* Render the text below the first image only */}
         {index === 0 && (
-          <div className='flex max-w-[500px] w-full md:max-w-[550px] justify-start'>
+          <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] justify-start'>
           <p className="text-[#FFFFFF]  pt-[20px] text-center">
-            INTENSO | FUERTE | AUDAZ I25
+            INTENSO | FUERTE | AUDAZ W25
           </p></div>
         )}
       </div>
