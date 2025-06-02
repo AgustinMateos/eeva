@@ -386,7 +386,7 @@ const Product = () => {
   };
 
   return (
-    <div className="h-[1322px] md:h-[1480px] w-full flex flex-col justify-center md:justify-end items-center">
+    <div className="h-[1322px] md:h-[1480px] 2xl:h-[1600px] w-full flex flex-col justify-center md:justify-end items-center">
       <div className="h-[800px] max-w-[1252px] flex justify-between flex-col md:flex-row">
         <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
           {images.length > 0 && (

@@ -145,40 +145,51 @@ const Initiation = () => {
             </div>
 
             {/* Segundo grid con imágenes centradas (slider en móvil) */}
-            <div className="mt-[60px] mb-[60px]">
-              <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-                {middleImages.map((card) => (
-                  <div
-                    key={card.id}
-                    className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2"
-                  >
-                    <Image
-                      src={card.image}
-                      alt={`Imagen central ${card.id}`}
-                      width={500}
-                      height={900}
-                      className="object-cover w-full h-[400px] md:h-auto"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="hidden md:grid md:grid-cols-2 md:gap-6">
-                {middleImages.map((card) => (
-                  <div key={card.id} className="flex justify-center h-auto">
-                    <Image
-                      src={card.image}
-                      alt={`Imagen central ${card.id}`}
-                      width={500}
-                      height={900}
-                      className="object-cover w-full max-w-[500px] h-auto"
-                    />
-                  </div>
-                ))}
-              </div>
-              <p className="text-[#FFFFFF] w-auto pt-[20px]">
-                INTENSO | FUERTE | AUDAZ I25
-              </p>
-            </div>
+           {/* Segundo grid con imágenes centradas (slider en móvil) */}
+<div className="mt-[60px] mb-[60px]">
+  {/* Mobile slider */}
+  <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+    {middleImages.map((card) => (
+      <div
+        key={card.id}
+        className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2"
+      >
+        <Image
+          src={card.image}
+          alt={`Imagen central ${card.id}`}
+          width={500}
+          height={900}
+          className="object-cover w-full h-[400px] md:h-auto"
+        />
+      </div>
+    ))}
+  </div>
+  {/* Mobile text */}
+  <p className="md:hidden text-[#FFFFFF] w-auto pt-[20px] text-center">
+    INTENSO | FUERTE | AUDAZ I25
+  </p>
+  {/* Desktop grid */}
+  <div className="hidden md:grid md:grid-cols-2 md:gap-6">
+    {middleImages.map((card, index) => (
+      <div key={card.id} className="flex flex-col justify-center items-center h-auto">
+        <Image
+          src={card.image}
+          alt={`Imagen central ${card.id}`}
+          width={500}
+          height={900}
+          className="object-cover w-full max-w-[500px] h-auto md:h-[900px] md:max-w-[550px]"
+        />
+        {/* Render the text below the first image only */}
+        {index === 0 && (
+          <div className='flex max-w-[500px] w-full md:max-w-[550px] justify-start'>
+          <p className="text-[#FFFFFF]  pt-[20px] text-center">
+            INTENSO | FUERTE | AUDAZ I25
+          </p></div>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
 
             {/* Segundo grid de tarjetas (resto de productos) */}
             {products.length > 8 && (
