@@ -18,7 +18,7 @@ const Product = () => {
   const [isShopLookOpen, setIsShopLookOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedLookColors, setSelectedLookColors] = useState({});
-  const [selectedLookSizes, setSelectedLookSizes] = useState({}); // New state for look sizes
+  const [selectedLookSizes, setSelectedLookSizes] = useState({});
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -34,6 +34,7 @@ const Product = () => {
   const lensWidth = 120;
   const lensHeight = 120;
   const zoomFactor = 2;
+
   useEffect(() => {
     if (!id) return;
 
@@ -91,14 +92,12 @@ const Product = () => {
           fetchedProduct.looks.forEach((look, index) => {
             if (look.colors && look.colors.length > 0) {
               const lookId = look._id || index;
-              // Seleccionar el primer color con stock
               const firstAvailableColor = look.colors.find(color =>
                 color.sizes.some(size => size.stock > 0)
               );
               initialLookColors[lookId] = firstAvailableColor
                 ? firstAvailableColor.color.name
                 : look.colors[0].color.name;
-              // Seleccionar el primer talle con stock para ese color
               const selectedColor = firstAvailableColor || look.colors[0];
               const firstAvailableSize = selectedColor.sizes.find(
                 size => size.stock > 0
@@ -120,7 +119,6 @@ const Product = () => {
     fetchProduct();
   }, [id]);
 
-  // Actualizar selectedSize cuando cambia selectedColor para el producto principal
   useEffect(() => {
     if (!product || !selectedColor) return;
 
@@ -135,7 +133,6 @@ const Product = () => {
     }
   }, [selectedColor, product]);
 
-  // Actualizar selectedLookSizes cuando cambia selectedLookColors
   useEffect(() => {
     if (!product || !product.looks) return;
 
@@ -179,8 +176,8 @@ const Product = () => {
     if (!isMagnifying || !imageRef.current) return;
 
     const rect = imageRef.current.getBoundingClientRect();
-    const imageWidth = rect.width; // Ancho real de la imagen renderizada
-    const imageHeight = rect.height; // Alto real de la imagen renderizada
+    const imageWidth = rect.width;
+    const imageHeight = rect.height;
 
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -231,7 +228,6 @@ const Product = () => {
     }));
   };
 
-  // Handler para seleccionar talle del producto principal
   const handleSizeSelect = (size) => {
     const stock = sizeStockMap[size] || 0;
     if (stock > 0) {
@@ -239,7 +235,6 @@ const Product = () => {
     }
   };
 
-  // Handler para seleccionar talle de un look
   const handleLookSizeSelect = (lookId, size, lookSizeStockMap) => {
     const stock = lookSizeStockMap[size] || 0;
     if (stock > 0) {
@@ -250,7 +245,6 @@ const Product = () => {
     }
   };
 
-  // Handler para agregar un look al carrito
   const handleAddLookToCart = (look, lookId) => {
     const selectedColor = selectedLookColors[lookId];
     const selectedSize = selectedLookSizes[lookId];
@@ -265,7 +259,6 @@ const Product = () => {
       return;
     }
 
-    // Log the selected look details
     console.log("Producto seleccionado en Shop Look:", {
       lookId: look._id || lookId,
       displayName: look.displayName,
@@ -281,14 +274,12 @@ const Product = () => {
     const lookImages = [`/${look.image}.webp`];
     addToCart(look, selectedColor, selectedSize, lookImages);
 
-    // Increment the count for this specific look
     setLookAddCounts((prevCounts) => ({
       ...prevCounts,
       [lookId]: (prevCounts[lookId] || 0) + 1,
     }));
   };
 
-  // New handler for "Finish Adding" button to log all selected looks
   const handleFinishAdding = () => {
     console.log("Todos los looks seleccionados:", {
       selectedLookColors,
@@ -307,7 +298,7 @@ const Product = () => {
         };
       }),
     });
-    setIsShopLookOpen(false); // Close the modal
+    setIsShopLookOpen(false);
   };
 
   if (error) return <div>{error}</div>;
@@ -382,12 +373,12 @@ const Product = () => {
       return;
     }
     addToCart(product, selectedColor, selectedSize, images);
-    setAddCount((prevCount) => prevCount + 1); // Increment the count
+    setAddCount((prevCount) => prevCount + 1);
   };
 
   return (
-    <div className="h-[1322px] md:h-[1480px] 2xl:h-[1600px] w-full flex flex-col justify-center md:justify-end items-center">
-      <div className="h-[800px] max-w-[1252px] flex justify-between flex-col md:flex-row">
+    <div className="min-h-screen w-full flex flex-col pt-[90px]">
+      <div className="max-w-[1252px] mx-auto flex flex-col md:flex-row py-8">
         <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
           {images.length > 0 && (
             <div
@@ -405,7 +396,7 @@ const Product = () => {
                 priority
                 onLoad={(e) => {
                   const img = e.target;
-                  console.log("Image dimensions:", img.naturalWidth, img.naturalHeight); // Depuración
+                  console.log("Image dimensions:", img.naturalWidth, img.naturalHeight);
                 }}
               />
               {isMagnifying && (
@@ -419,7 +410,7 @@ const Product = () => {
                     backgroundImage: `url(${images[currentImageIndex] || "/rotate1.svg"})`,
                     backgroundSize: `${imageRef.current?.getBoundingClientRect().width * zoomFactor}px ${imageRef.current?.getBoundingClientRect().height * zoomFactor}px`,
                     backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor}px -${(lensPosition.y - lensHeight / 2) * zoomFactor}px`,
-                    backgroundRepeat: "no-repeat", // Asegurar que no se repita la imagen
+                    backgroundRepeat: "no-repeat",
                     pointerEvents: "none",
                     zIndex: 20,
                   }}
@@ -456,7 +447,7 @@ const Product = () => {
                 const maxHeightOptions = [5, 10, 15, 30];
                 const maxHeight =
                   maxHeightOptions[
-                  Math.floor(Math.random() * maxHeightOptions.length)
+                    Math.floor(Math.random() * maxHeightOptions.length)
                   ];
                 const animationClass = `animate-pulseHeight-${maxHeight}`;
                 const delay = Math.random() * 2;
@@ -475,57 +466,33 @@ const Product = () => {
             </div>
             <style jsx>{`
               @keyframes pulseHeight-5 {
-                0% {
-                  height: 10px;
-                }
-                50% {
-                  height: 5px;
-                }
-                100% {
-                  height: 10px;
-                }
+                0% { height: 10px; }
+                50% { height: 5px; }
+                100% { height: 10px; }
               }
               .animate-pulseHeight-5 {
                 animation: pulseHeight-5 2s ease-in-out infinite;
               }
               @keyframes pulseHeight-10 {
-                0% {
-                  height: 10px;
-                }
-                50% {
-                  height: 10px;
-                }
-                100% {
-                  height: 10px;
-                }
+                0% { height: 10px; }
+                50% { height: 10px; }
+                100% { height: 10px; }
               }
               .animate-pulseHeight-10 {
                 animation: pulseHeight-10 2s ease-in-out infinite;
               }
               @keyframes pulseHeight-15 {
-                0% {
-                  height: 10px;
-                }
-                50% {
-                  height: 15px;
-                }
-                100% {
-                  height: 10px;
-                }
+                0% { height: 10px; }
+                50% { height: 15px; }
+                100% { height: 10px; }
               }
               .animate-pulseHeight-15 {
                 animation: pulseHeight-15 2s ease-in-out infinite;
               }
               @keyframes pulseHeight-30 {
-                0% {
-                  height: 10px;
-                }
-                50% {
-                  height: 30px;
-                }
-                100% {
-                  height: 10px;
-                }
+                0% { height: 10px; }
+                50% { height: 30px; }
+                100% { height: 10px; }
               }
               .animate-pulseHeight-30 {
                 animation: pulseHeight-30 2s ease-in-out infinite;
@@ -557,10 +524,6 @@ const Product = () => {
                     {product.models.size.name}
                   </p>
                 </div>
-                {/* <div className="flex justify-between">
-                  <p>Piel</p>{" "}
-                  <p className="w-[48px] lowercase">{product.models.skin}</p>
-                </div> */}
                 <div className="flex justify-between">
                   <p>Género</p>{" "}
                   <p className="w-[48px] lowercase">{product.models.gender}</p>
@@ -569,7 +532,7 @@ const Product = () => {
             </div>
           </div>
         </div>
-        <div className="text-[#FCFDFD] w-auto md:w-[551px] justify-around h-[500px] flex flex-col">
+        <div className="text-[#FCFDFD] w-auto md:w-[551px] h-auto flex flex-col">
           <div className="flex items-center justify-center md:justify-start">
             <p className="h-[40px] w-[90%] md:w-[100%] px-4 border uppercase flex items-center">
               {product.displayName || "Camisa Oversize"}
@@ -655,8 +618,9 @@ const Product = () => {
                         <button
                           key={index}
                           onClick={() => handleSizeSelect(size)}
-                          className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? "line-through opacity-50" : ""
-                            } ${selectedSize === size ? "bg-[#E7E7E766]" : ""}`}
+                          className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
+                            stock <= 0 ? "line-through opacity-50" : ""
+                          } ${selectedSize === size ? "bg-[#E7E7E766]" : ""}`}
                           disabled={stock <= 0}
                         >
                           {size}
@@ -673,22 +637,22 @@ const Product = () => {
               </div>
             </div>
           </div>
-          <div className="flex h-[90px] md:h-auto flex-col items-center md:flex-row justify-between">
+          <div className="relative flex min-h-[90px] md:h-auto flex-col items-center md:flex-row justify-between gap-4">
             <button
               onClick={handleAddToCart}
-              className="w-[315px] pb-[10px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
+              className="w-full max-w-[280px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
             >
               {addCount > 0 ? `(${addCount}) Added` : '+ Add to Bag'}
             </button>
             <button
               onClick={() => setIsShopLookOpen(true)}
-              className="w-[315px] transition-all duration-200 hover:bg-[#A8A8A84D] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase"
+              className="w-full max-w-[280px] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase transition-all duration-200 hover:bg-[#A8A8A84D]"
             >
               Shop Look
             </button>
           </div>
           <div className="w-full flex flex-col items-center">
-            <div className="mt-2 w-[80%] md:w-full">
+            <div className="mt-2 w-[80%] md:w-full z-10 relative">
               <button
                 onClick={() => setIsDetailsOpen(!isDetailsOpen)}
                 className="w-full text-left flex justify-between h-[30px] items-center uppercase"
@@ -706,12 +670,14 @@ const Product = () => {
                 />
               </button>
               {isDetailsOpen && (
-                <div className="font-normal text-[12px] leading-[110%] tracking-[-4%] text-justify align-middle">
-                  <p>{product.details}</p>
+                <div className="p-4 z-10 relative">
+                  <p className="font-normal text-[12px] leading-[170%] tracking-[-4%] text-justify align-middle">
+                    {product.details}
+                  </p>
                 </div>
               )}
             </div>
-            <div className="mt-2 w-[80%] md:w-full">
+            <div className="mt-2 w-[80%] md:w-full z-10 relative">
               <button
                 onClick={() => setIsProductCareOpen(!isProductCareOpen)}
                 className="w-full text-left flex justify-between items-center uppercase h-[30px]"
@@ -729,19 +695,24 @@ const Product = () => {
                 />
               </button>
               {isProductCareOpen && (
-                <div className="font-normal h-[90px] text-[12px] leading-[110%] tracking-[-4%] text-justify align-middle">
-                  <p>{product.productCare}</p>
+                <div className="p-4 z-10 relative">
+                  {product.productCare.split('\n').map((line, index) => (
+                    <p key={index} className="text-white font-normal text-[12px] leading-[170%] tracking-[-4%] text-justify align-middle">
+                      {line}
+                    </p>
+                  ))}
                 </div>
               )}
             </div>
           </div>
         </div>
-        
       </div>
-       <div className="h-[70vh] w-[100%] mt-[40px]"><Marquee/></div> 
+      <div className="w-full mt-8 z-0">
+        <Marquee />
+      </div>
       {isShopLookOpen && (
         <div
-          className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
+          className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
           onClick={handleOverlayClick}
         >
           <div className="w-full max-w-[1062px] mx-4 my-8 sm:mx-6 md:mx-8 bg-[#83838366] border-[#f2f2f2] border-[0.5px] rounded-[6px] pt-8 pb-6 px-4 sm:px-6 md:px-10 gap-6 backdrop-blur-[30px] relative min-h-[300px] max-h-[90vh] overflow-y-auto">
@@ -856,7 +827,7 @@ const Product = () => {
                                           borderRadius: "18px",
                                           padding:
                                             selectedLookColor ===
-                                              color.color.name
+                                            color.color.name
                                               ? "2px"
                                               : "0",
                                         }}
@@ -873,15 +844,21 @@ const Product = () => {
                                       <button
                                         key={sizeIndex}
                                         onClick={() =>
-                                          handleLookSizeSelect(lookId, size, lookSizeStockMap)
+                                          handleLookSizeSelect(
+                                            lookId,
+                                            size,
+                                            lookSizeStockMap
+                                          )
                                         }
-                                        className={`w-[40px] h-[40px] p[M10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0
-                                          ? "line-through opacity-50"
-                                          : ""
-                                          } ${selectedLookSize === size
+                                        className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${
+                                          stock <= 0
+                                            ? "line-through opacity-50"
+                                            : ""
+                                        } ${
+                                          selectedLookSize === size
                                             ? "bg-[#E7E7E766]"
                                             : ""
-                                          }`}
+                                        }`}
                                         disabled={stock <= 0}
                                       >
                                         {size}
@@ -892,17 +869,19 @@ const Product = () => {
                                 {Object.values(lookSizeStockMap).every(
                                   (stock) => stock <= 0
                                 ) && (
-                                    <p className="text-white text-xs mt-2">
-                                      No hay stock disponible
-                                    </p>
-                                  )}
+                                  <p className="text-white text-xs mt-2">
+                                    No hay stock disponible
+                                  </p>
+                                )}
                               </div>
                               <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
                                 <button
                                   onClick={() => handleAddLookToCart(look, lookId)}
                                   className="w-full text-white uppercase text-xs"
                                 >
-                                  {lookAddCounts[lookId] > 0 ? `(${lookAddCounts[lookId]}) Added` : '+ Add'}
+                                  {lookAddCounts[lookId] > 0
+                                    ? `(${lookAddCounts[lookId]}) Added`
+                                    : '+ Add'}
                                 </button>
                               </div>
                             </div>
@@ -914,10 +893,9 @@ const Product = () => {
                           <button
                             key={index}
                             onClick={() => handleDotClick(index)}
-                            className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index
-                              ? "bg-white"
-                              : "bg-gray-500"
-                              }`}
+                            className={`w-[20px] h-[3px] rounded-[2px] ${
+                              currentSlide === index ? "bg-white" : "bg-gray-500"
+                            }`}
                           />
                         ))}
                       </div>
@@ -941,7 +919,7 @@ const Product = () => {
                             className="w-[300px] h-auto rounded-[6px] flex flex-col items-center justify-between p-4"
                           >
                             <Image
-                               src={`/products/${look.image}.webp`}
+                              src={`/products/${look.image}.webp`}
                               alt={look.displayName}
                               width={200}
                               height={250}
@@ -1016,15 +994,21 @@ const Product = () => {
                                     <button
                                       key={sizeIndex}
                                       onClick={() =>
-                                        handleLookSizeSelect(lookId, size, lookSizeStockMap)
+                                        handleLookSizeSelect(
+                                          lookId,
+                                          size,
+                                          lookSizeStockMap
+                                        )
                                       }
-                                      className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0
-                                        ? "line-through opacity-50"
-                                        : ""
-                                        } ${selectedLookSize === size
+                                      className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${
+                                        stock <= 0
+                                          ? "line-through opacity-50"
+                                          : ""
+                                      } ${
+                                        selectedLookSize === size
                                           ? "bg-[#E7E7E766]"
                                           : ""
-                                        }`}
+                                      }`}
                                       disabled={stock <= 0}
                                     >
                                       {size}
@@ -1035,17 +1019,19 @@ const Product = () => {
                               {Object.values(lookSizeStockMap).every(
                                 (stock) => stock <= 0
                               ) && (
-                                  <p className="text-white text-sm mt-2">
-                                    No hay stock disponible
-                                  </p>
-                                )}
+                                <p className="text-white text-sm mt-2">
+                                  No hay stock disponible
+                                </p>
+                              )}
                             </div>
                             <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
                               <button
                                 onClick={() => handleAddLookToCart(look, lookId)}
                                 className="w-full text-white uppercase text-sm"
                               >
-                                {lookAddCounts[lookId] > 0 ? `(${lookAddCounts[lookId]}) Added` : '+ Add'}
+                                {lookAddCounts[lookId] > 0
+                                  ? `(${lookAddCounts[lookId]}) Added`
+                                  : '+ Add'}
                               </button>
                             </div>
                           </div>
@@ -1060,8 +1046,8 @@ const Product = () => {
                 )}
                 <div className="w-full flex justify-end mt-4">
                   <button
-                    onClick={handleFinishAdding} // Updated to call handleFinishAdding
-                    className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5]  backdrop-blur-[6px]"
+                    onClick={handleFinishAdding}
+                    className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5] backdrop-blur-[6px]"
                   >
                     <p className="font-medium text-xs sm:text-sm md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#F2F2F2]">
                       Finish Adding
@@ -1075,7 +1061,7 @@ const Product = () => {
       )}
       {isSizeGuideOpen && (
         <div
-          className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
+          className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
           onClick={handleOverlayClick}
         >
           <div className="w-full max-w-[90%] md:max-w-[1062px] h-[585px] md:h-[500px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
@@ -1104,47 +1090,22 @@ const Product = () => {
                   className="w-full md:w-[40%] h-[300px] md:h-full bg-cover bg-center bg-no-repeat"
                   style={{ backgroundImage: "url('/sizeguantes.png')" }}
                 ></div>
-                 <div
+                <div
                   className="w-full md:w-auto h-auto md:h-full bg-cover bg-center bg-no-repeat"
-                  // style={{ backgroundImage: "url('/sizeguantestabla.png')" }}
-                  
-                > <Image src={'/tablafinal.png'} width={350} height={150} alt="img" className="md:w-[950px]  md:h-[340px]"/></div>
-                {/* <div className="w-full md:w-[60%] h-[300px] md:h-full overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="text-white">
-                        {tableHeaders.map((header, index) => (
-                          <th
-                            key={index}
-                            className="px-2 py-1 sm:px-4 sm:py-2 font-medium text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                          >
-                            {header}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tableData.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="text-white">
-                          {row.map((cell, cellIndex) => (
-                            <td
-                              key={cellIndex}
-                              className="px-2 py-1 sm:px-4 sm:py-2 font-normal text-xs sm:text-[14px] leading-[14px] tracking-[0.1em] uppercase"
-                            >
-                              {cell}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div> */}
+                >
+                  <Image
+                    src={'/tablafinal.png'}
+                    width={350}
+                    height={150}
+                    alt="img"
+                    className="md:w-[950px] md:h-[340px]"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };
