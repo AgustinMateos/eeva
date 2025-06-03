@@ -175,13 +175,13 @@ const Initiation = () => {
   <div className="hidden md:grid md:grid-cols-2 md:gap-6">
     {middleImages.map((card, index) => (
       <div key={card.id} className="flex flex-col  items-center h-auto">
-        <Image
-          src={card.image}
-          alt={`Imagen central ${card.id}`}
-          width={500}
-          height={900}
-          className="object-cover w-full max-w-[500px] h-auto md:h-[900px] md:max-w-[550px] xl:max-w-[560px]"
-        />
+       <Image
+  src={card.image}
+  alt={`Imagen central ${card.id}`}
+  width={500}
+  height={625}
+  className="object-contain w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5]"
+/>
         {/* Render the text below the first image only */}
         {index === 0 && (
           <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] justify-start'>
