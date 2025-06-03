@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Axios from "axios";
 import style from "@/app/ui/navbar.module.css";
 import { usePathname } from "next/navigation";
 import { useCart } from "./context/CartContext";
@@ -16,26 +17,6 @@ const colecciones = [
   { name: "Los Angeles", link: "/collections/los-angeles", age: "'23" },
 ];
 
-const products = [
-  { id: 1, title: "Native Iron Tunk", image: "/NativeIronTunk.svg" },
-  { id: 2, title: "Century Dashe", image: "/CenturyDashe.svg" },
-  { id: 3, title: "Native Dark Jean", image: "/NativeDarkJean.svg" },
-  { id: 4, title: "Paola Wood Shirt", image: "/PaolaWoodShirt.svg" },
-  { id: 5, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
-  { id: 6, title: "Century Dashe", image: "/CenturyDashe2.svg" },
-  { id: 7, title: "Native Dark Jean", image: "/NativeDarkJean2.svg" },
-  { id: 8, title: "Paola Wood Shirt", image: "/PaolaWoodShirt2.svg" },
-  { id: 9, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
-  { id: 10, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
-  { id: 11, title: "Native Iron Tunk", image: "/NativeIronTunk2.svg" },
-];
-
-const topSearchedProducts = [
-  products[0], // Native Iron Tunk
-  products[1], // Century Dashe
-  products[2], // Native Dark Jean
-];
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHombreOpen, setIsHombreOpen] = useState(false);
@@ -43,6 +24,9 @@ const Navbar = () => {
   const [isColeccionesOpen, setIsColeccionesOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const pathname = usePathname();
   const currentCollection = colecciones.find((coleccion) =>
     pathname.startsWith(coleccion.link)
@@ -53,6 +37,43 @@ const Navbar = () => {
   const coleccionesRef = useRef(null);
   const modalRef = useRef(null);
   const { totalItems } = useCart();
+
+  // Fetch products from API and format them
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await Axios.get('https://eeva-api.vercel.app/api/v1/products');
+        const formattedProducts = response.data.map((product) => ({
+          id: product._id,
+          title: product.displayName || product.name || 'Producto sin título',
+          subtitle: product.details || '', // Use details as subtitle, adjust as needed
+          image: product.models?.images?.static
+            ? `/static/${product.models.images.static}.webp`
+            : '/static/placeholder.webp', // Fallback image
+          gender: product.gender || 'unknown',
+        }));
+        setProducts(formattedProducts);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError("No se pudieron cargar los productos. Intenta de nuevo.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Get top searched products (based on searchCount or first 3 products)
+  const topSearchedProducts = products
+    .sort((a, b) => (b.searchCount || 0) - (a.searchCount || 0))
+    .slice(0, 3);
+
+  // Filter products based on search term
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Toggle functions
   const toggleDropdown = () => {
@@ -92,29 +113,25 @@ const Navbar = () => {
     }
     if (
       hombreRef.current &&
-      !hombreRef.current.contains(event.target) &&
-      isHombreOpen
+      !hombreRef.current.contains(event.target) && isHombreOpen
     ) {
       setIsHombreOpen(false);
     }
     if (
       mujerRef.current &&
-      !mujerRef.current.contains(event.target) &&
-      isMujerOpen
+      !mujerRef.current.contains(event.target) && isMujerOpen
     ) {
       setIsMujerOpen(false);
     }
     if (
       coleccionesRef.current &&
-      !coleccionesRef.current.contains(event.target) &&
-      isColeccionesOpen
+      !coleccionesRef.current.contains(event.target) && isColeccionesOpen
     ) {
       setIsColeccionesOpen(false);
     }
     if (
       modalRef.current &&
-      !modalRef.current.contains(event.target) &&
-      isSearchModalOpen
+      !modalRef.current.contains(event.target) && isSearchModalOpen
     ) {
       setIsSearchModalOpen(false);
     }
@@ -126,10 +143,6 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, isHombreOpen, isMujerOpen, isColeccionesOpen, isSearchModalOpen]);
-
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="absolute w-full">
@@ -598,46 +611,54 @@ const Navbar = () => {
               </button>
             </div>
             <div className="mt-4 w-full bg-[#FFFFFF1A] border-[0.5px] border-white rounded-md p-2 text-white overflow-y-auto max-h-[80vh]">
-              {searchTerm !== "" && (
+              {loading && <p>Cargando productos...</p>}
+              {error && <p>{error}</p>}
+              {!loading && !error && searchTerm !== "" && (
                 <div className="m-4">
                   <h4 className="uppercase">Resultados</h4>
                   {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      {filteredProducts.map((product) => (
-                        <div
-                          key={product.id}
-                          className="flex flex-col items-center"
-                        >
-                          <Image
-                            src={product.image}
-                            width={150}
-                            height={150}
-                            alt={product.title}
-                            className="rounded-md"
-                          />
-                          <p className="mt-2 text-center">{product.title}</p>
-                        </div>
-                      ))}
+                      {filteredProducts.map((product) =>
+  product.id ? (
+    <Link
+      key={product.id}
+      href={`/collections/initiation/product/${product.id}`}
+      className="flex flex-col items-center"
+      onClick={() => setIsSearchModalOpen(false)}
+    >
+      <Image
+        src={product.image}
+        width={150}
+        height={150}
+        alt={product.title}
+        className="rounded-md"
+      />
+      <p className="mt-2 text-center">{product.title}</p>
+    </Link>
+  ) : null
+)}
                     </div>
                   ) : (
                     <p>No se encontraron productos</p>
                   )}
                 </div>
               )}
-              <div className="md:m-4">
-                <p className="mb-2 font-semibold uppercase">Más buscado</p>
-                <ul className="grid grid-cols-2 gap-2 w-full sm:flex sm:w-[55%] sm:items-center sm:justify-evenly">
-                  {topSearchedProducts.map((product) => (
-                    <li
-                      key={product.id}
-                      className="cursor-pointer text-[12px] min-w-[120px] items-center text-center justify-center flex h-[30px] rounded border-[0.5px] p-2 px-4"
-                      onClick={() => setSearchTerm(product.title)}
-                    >
-                      {product.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {!loading && !error && (
+                <div className="md:m-4">
+                  <p className="mb-2 font-semibold uppercase">Más buscado</p>
+                  <ul className="grid grid-cols-2 gap-2 w-full sm:flex sm:w-[55%] sm:items-center sm:justify-evenly">
+                    {topSearchedProducts.map((product) => (
+                      <li
+                        key={product.id}
+                        className="cursor-pointer text-[12px] min-w-[120px] items-center text-center justify-center flex h-[30px] rounded border-[0.5px] p-2 px-4"
+                        onClick={() => setSearchTerm(product.title)}
+                      >
+                        {product.title}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -767,13 +767,21 @@ const Product = () => {
                               key={index}
                               className="w-full flex-shrink-0 flex flex-col items-center justify-between p-4"
                             >
-                              <Image
+                              {/* <Image
                                 src={`/products/${look.image}.webp`}
                                 alt={look.displayName}
                                 width={200}
                                 height={250}
                                 className="object-cover w-full max-w-[200px] h-[200px]"
-                              />
+                              /> */}
+                              <div className="w-[284px] h-[200px] relative">
+                                                    <Image
+                                                       src={`/products/${look.image}.webp`}
+                                                       alt={look.displayName}
+                                                      fill
+                                                      className="object-contain"
+                                                    />
+                                                  </div>
                               <p className="text-white text-xs uppercase mt-2 text-center">
                                 {look.displayName}
                               </p>
@@ -918,13 +926,14 @@ const Product = () => {
                             key={index}
                             className="w-[300px] h-auto rounded-[6px] flex flex-col items-center justify-between p-4"
                           >
-                            <Image
-                              src={`/products/${look.image}.webp`}
-                              alt={look.displayName}
-                              width={200}
-                              height={250}
-                              className="object-cover w-full max-w-[200px] h-[200px]"
-                            />
+                             <div className="w-[284px] h-[200px] relative">
+                                                    <Image
+                                                       src={`/products/${look.image}.webp`}
+                                                       alt={look.displayName}
+                                                      fill
+                                                      className="object-contain"
+                                                    />
+                                                  </div>
                             <p className="text-white text-sm md:text-[14px] uppercase mt-2 text-center">
                               {look.displayName}
                             </p>
