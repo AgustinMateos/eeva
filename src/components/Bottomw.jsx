@@ -18,7 +18,7 @@ export default function Topg() {
         const response = await Axios.get('https://eeva-api.vercel.app/api/v1/products');
         // Filter products for type: "TOP" and gender: "MALE"
         const filteredProducts = response.data.filter(
-          (product) => product.type === 'TOP' && product.gender === 'FEMALE'
+          (product) => product.type === 'BOTTOM' && product.gender === 'FEMALE'
         );
         setProducts(filteredProducts);
         setLoading(false);

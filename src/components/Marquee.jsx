@@ -30,8 +30,8 @@ const Marquee = () => {
   return (
     <div className="w-full overflow-hidden py-8 flex justify-center md:h-[500px]">
       <div className="w-[100%]">
-        <div className="text-[rgb(255,255,255)] pl-[140px] font-normal text-base leading-[64px] tracking-[-4%] align-middle">
-          YOU ALSO MAY LIKE
+        <div className="text-[rgb(255,255,255)] w-full flex justify-center font-normal text-base leading-[64px] tracking-[-4%] align-middle">
+          <p className='w-[80%]'>YOU ALSO MAY LIKE</p>
         </div>
         <div
           className="marquee-wrapper w-full overflow-x-auto md:overflow-hidden scrollbar-hide snap-x snap-mandatory"
