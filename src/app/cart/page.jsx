@@ -275,8 +275,8 @@ export default function CartPage() {
               </div>
             </div>
             <div className="w-full px-4 flex flex-col gap-4 mt-4">
-              <h2 className="font-bold-medium">¡Tu carrito quedará vacío!</h2>
-              <p className="font-light text-xs">
+              <h2 className="font-bold-medium text-white">¡Tu carrito quedará vacío!</h2>
+              <p className="font-light text-xs text-white">
                 Este es el último producto en tu carrito. Si lo eliminas, no
                 quedará nada en él. ¿Seguro que quieres continuar?
               </p>
