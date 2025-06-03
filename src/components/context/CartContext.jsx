@@ -6,6 +6,8 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [lastProductOpen, setLastProductOpen] = useState(false);
+  const [productToRemove, setProductToRemove] = useState(null);
 
   // Cargar carrito desde localStorage al iniciar
   useEffect(() => {
@@ -62,18 +64,33 @@ export const CartProvider = ({ children }) => {
       }
     });
   };
+
   const removeFromCart = (index) => {
     setCart((prevCart) => {
-      const newCart = [...prevCart];
-      newCart.splice(index, 1);
-      return newCart;
+      // Si es el último producto
+      if (prevCart.length === 1) {
+        setProductToRemove(index);
+        setLastProductOpen(true);
+        return prevCart;
+      }
+
+      return prevCart.filter((_, i) => i !== index);
     });
   };
 
   const updateQuantity = (index, newQuantity) => {
-    if (newQuantity < 1) return;
-
     setCart((prevCart) => {
+      // Si es el último producto y la cantidad llegará a 0
+      if (prevCart.length === 1 && newQuantity < 1) {
+        setProductToRemove(index); // Guarda el índice del producto a eliminar
+        setLastProductOpen(true); // Abre el modal de confirmación
+        return prevCart; // No modifiques el carrito aún
+      }
+
+      if (newQuantity < 1) {
+        return prevCart.filter((_, i) => i !== index);
+      }
+
       const newCart = [...prevCart];
       newCart[index].quantity = newQuantity;
       return newCart;
@@ -82,6 +99,12 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
+  };
+
+  const confirmRemoveLastItem = () => {
+    setCart((prevCart) => prevCart.filter((_, i) => i !== productToRemove));
+    setLastProductOpen(false);
+    setProductToRemove(null);
   };
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -100,6 +123,11 @@ export const CartProvider = ({ children }) => {
         clearCart,
         totalItems,
         totalPrice,
+        lastProductOpen,
+        setLastProductOpen,
+        productToRemove,
+        setProductToRemove,
+        confirmRemoveLastItem,
       }}
     >
       {children}
