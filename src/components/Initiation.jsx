@@ -169,7 +169,7 @@ const Initiation = () => {
                 ))}
               </div>
               {/* Mobile text */}
-              <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] justify-start'>
+              <div className='md:hidden max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] flex justify-start'>
                         <p className="text-[#FFFFFF]  pt-[20px] text-center text-[12px]">
                           INTENSO | FUERTE | AUDAZ W25
                         </p></div>
