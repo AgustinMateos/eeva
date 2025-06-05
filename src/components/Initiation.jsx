@@ -127,13 +127,14 @@ const Initiation = () => {
                   href={`/collections/initiation/product/${card.id}`}
                   className="group w-full h-auto relative flex flex-col"
                 >
-                  <Image
+                  <div className='h-[589px] w-[289px]'>
+                     <Image
                     src={card.image}
                     alt={card.title}
-                    width={289}
-                    height={415}
-                    className="object-cover w-full h-auto"
-                  />
+                    fill
+                    className="object-contain w-full h-auto"
+                  /></div>
+                 
                   <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
                       SEE PRODUCT
@@ -203,13 +204,13 @@ const Initiation = () => {
                     href={`/collections/initiation/product/${card.id}`}
                     className="group w-full h-auto relative flex flex-col"
                   >
-                    <Image
-                      src={card.image}
-                      alt={card.title}
-                      width={289}
-                      height={415}
-                      className="object-cover w-full h-auto"
-                    />
+                    <div className='h-[589px] w-[289px]'>
+                     <Image
+                    src={card.image}
+                    alt={card.title}
+                    fill
+                    className="object-contain w-full h-auto"
+                  /></div>
                     <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                       <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
                         SEE PRODUCT
