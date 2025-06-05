@@ -169,9 +169,10 @@ const Initiation = () => {
                 ))}
               </div>
               {/* Mobile text */}
-              <p className="md:hidden text-[#FFFFFF] w-auto pt-[20px] text-center">
-                INTENSO | FUERTE | AUDAZ I25
-              </p>
+              <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] justify-start'>
+                        <p className="text-[#FFFFFF]  pt-[20px] text-center text-[12px]">
+                          INTENSO | FUERTE | AUDAZ W25
+                        </p></div>
               {/* Desktop grid */}
               <div className="hidden md:grid md:grid-cols-2 md:gap-6">
                 {middleImages.map((card, index) => (
@@ -185,7 +186,7 @@ const Initiation = () => {
                     />
                     {/* Render the text below the first image only */}
                     {index === 0 && (
-                      <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] justify-start'>
+                      <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] justify-start'>
                         <p className="text-[#FFFFFF]  pt-[20px] text-center">
                           INTENSO | FUERTE | AUDAZ W25
                         </p></div>
