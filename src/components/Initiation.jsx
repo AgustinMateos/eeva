@@ -127,7 +127,7 @@ const Initiation = () => {
                   href={`/collections/initiation/product/${card.id}`}
                   className="group w-full h-auto relative flex flex-col"
                 >
-                  <div className='h-[315px] md:h-[589px] w-[139px] md:w-[289px]'>
+                  <div className='h-[315px] md:h-[589px] xl:h-[700px] w-[139px] md:w-[289px]'>
                     <Image
                       src={card.image}
                       alt={card.title}
@@ -205,7 +205,7 @@ const Initiation = () => {
                     href={`/collections/initiation/product/${card.id}`}
                     className="group w-full h-auto relative flex flex-col"
                   >
-                    <div className='h-[315px] md:h-[589px] w-[139px] md:w-[289px]'>
+                    <div className='h-[315px] md:h-[589px] xl:h-[700px] w-[139px] md:w-[289px]'>
                       <Image
                         src={card.image}
                         alt={card.title}
