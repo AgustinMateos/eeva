@@ -127,14 +127,14 @@ const Initiation = () => {
                   href={`/collections/initiation/product/${card.id}`}
                   className="group w-full h-auto relative flex flex-col"
                 >
-                  <div className='h-[589px] w-[289px]'>
-                     <Image
-                    src={card.image}
-                    alt={card.title}
-                    fill
-                    className="object-contain w-full h-auto"
-                  /></div>
-                 
+                  <div className='h-[315px] md:h-[589px] w-[139px] md:w-[289px]'>
+                    <Image
+                      src={card.image}
+                      alt={card.title}
+                      fill
+                      className="object-contain w-full h-auto"
+                    /></div>
+
                   <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
                       SEE PRODUCT
@@ -149,51 +149,51 @@ const Initiation = () => {
 
             {/* Segundo grid con imágenes centradas (slider en móvil) */}
             {/* Segundo grid con imágenes centradas (slider en móvil) */}
-           {/* Segundo grid con imágenes centradas (slider en móvil) */}
-<div className="mt-[60px] mb-[60px]">
-  {/* Mobile slider */}
-  <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-    {middleImages.map((card) => (
-      <div
-        key={card.id}
-        className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2"
-      >
-        <Image
-          src={card.image}
-          alt={`Imagen central ${card.id}`}
-          width={500}
-          height={900}
-          className="object-cover w-full h-[400px] md:h-auto"
-        />
-      </div>
-    ))}
-  </div>
-  {/* Mobile text */}
-  <p className="md:hidden text-[#FFFFFF] w-auto pt-[20px] text-center">
-    INTENSO | FUERTE | AUDAZ I25
-  </p>
-  {/* Desktop grid */}
-  <div className="hidden md:grid md:grid-cols-2 md:gap-6">
-    {middleImages.map((card, index) => (
-      <div key={card.id} className="flex flex-col  items-center h-auto">
-       <Image
-  src={card.image}
-  alt={`Imagen central ${card.id}`}
-  width={500}
-  height={625}
-  className="object-contain w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5]"
-/>
-        {/* Render the text below the first image only */}
-        {index === 0 && (
-          <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] justify-start'>
-          <p className="text-[#FFFFFF]  pt-[20px] text-center">
-            INTENSO | FUERTE | AUDAZ W25
-          </p></div>
-        )}
-      </div>
-    ))}
-  </div>
-</div>
+            {/* Segundo grid con imágenes centradas (slider en móvil) */}
+            <div className="mt-[60px] mb-[60px]">
+              {/* Mobile slider */}
+              <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                {middleImages.map((card) => (
+                  <div
+                    key={card.id}
+                    className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2"
+                  >
+                    <Image
+                      src={card.image}
+                      alt={`Imagen central ${card.id}`}
+                      width={500}
+                      height={900}
+                      className="object-cover w-full h-[400px] md:h-auto"
+                    />
+                  </div>
+                ))}
+              </div>
+              {/* Mobile text */}
+              <p className="md:hidden text-[#FFFFFF] w-auto pt-[20px] text-center">
+                INTENSO | FUERTE | AUDAZ I25
+              </p>
+              {/* Desktop grid */}
+              <div className="hidden md:grid md:grid-cols-2 md:gap-6">
+                {middleImages.map((card, index) => (
+                  <div key={card.id} className="flex flex-col  items-center h-auto">
+                    <Image
+                      src={card.image}
+                      alt={`Imagen central ${card.id}`}
+                      width={500}
+                      height={625}
+                      className="object-contain w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5]"
+                    />
+                    {/* Render the text below the first image only */}
+                    {index === 0 && (
+                      <div className='flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] justify-start'>
+                        <p className="text-[#FFFFFF]  pt-[20px] text-center">
+                          INTENSO | FUERTE | AUDAZ W25
+                        </p></div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* Segundo grid de tarjetas (resto de productos) */}
             {products.length > 8 && (
@@ -204,13 +204,13 @@ const Initiation = () => {
                     href={`/collections/initiation/product/${card.id}`}
                     className="group w-full h-auto relative flex flex-col"
                   >
-                    <div className='h-[589px] w-[289px]'>
-                     <Image
-                    src={card.image}
-                    alt={card.title}
-                    fill
-                    className="object-contain w-full h-auto"
-                  /></div>
+                    <div className='h-[315px] md:h-[589px] w-[139px] md:w-[289px]'>
+                      <Image
+                        src={card.image}
+                        alt={card.title}
+                        fill
+                        className="object-contain w-full h-auto"
+                      /></div>
                     <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                       <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
                         SEE PRODUCT
