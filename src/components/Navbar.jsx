@@ -47,11 +47,13 @@ const Navbar = () => {
         const formattedProducts = response.data.map((product) => ({
           id: product._id,
           title: product.displayName || product.name || 'Producto sin título',
-          subtitle: product.details || '', // Use details as subtitle, adjust as needed
+          subtitle: product.details || '',
           image: product.models?.images?.static
             ? `/static/${product.models.images.static}.webp`
-            : '/static/placeholder.webp', // Fallback image
+            : '/static/placeholder.webp',
           gender: product.gender || 'unknown',
+          tags: product.tags || [], // Include tags for filtering
+          searchCount: product.searchCount || 0, // Include searchCount for topSearchedProducts
         }));
         setProducts(formattedProducts);
         setError(null);
@@ -70,9 +72,10 @@ const Navbar = () => {
     .sort((a, b) => (b.searchCount || 0) - (a.searchCount || 0))
     .slice(0, 3);
 
-  // Filter products based on search term
+  // Filter products based on search term (title or tags)
   const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Toggle functions
@@ -406,9 +409,8 @@ const Navbar = () => {
               <div ref={hombreRef} className="relative">
                 <button
                   onClick={toggleHombreDropdown}
-                  className={`w-[50px] transition-all duration-200 ${
-                    isHombreOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
-                  } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
+                  className={`w-[50px] transition-all duration-200 ${isHombreOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
+                    } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
                 >
                   H
                 </button>
@@ -464,9 +466,8 @@ const Navbar = () => {
               <div ref={mujerRef} className="relative">
                 <button
                   onClick={toggleMujerDropdown}
-                  className={`w-[50px] transition-all duration-200 ${
-                    isMujerOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
-                  } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
+                  className={`w-[50px] transition-all duration-200 ${isMujerOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
+                    } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
                 >
                   M
                 </button>
@@ -619,24 +620,24 @@ const Navbar = () => {
                   {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       {filteredProducts.map((product) =>
-  product.id ? (
-    <Link
-      key={product.id}
-      href={`/collections/initiation/product/${product.id}`}
-      className="flex flex-col items-center"
-      onClick={() => setIsSearchModalOpen(false)}
-    >
-      <Image
-        src={product.image}
-        width={150}
-        height={150}
-        alt={product.title}
-        className="rounded-md"
-      />
-      <p className="mt-2 text-center">{product.title}</p>
-    </Link>
-  ) : null
-)}
+                        product.id ? (
+                          <Link
+                            key={product.id}
+                            href={`/collections/initiation/product/${product.id}`}
+                            className="flex flex-col items-center"
+                            onClick={() => setIsSearchModalOpen(false)}
+                          >
+                            <Image
+                              src={product.image}
+                              width={150}
+                              height={150}
+                              alt={product.title}
+                              className="rounded-md"
+                            />
+                            <p className="mt-2 text-center">{product.title}</p>
+                          </Link>
+                        ) : null
+                      )}
                     </div>
                   ) : (
                     <p>No se encontraron productos</p>
