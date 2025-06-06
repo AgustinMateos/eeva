@@ -651,7 +651,7 @@ const Navbar = () => {
                     {topSearchedProducts.map((product) => (
                       <li
                         key={product.id}
-                        className="cursor-pointer text-[12px] min-w-[120px] items-center text-center justify-center flex h-[30px] rounded border-[0.5px] p-2 px-4"
+                        className="cursor-pointer text-[12px] min-w-[120px] items-center text-center justify-center flex h-[30px] md:h-[40px] rounded border-[0.5px] p-2 px-4"
                         onClick={() => setSearchTerm(product.title)}
                       >
                         {product.title}
