@@ -31,8 +31,8 @@ const Product = () => {
   const { addToCart } = useCart();
   const [lookAddCounts, setLookAddCounts] = useState({});
   const [addCount, setAddCount] = useState(0);
-  const lensWidth = 120;
-  const lensHeight = 120;
+  const lensWidth = 160;
+  const lensHeight = 160;
   const zoomFactor = 2;
 
   useEffect(() => {
@@ -406,10 +406,10 @@ const Product = () => {
                     width: `${lensWidth}px`,
                     height: `${lensHeight}px`,
                     top: `${lensPosition.y - lensHeight / 2}px`,
-                    left: `${lensPosition.x - lensWidth / 2}px`,
+                    left: `${lensPosition.x - lensWidth / 1.5}px`,
                     backgroundImage: `url(${images[currentImageIndex] || "/rotate1.svg"})`,
                     backgroundSize: `${imageRef.current?.getBoundingClientRect().width * zoomFactor}px ${imageRef.current?.getBoundingClientRect().height * zoomFactor}px`,
-                    backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor}px -${(lensPosition.y - lensHeight / 2) * zoomFactor}px`,
+                    backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor}px -${(lensPosition.y - lensHeight / 3.5) * zoomFactor}px`,
                     backgroundRepeat: "no-repeat",
                     pointerEvents: "none",
                     zIndex: 20,
