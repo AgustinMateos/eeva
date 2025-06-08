@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Axios from 'axios';
 
-const Marquee = () => {
+export default function Marquee ()  {
   const [products, setProducts] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [error, setError] = useState(null);
@@ -118,4 +118,3 @@ const Marquee = () => {
   );
 };
 
-export default Marquee;

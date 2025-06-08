@@ -20,7 +20,7 @@ export default function CartPage() {
   return (
     <div className="space-y-6 w-full mx-20">
       {cart.length === 0 ? (
-        <div className="flex flex-col gap-10 w-full">
+        <div className="flex flex-col gap-10 w-full min-h-[90vh] justify-between">
           <div>
             <div className="divide-y divide-gray-400 mt-10 text-white">
               <div className="text-center py-12">
@@ -89,7 +89,7 @@ export default function CartPage() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-10 w-full">
+        <div className="flex flex-col gap-10 w-full min-h-[90vh] justify-between">
           <div>
             <div className="divide-y divide-gray-400 mt-10 text-white w-[90%] lg:w-full mx-auto">
               {cart.map((item, index) => (
