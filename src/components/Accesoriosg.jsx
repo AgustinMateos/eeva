@@ -116,7 +116,7 @@ export default function Topg() {
                 className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
               >
                
-                <div className='h-[315px] md:h-[589px] xl:h-[500px] 2xl:h-[700px] w-[139px] md:w-[289px]'>
+                <div className='h-[315px] md:h-[589px] xl:h-[500px] 2xl:h-[540px] w-[139px] md:w-[289px]'>
                                       <Image
                                          src={`/static/${product.models.images.static}.webp`} // Adjust image path as per your setup
                                          alt={product.displayName}
