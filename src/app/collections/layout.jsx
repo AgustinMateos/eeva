@@ -12,7 +12,7 @@ export default function CollectionsLayout({ children }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false); // Cambia el estado a false después de 2 segundos
-    }, 2500); // Ajusta el tiempo según tus necesidades
+    }, 3000); // Ajusta el tiempo según tus necesidades
 
     return () => clearTimeout(timer); // Limpieza del temporizador
   }, []);
@@ -23,13 +23,9 @@ export default function CollectionsLayout({ children }) {
         <Navbar />
       </nav>
       <main>
-        {isLoading ? (
-          <div className="flex justify-center items-center min-h-screen  w-full bg-gradient-to-r from-[#303F48] to-[#6D7276]">
-            <Loader/>
-          </div>
-        ) : (
+        {
           children
-        )}
+        }
       </main>
     </div>
   );
