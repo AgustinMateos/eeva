@@ -17,24 +17,24 @@ const Loader = ({ loading }) => {
       const interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
-            // Delay hiding the loader to ensure rendering
+            // Reduced delay to 200ms for faster hiding
             setTimeout(() => {
               setIsVisible(false);
-            }, 500); // 500ms delay after reaching 100%
+            }, 200);
             return 100; // Cap at 100%
           }
-          return prev + 0.5; // Slower increment: 0.5% every 50ms (100 steps over 5s)
+          return prev + 2; // Faster increment: 2% every 20ms (100 steps over 1s)
         });
-      }, 50); // Slower animation: 5000ms / 100 = 50ms per step
+      }, 20); // Faster animation: 1000ms / 100 = 20ms per step
 
       return () => clearInterval(interval);
     } else {
       // When loading is false, set progress to 100% immediately
       setProgress(100);
-      // Delay hiding the loader
+      // Reduced delay to 200ms
       setTimeout(() => {
         setIsVisible(false);
-      }, 500); // 500ms delay for smooth transition
+      }, 200);
     }
   }, [loading]);
 
@@ -46,7 +46,7 @@ const Loader = ({ loading }) => {
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden z-50 bg-gradient-to-r from-[#303F48] to-[#6D7276]">
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-[50ms] ease-linear"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-[20ms] ease-linear"
         style={{
           backgroundImage: 'url(/lineasCodigo.svg)',
           clipPath: `polygon(0 0, 100% 0, 100% ${progress}%, 0 ${progress}%)`,
@@ -63,7 +63,7 @@ const Loader = ({ loading }) => {
           className="w-[305px] md:w-[405px] h-7 rounded-[2px] border border-[#F2F2F2] p-2 bg-[#FFFFFF1A] overflow-hidden"
         >
           <div
-            className="h-full bg-[#D9D9D9] transition-all duration-[50ms] ease-linear"
+            className="h-full bg-[#D9D9D9] transition-all duration-[20ms] ease-linear"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -90,8 +90,8 @@ export default function Topg() {
         const filteredProducts = response.data.filter(
           (product) => product.type === 'ACCESSORIES' && product.gender === 'MALE'
         );
-        // Minimum loading time of 3 seconds
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        // Reduced minimum loading time to 1 second
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         setProducts(filteredProducts);
         setLoading(false);
       } catch (err) {
@@ -99,7 +99,7 @@ export default function Topg() {
         setLoading(false);
       }
     };
-  
+
     fetchProducts();
   }, []);
 
@@ -113,13 +113,13 @@ export default function Topg() {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w-[95rem]  border-b border-[#AEAEAE] uppercase">
-      ACCESSORIES - MEN
+      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w-[95rem] border-b border-[#AEAEAE] uppercase">
+        ACCESSORIES - MEN
       </p>
 
       <div className="w-full max-w-[90%] mx-auto mt-[40px]">
         {/* Grid de cards */}
-        <div className="grid  grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.length > 0 ? (
             products.map((product) => (
               <Link
@@ -127,16 +127,15 @@ export default function Topg() {
                 href={`/collections/initiation/product/${product._id}`}
                 className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
               >
-               
-                <div className='h-[315px] md:h-[589px] xl:h-[500px] 2xl:h-[540px] w-[139px] md:w-[289px]'>
-                <Image
-  src={`/static/${product.models.images.static}.webp`}
-  alt={product.displayName}
-  fill
-  priority // Add this for above-the-fold images
-  className="object-contain w-full h-auto"
-/>
-                                      </div>
+                <div className="h-[315px] md:h-[589px] xl:h-[500px] 2xl:h-[540px] w-[139px] md:w-[289px]">
+                  <Image
+                    src={`/static/${product.models.images.static}.webp`}
+                    alt={product.displayName}
+                    fill
+                    priority // Preload above-the-fold images
+                    className="object-contain w-full h-auto"
+                  />
+                </div>
                 <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
                     SEE PRODUCT
