@@ -58,7 +58,7 @@ const Initiation = () => {
           setSubtitle(initiationCollection.subtitle || 'Subtítulo no disponible');
           const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
             id: index + 1,
-            image: `/${image}.jpg`,
+            image: `/${image}.webp`,
           }));
           setMiddleImages(formattedMiddleImages);
           setFooterImage(initiationCollection.images.footer ? `/${initiationCollection.images.footer}.webp` : '/evvaprevfooter.svg');

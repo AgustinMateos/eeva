@@ -123,7 +123,7 @@ export default function Slider() {
   }, [isTransitioning]);
 
   return (
-    <div className="relative w-full h-[100dvh] overflow-hidden bg-black overscroll-y-none" style={{ touchAction: 'pan-x' }}>
+    <div className="relative w-full h-[100vh] overflow-hidden bg-black overscroll-y-none" style={{ touchAction: 'pan-x' }}>
       {/* Fondo anterior */}
       <Image
         src={extendedOptions[previousIndex]?.bgImage}
