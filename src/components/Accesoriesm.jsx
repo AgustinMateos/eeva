@@ -9,33 +9,44 @@ import Footer from './Footer';
 // Inline Loader Component
 const Loader = ({ loading }) => {
   const [progress, setProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState(true); // Control loader visibility
 
   useEffect(() => {
     if (loading) {
       // Increment progress while loading
       const interval = setInterval(() => {
         setProgress((prev) => {
-          if (prev >= 100) return 100; // Cap at 100%
-          return prev + 1;
+          if (prev >= 100) {
+            // Delay hiding the loader to ensure rendering
+            setTimeout(() => {
+              setIsVisible(false);
+            }, 500); // 500ms delay after reaching 100%
+            return 100; // Cap at 100%
+          }
+          return prev + 0.5; // Slower increment: 0.5% every 50ms (100 steps over 5s)
         });
-      }, 20); // 2s animation: 2000ms / 100 = 20ms per step
+      }, 50); // Slower animation: 5000ms / 100 = 50ms per step
 
       return () => clearInterval(interval);
     } else {
       // When loading is false, set progress to 100% immediately
       setProgress(100);
+      // Delay hiding the loader
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 500); // 500ms delay for smooth transition
     }
   }, [loading]);
 
-  // Hide loader when progress reaches 100%
-  if (progress >= 100) {
+  // Hide loader when not visible
+  if (!isVisible) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden z-50 bg-gradient-to-r from-[#303F48] to-[#6D7276]">
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-[20ms] ease-linear"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-[50ms] ease-linear"
         style={{
           backgroundImage: 'url(/lineasCodigo.svg)',
           clipPath: `polygon(0 0, 100% 0, 100% ${progress}%, 0 ${progress}%)`,
@@ -52,7 +63,7 @@ const Loader = ({ loading }) => {
           className="w-[305px] md:w-[405px] h-7 rounded-[2px] border border-[#F2F2F2] p-2 bg-[#FFFFFF1A] overflow-hidden"
         >
           <div
-            className="h-full bg-[#D9D9D9] transition-all duration-[20ms] ease-linear"
+            className="h-full bg-[#D9D9D9] transition-all duration-[50ms] ease-linear"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -60,7 +71,7 @@ const Loader = ({ loading }) => {
           className="font-light text-lg leading-none tracking-[-0.02em] text-center uppercase text-[#F9F9F9]"
           style={{ fontFamily: 'IBM Plex Mono' }}
         >
-          {progress}%
+          {Math.floor(progress)}%
         </span>
       </div>
     </div>
@@ -76,10 +87,11 @@ export default function Topg() {
     const fetchProducts = async () => {
       try {
         const response = await Axios.get('https://eeva-api.vercel.app/api/v1/products');
-        // Filter products for type: "ACCESSORIES" and gender: "FEMALE"
         const filteredProducts = response.data.filter(
           (product) => product.type === 'ACCESSORIES' && product.gender === 'MALE'
         );
+        // Minimum loading time of 3 seconds
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         setProducts(filteredProducts);
         setLoading(false);
       } catch (err) {
@@ -87,7 +99,7 @@ export default function Topg() {
         setLoading(false);
       }
     };
-
+  
     fetchProducts();
   }, []);
 
@@ -117,12 +129,14 @@ export default function Topg() {
               >
                
                 <div className='h-[315px] md:h-[589px] xl:h-[500px] 2xl:h-[540px] w-[139px] md:w-[289px]'>
-                                      <Image
-                                         src={`/static/${product.models.images.static}.webp`} // Adjust image path as per your setup
-                                         alt={product.displayName}
-                                        fill
-                                        className="object-contain w-full h-auto"
-                                      /></div>
+                <Image
+  src={`/static/${product.models.images.static}.webp`}
+  alt={product.displayName}
+  fill
+  priority // Add this for above-the-fold images
+  className="object-contain w-full h-auto"
+/>
+                                      </div>
                 <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
                     SEE PRODUCT
