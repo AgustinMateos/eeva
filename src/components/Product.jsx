@@ -97,10 +97,10 @@ const Product = () => {
     // Convert price to number and handle invalid inputs
     const num = Number(price);
     if (isNaN(num)) return '0';
-  
+
     // Split into integer and decimal parts
     const [integerPart, decimalPart] = num.toFixed(2).split('.');
-  
+
     // Add dots as thousand separators to integer part
     const formattedInteger = integerPart
       .split('')
@@ -109,7 +109,7 @@ const Product = () => {
         const separator = index > 0 && index % 3 === 0 ? '.' : '';
         return digit + separator + acc;
       }, '');
-  
+
     // Handle decimal part: show only if non-zero
     if (parseInt(decimalPart) === 0) {
       return formattedInteger;
@@ -130,22 +130,22 @@ const Product = () => {
 
         const newImages = fetchedProduct.models?.images?.gif360
           ? [
-              `/360/${fetchedProduct.models.images.gif360}-1.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-2.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-3.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-4.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-5.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-6.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-7.webp`,
-              `/360/${fetchedProduct.models.images.gif360}-8.webp`,
-            ]
+            `/360/${fetchedProduct.models.images.gif360}-1.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-2.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-3.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-4.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-5.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-6.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-7.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-8.webp`,
+          ]
           : [
-              '/rotate1.svg',
-              '/rotate2.svg',
-              '/rotate3.svg',
-              '/rotate4.svg',
-              '/rotate5.svg',
-            ];
+            '/rotate1.svg',
+            '/rotate2.svg',
+            '/rotate3.svg',
+            '/rotate4.svg',
+            '/rotate5.svg',
+          ];
         setCachedImages(newImages);
 
         if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
@@ -398,11 +398,11 @@ const Product = () => {
 
   const sizeStockMap = selectedColor
     ? product.colors
-        .find((color) => color.color.name === selectedColor)
-        ?.sizes.reduce((acc, size) => {
-          acc[size.size.name] = size.stock;
-          return acc;
-        }, {}) || {}
+      .find((color) => color.color.name === selectedColor)
+      ?.sizes.reduce((acc, size) => {
+        acc[size.size.name] = size.stock;
+        return acc;
+      }, {}) || {}
     : {};
 
   const discountedPrice = product?.discount
@@ -412,11 +412,11 @@ const Product = () => {
   const getLookSizeStockMap = (look, selectedColor) => {
     return selectedColor
       ? look.colors
-          .find((color) => color.color.name === selectedColor)
-          ?.sizes.reduce((acc, size) => {
-            acc[size.size.name] = size.stock;
-            return acc;
-          }, {}) || {}
+        .find((color) => color.color.name === selectedColor)
+        ?.sizes.reduce((acc, size) => {
+          acc[size.size.name] = size.stock;
+          return acc;
+        }, {}) || {}
       : {};
   };
 
@@ -488,17 +488,13 @@ const Product = () => {
                         height: `${lensHeight}px`,
                         top: `${lensPosition.y - lensHeight / 2}px`,
                         left: `${lensPosition.x - lensWidth / 1.5}px`,
-                        backgroundImage: `url(${
-                          cachedImages[currentImageIndex] || '/rotate1.svg'
-                        })`,
-                        backgroundSize: `${
-                          imageRef.current?.getBoundingClientRect().width * zoomFactor
-                        }px ${
-                          imageRef.current?.getBoundingClientRect().height * zoomFactor
-                        }px`,
-                        backgroundPosition: `-${
-                          (lensPosition.x - lensWidth / 2) * zoomFactor
-                        }px -${(lensPosition.y - lensHeight / 3.5) * zoomFactor}px`,
+                        backgroundImage: `url(${cachedImages[currentImageIndex] || '/rotate1.svg'
+                          })`,
+                        backgroundSize: `${imageRef.current?.getBoundingClientRect().width * zoomFactor
+                          }px ${imageRef.current?.getBoundingClientRect().height * zoomFactor
+                          }px`,
+                        backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor
+                          }px -${(lensPosition.y - lensHeight / 3.5) * zoomFactor}px`,
                         backgroundRepeat: 'no-repeat',
                         pointerEvents: 'none',
                         zIndex: 20,
@@ -536,7 +532,7 @@ const Product = () => {
                     const maxHeightOptions = [5, 10, 15, 30];
                     const maxHeight =
                       maxHeightOptions[
-                        Math.floor(Math.random() * maxHeightOptions.length)
+                      Math.floor(Math.random() * maxHeightOptions.length)
                       ];
                     const animationClass = `animate-pulseHeight-${maxHeight}`;
                     const delay = Math.random() * 2;
@@ -726,9 +722,8 @@ const Product = () => {
                             <button
                               key={index}
                               onClick={() => handleSizeSelect(size)}
-                              className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
-                                stock <= 0 ? 'line-through opacity-50' : ''
-                              } ${selectedSize === size ? 'bg-[#E7E7E766]' : ''}`}
+                              className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''
+                                } ${selectedSize === size ? 'bg-[#E7E7E766]' : ''}`}
                               disabled={stock <= 0}
                             >
                               {size}
@@ -952,13 +947,11 @@ const Product = () => {
                                                 lookSizeStockMap
                                               )
                                             }
-                                            className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${
-                                              stock <= 0 ? 'line-through opacity-50' : ''
-                                            } ${
-                                              selectedLookSize === size
+                                            className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0 ? 'line-through opacity-50' : ''
+                                              } ${selectedLookSize === size
                                                 ? 'bg-[#E7E7E766]'
                                                 : ''
-                                            }`}
+                                              }`}
                                             disabled={stock <= 0}
                                           >
                                             {size}
@@ -969,10 +962,10 @@ const Product = () => {
                                     {Object.values(lookSizeStockMap).every(
                                       (stock) => stock <= 0
                                     ) && (
-                                      <p className="text-white text-xs mt-2">
-                                        No hay stock disponible
-                                      </p>
-                                    )}
+                                        <p className="text-white text-xs mt-2">
+                                          No hay stock disponible
+                                        </p>
+                                      )}
                                   </div>
                                   <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
                                     <button
@@ -993,9 +986,8 @@ const Product = () => {
                               <button
                                 key={index}
                                 onClick={() => handleDotClick(index)}
-                                className={`w-[20px] h-[3px] rounded-[2px] ${
-                                  currentSlide === index ? 'bg-white' : 'bg-gray-500'
-                                }`}
+                                className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index ? 'bg-white' : 'bg-gray-500'
+                                  }`}
                               />
                             ))}
                           </div>
@@ -1098,13 +1090,11 @@ const Product = () => {
                                               lookSizeStockMap
                                             )
                                           }
-                                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${
-                                            stock <= 0 ? 'line-through opacity-50' : ''
-                                          } ${
-                                            selectedLookSize === size
+                                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0 ? 'line-through opacity-50' : ''
+                                            } ${selectedLookSize === size
                                               ? 'bg-[#E7E7E766]'
                                               : ''
-                                          }`}
+                                            }`}
                                           disabled={stock <= 0}
                                         >
                                           {size}
@@ -1115,10 +1105,10 @@ const Product = () => {
                                   {Object.values(lookSizeStockMap).every(
                                     (stock) => stock <= 0
                                   ) && (
-                                    <p className="text-white text-sm mt-2">
-                                      No hay stock disponible
-                                    </p>
-                                  )}
+                                      <p className="text-white text-sm mt-2">
+                                        No hay stock disponible
+                                      </p>
+                                    )}
                                 </div>
                                 <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
                                   <button
@@ -1178,28 +1168,30 @@ const Product = () => {
                     </button>
                   </div>
                 </div>
-                <div className="w-full flex justify-center items-center mt-4">
+                <div className="w-full flex justify-center items-center ">
                   <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
                     {product.sizeGuide && product.sizeGuide.length >= 2 ? (
                       <>
-                        <div className="w-full md:w-auto h-auto md:h-full">
+                        <div className="w-[402px] h-[296px] relative">
                           <Image
                             src={`/sizeGuide/${product.sizeGuide[0]}.webp`}
-                            width={350}
-                            height={150}
+                            fill
+                            className="object-contain"
                             alt="Size guide table"
-                            className="md:w-[650px] md:h-[340px]"
+
+
                           />
                         </div>
-                        <div className="w-full md:w-auto h-auto md:h-full">
+                        <div className="w-[600px] h-[296px] relative">
                           <Image
                             src={`/sizeGuide/${product.sizeGuide[1]}.webp`}
-                            width={350}
-                            height={150}
+                            fill
+                            className="object-contain"
                             alt="Size guide table"
-                            className="md:w-[950px] md:h-[340px]"
+
                           />
                         </div>
+
                       </>
                     ) : (
                       <p className="text-white text-center">
