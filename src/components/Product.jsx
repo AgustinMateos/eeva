@@ -1172,7 +1172,7 @@ const Product = () => {
                   <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
                     {product.sizeGuide && product.sizeGuide.length >= 2 ? (
                       <>
-                        <div className="w-[402px] h-[296px] relative">
+                        <div className= "w-[300px] h-[196px] md:w-[402px] md:h-[296px] relative">
                           <Image
                             src={`/sizeGuide/${product.sizeGuide[0]}.webp`}
                             fill
@@ -1182,7 +1182,7 @@ const Product = () => {
 
                           />
                         </div>
-                        <div className="w-[600px] h-[296px] relative">
+                        <div className="w-[300px] h-[196px] md:w-[600px] md:h-[296px] relative">
                           <Image
                             src={`/sizeGuide/${product.sizeGuide[1]}.webp`}
                             fill

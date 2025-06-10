@@ -53,7 +53,7 @@ export default function ComingSoon() {
           <div className="flex items-center w-full max-w-md px-4 sm:max-w-lg md:max-w-xl lg:max-w-2xl">
             <div className="w-full flex flex-col text-[#F9F9F9] justify-around items-center space-y-6 md:space-y-8">
               <h3 className="text-xl md:text-3xl font-bold">COMING SOON</h3>
-              <p className="text-lg md:text-2xl">07 | 03 | 25</p>
+              <p className="text-lg md:text-2xl">25 | 06 | 25</p>
               <p className="text-sm md:text-base text-center">
                 BE THE FIRST TO KNOW WHEN WE GO LIVE
               </p>

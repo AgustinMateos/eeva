@@ -10,11 +10,11 @@ import { useCart } from "./context/CartContext";
 
 const colecciones = [
   { name: "Initiation", link: "/collections/initiation", age: "new" },
-  { name: "Amsterdam", link: "/collections/amsterdam", age: "'24" },
-  { name: "New York", link: "/collections/newyork", age: "'27" },
-  { name: "Groenlandia", link: "/collections/groenlandia", age: "'20" },
-  { name: "Buenos Aires", link: "/collections/buenos-aires", age: "'22" },
-  { name: "Los Angeles", link: "/collections/los-angeles", age: "'23" },
+  // { name: "Amsterdam", link: "/collections/amsterdam", age: "'24" },
+  // { name: "New York", link: "/collections/newyork", age: "'27" },
+  // { name: "Groenlandia", link: "/collections/groenlandia", age: "'20" },
+  // { name: "Buenos Aires", link: "/collections/buenos-aires", age: "'22" },
+  // { name: "Los Angeles", link: "/collections/los-angeles", age: "'23" },
 ];
 
 const Navbar = () => {
