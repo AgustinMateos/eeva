@@ -13,22 +13,18 @@ const Loader = ({ loading }) => {
 
   useEffect(() => {
     if (loading) {
-      // Increment progress while loading
       const interval = setInterval(() => {
         setProgress((prev) => {
-          if (prev >= 100) return 100; // Cap at 100%
+          if (prev >= 100) return 100;
           return prev + 1;
         });
-      }, 20); // 2s animation: 2000ms / 100 = 20ms per step
-
+      }, 20);
       return () => clearInterval(interval);
     } else {
-      // When loading is false, set progress to 100% immediately
       setProgress(100);
     }
   }, [loading]);
 
-  // Hide loader when progress reaches 100%
   if (progress >= 100) {
     return null;
   }
@@ -71,6 +67,7 @@ const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
+  const [cachedImages, setCachedImages] = useState([]);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isProductCareOpen, setIsProductCareOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
@@ -80,7 +77,6 @@ const Product = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedLookColors, setSelectedLookColors] = useState({});
   const [selectedLookSizes, setSelectedLookSizes] = useState({});
-  const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMagnifying, setIsMagnifying] = useState(false);
@@ -96,6 +92,14 @@ const Product = () => {
   const lensHeight = 160;
   const zoomFactor = 2;
 
+  // Function to format price with Argentine conventions
+  const formatPrice = (price) => {
+    return price.toLocaleString('es-AR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   useEffect(() => {
     if (!id) return;
 
@@ -107,29 +111,26 @@ const Product = () => {
         const fetchedProduct = response.data;
         setProduct(fetchedProduct);
 
-        // Configurar imágenes
-        // if (fetchedProduct.models?.images?.gif360) {
-        //   setImages([
-        //     `/360/${fetchedProduct.models.images.gif360}-1.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-2.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-3.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-4.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-5.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-6.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-7.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-8.webp`,
-        //   ]);
-        // } else {
-        //   setImages([
-        //     '/rotate1.svg',
-        //     '/rotate2.svg',
-        //     '/rotate3.svg',
-        //     '/rotate4.svg',
-        //     '/rotate5.svg',
-        //   ]);
-        // }
+        const newImages = fetchedProduct.models?.images?.gif360
+          ? [
+              `/360/${fetchedProduct.models.images.gif360}-1.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-2.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-3.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-4.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-5.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-6.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-7.webp`,
+              `/360/${fetchedProduct.models.images.gif360}-8.webp`,
+            ]
+          : [
+              '/rotate1.svg',
+              '/rotate2.svg',
+              '/rotate3.svg',
+              '/rotate4.svg',
+              '/rotate5.svg',
+            ];
+        setCachedImages(newImages);
 
-        // Inicializar color y talle con stock disponible para el producto principal
         if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
           const firstAvailableColor = fetchedProduct.colors.find((color) =>
             color.sizes.some((size) => size.stock > 0)
@@ -146,7 +147,6 @@ const Product = () => {
           }
         }
 
-        // Inicializar colores y talles de los looks
         if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
           const initialLookColors = {};
           const initialLookSizes = {};
@@ -172,9 +172,6 @@ const Product = () => {
           setSelectedLookSizes(initialLookSizes);
         }
 
-        // Marcar la carga como completa
-        // Opcional: Agregar un retraso mínimo para que el loader sea visible
-        // setTimeout(() => setLoading(false), 1000);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching product:', err);
@@ -213,7 +210,9 @@ const Product = () => {
             (color) => color.color.name === selectedColor
           );
           if (selectedColorData) {
-            const availableSize = selectedColorData.sizes.find((size) => size.stock > 0);
+            const availableSize = selectedColorData.sizes.find(
+              (size) => size.stock > 0
+            );
             updatedSizes[lookId] = availableSize ? availableSize.size.name : null;
           } else {
             updatedSizes[lookId] = null;
@@ -225,14 +224,14 @@ const Product = () => {
   }, [selectedLookColors, product]);
 
   useEffect(() => {
-    if (isPaused || images.length === 0) return;
+    if (isPaused || cachedImages.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 700);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % cachedImages.length);
+    }, 600);
 
     return () => clearInterval(interval);
-  }, [images.length, isPaused]);
+  }, [cachedImages.length, isPaused]);
 
   const handleMagnifyClick = () => {
     setIsPaused(true);
@@ -253,7 +252,10 @@ const Product = () => {
     const halfLensHeight = lensHeight / 2;
 
     const boundedX = Math.max(halfLensWidth, Math.min(x, imageWidth - halfLensWidth));
-    const boundedY = Math.max(halfLensHeight, Math.min(y, imageHeight - halfLensHeight));
+    const boundedY = Math.max(
+      halfLensHeight,
+      Math.min(y, imageHeight - halfLensHeight)
+    );
 
     setLensPosition({ x: boundedX, y: boundedY });
   };
@@ -401,20 +403,6 @@ const Product = () => {
       : {};
   };
 
-  const tableHeaders = ['REF', 'MEDIDAS (CM)', 'S', 'M', 'L'];
-  const tableData = [
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-    ['A', 'TOTAL LENGTH', '108', '109', '114'],
-  ];
-
   const getColorBackground = (colorName) => {
     switch (colorName.toUpperCase()) {
       case 'BLANCO':
@@ -436,7 +424,7 @@ const Product = () => {
       alert('El talle seleccionado no tiene stock');
       return;
     }
-    addToCart(product, selectedColor, selectedSize, images);
+    addToCart(product, selectedColor, selectedSize, cachedImages);
     setAddCount((prevCount) => prevCount + 1);
   };
 
@@ -452,7 +440,7 @@ const Product = () => {
         <>
           <div className="max-w-[1252px] mx-auto flex flex-col md:flex-row py-8">
             <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
-              {images.length > 0 && (
+              {cachedImages.length > 0 && (
                 <div
                   className="relative"
                   onMouseMove={handleMouseMove}
@@ -460,7 +448,7 @@ const Product = () => {
                 >
                   <Image
                     ref={imageRef}
-                    src={images[currentImageIndex] || '/rotate1.svg'}
+                    src={cachedImages[currentImageIndex] || '/rotate1.svg'}
                     alt={`Product image ${currentImageIndex + 1}`}
                     width={545}
                     height={900}
@@ -468,7 +456,11 @@ const Product = () => {
                     priority
                     onLoad={(e) => {
                       const img = e.target;
-                      console.log('Image dimensions:', img.naturalWidth, img.naturalHeight);
+                      console.log(
+                        'Image dimensions:',
+                        img.naturalWidth,
+                        img.naturalHeight
+                      );
                     }}
                   />
                   {isMagnifying && (
@@ -479,10 +471,14 @@ const Product = () => {
                         height: `${lensHeight}px`,
                         top: `${lensPosition.y - lensHeight / 2}px`,
                         left: `${lensPosition.x - lensWidth / 1.5}px`,
-                        backgroundImage: `url(${images[currentImageIndex] || '/rotate1.svg'})`,
+                        backgroundImage: `url(${
+                          cachedImages[currentImageIndex] || '/rotate1.svg'
+                        })`,
                         backgroundSize: `${
                           imageRef.current?.getBoundingClientRect().width * zoomFactor
-                        }px ${imageRef.current?.getBoundingClientRect().height * zoomFactor}px`,
+                        }px ${
+                          imageRef.current?.getBoundingClientRect().height * zoomFactor
+                        }px`,
                         backgroundPosition: `-${
                           (lensPosition.x - lensWidth / 2) * zoomFactor
                         }px -${(lensPosition.y - lensHeight / 3.5) * zoomFactor}px`,
@@ -522,7 +518,9 @@ const Product = () => {
                   {Array.from({ length: 40 }, (_, index) => {
                     const maxHeightOptions = [5, 10, 15, 30];
                     const maxHeight =
-                      maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)];
+                      maxHeightOptions[
+                        Math.floor(Math.random() * maxHeightOptions.length)
+                      ];
                     const animationClass = `animate-pulseHeight-${maxHeight}`;
                     const delay = Math.random() * 2;
 
@@ -644,14 +642,14 @@ const Product = () => {
                       <div className="flex items-baseline w-full">
                         <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
                           <p className="uppercase mr-1 w-auto">Ars $</p>{' '}
-                          {product.price.toFixed(2)}
+                          {formatPrice(product.price)}
                         </span>
                       </div>
                     </div>
                   )}
                   <div className="flex items-baseline">
                     <p className="uppercase mr-1">Ars $</p>
-                    <span>{discountedPrice.toFixed(2)}</span>
+                    <span>{formatPrice(discountedPrice)}</span>
                   </div>
                   <div>
                     <p>3 cuotas sin interés en bancos seleccionados</p>
@@ -668,8 +666,11 @@ const Product = () => {
                           className="w-[40px] h-[40px] p-1 rounded-[20px] border"
                           style={{
                             borderColor:
-                              selectedColor === color.color.name ? '#FFFFFF' : 'transparent',
-                            borderWidth: selectedColor === color.color.name ? '0.5px' : '1px',
+                              selectedColor === color.color.name
+                                ? '#FFFFFF'
+                                : 'transparent',
+                            borderWidth:
+                              selectedColor === color.color.name ? '0.5px' : '1px',
                           }}
                         >
                           <div
@@ -769,7 +770,9 @@ const Product = () => {
                     <span>Product Care</span>
                     <Image
                       src={
-                        isProductCareOpen ? '/flechamobileup.svg' : '/flechamobiledown.svg'
+                        isProductCareOpen
+                          ? '/flechamobileup.svg'
+                          : '/flechamobiledown.svg'
                       }
                       width={24}
                       height={24}
@@ -872,13 +875,13 @@ const Product = () => {
                                       </div>
                                       <span className="line-through text-gray-400 text-[12px] ml-2">
                                         <span className="uppercase">Ars $</span>{' '}
-                                        {look.price.toFixed(2)}
+                                        {formatPrice(look.price)}
                                       </span>
                                     </div>
                                   )}
                                   <p className="text-white text-xs text-center mt-1">
                                     <span className="uppercase">Ars $</span>{' '}
-                                    {discountedPrice.toFixed(2)}
+                                    {formatPrice(discountedPrice)}
                                   </p>
                                   <div>
                                     <div className="flex w-full md:w-[50%] justify-center gap-2 mt-1">
@@ -935,7 +938,9 @@ const Product = () => {
                                             className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${
                                               stock <= 0 ? 'line-through opacity-50' : ''
                                             } ${
-                                              selectedLookSize === size ? 'bg-[#E7E7E766]' : ''
+                                              selectedLookSize === size
+                                                ? 'bg-[#E7E7E766]'
+                                                : ''
                                             }`}
                                             disabled={stock <= 0}
                                           >
@@ -986,7 +991,10 @@ const Product = () => {
                             const lookId = look._id || index;
                             const selectedLookColor = selectedLookColors[lookId];
                             const selectedLookSize = selectedLookSizes[lookId];
-                            const lookSizeStockMap = getLookSizeStockMap(look, selectedLookColor);
+                            const lookSizeStockMap = getLookSizeStockMap(
+                              look,
+                              selectedLookColor
+                            );
 
                             return (
                               <div
@@ -1013,13 +1021,13 @@ const Product = () => {
                                     </div>
                                     <span className="line-through text-gray-400 text-[12px] md:text-[14px] ml-2">
                                       <span className="uppercase">Ars $</span>{' '}
-                                      {look.price.toFixed(2)}
+                                      {formatPrice(look.price)}
                                     </span>
                                   </div>
                                 )}
                                 <p className="text-white text-sm md:text-[14px] text-center mt-1">
                                   <span className="uppercase">Ars $</span>{' '}
-                                  {discountedPrice.toFixed(2)}
+                                  {formatPrice(discountedPrice)}
                                 </p>
                                 <div>
                                   <div className="flex w-[100%] justify-center gap-2 mt-1">
@@ -1045,7 +1053,9 @@ const Product = () => {
                                           style={{
                                             width: '100%',
                                             height: '100%',
-                                            backgroundColor: getColorBackground(color.color.name),
+                                            backgroundColor: getColorBackground(
+                                              color.color.name
+                                            ),
                                             borderRadius: '18px',
                                             padding:
                                               selectedLookColor === color.color.name
@@ -1065,12 +1075,18 @@ const Product = () => {
                                         <button
                                           key={sizeIndex}
                                           onClick={() =>
-                                            handleLookSizeSelect(lookId, size, lookSizeStockMap)
+                                            handleLookSizeSelect(
+                                              lookId,
+                                              size,
+                                              lookSizeStockMap
+                                            )
                                           }
                                           className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${
                                             stock <= 0 ? 'line-through opacity-50' : ''
                                           } ${
-                                            selectedLookSize === size ? 'bg-[#E7E7E766]' : ''
+                                            selectedLookSize === size
+                                              ? 'bg-[#E7E7E766]'
+                                              : ''
                                           }`}
                                           disabled={stock <= 0}
                                         >
@@ -1149,12 +1165,6 @@ const Product = () => {
                   <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
                     {product.sizeGuide && product.sizeGuide.length >= 2 ? (
                       <>
-                        {/* <div
-                          className="w-full md:w-[40%] h-[300px] md:h-full bg-cover bg-center bg-no-repeat"
-                          style={{
-                            backgroundImage: `url(/sizeGuide/${product.sizeGuide[0]}.webp)`,
-                          }}
-                        ></div>  */}
                         <div className="w-full md:w-auto h-auto md:h-full">
                           <Image
                             src={`/sizeGuide/${product.sizeGuide[0]}.webp`}

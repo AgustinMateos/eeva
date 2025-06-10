@@ -5,15 +5,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const options = [
-  { id: 1, name: 'New Asia', bgImage: '/slide2.svg', estado: 'archive', link: '/new-asia' },
-  { id: 2, name: 'New York', bgImage: '/slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/collections/newyork' },
-  { id: 3, name: 'Initiation', bgImage: '/initiationslider.jpg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
-  { id: 4, name: 'Tokio', bgImage: '/slide2.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/tokio' },
-  { id: 5, name: 'Opción 5', bgImage: '/slide1.svg', estado: '09|05|25', estadoAccion: 'Shop', link: '/option-5' },
+  { id: 1, name: 'New Asia', bgImage: '/slide2.svg', mobileBgImage: '/mobile-slide2.svg', estado: 'archive', link: '/new-asia' },
+  { id: 2, name: 'New York', bgImage: '/slide3.svg', mobileBgImage: '/mobile-slide3.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/collections/newyork' },
+  { id: 3, name: 'Initiation', bgImage: '/initiationslider.jpg', mobileBgImage: '/slide2.svg', estado: '07 | 03 | 25', estadoAccion: 'Shop', link: '/collections/initiation' },
+  { id: 4, name: 'Tokio', bgImage: '/slide2.svg', mobileBgImage: '/mobile-slide2.svg', estado: 'proximamente', estadoAccion: '01:02:03:00', link: '/tokio' },
+  { id: 5, name: 'Opción 5', bgImage: '/slide1.svg', mobileBgImage: '/mobile-slide1.svg', estado: '09|05|25', estadoAccion: 'Shop', link: '/option-5' },
 ];
 
 export default function Slider() {
-  const [currentIndex, setCurrentIndex] = useState(4); // Start at index 4 (Opción 5)
+  const [currentIndex, setCurrentIndex] = useState(4);
   const [previousIndex, setPreviousIndex] = useState(4);
   const [transitionProgress, setTransitionProgress] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -26,7 +26,6 @@ export default function Slider() {
   const totalItems = extendedOptions.length;
   const sliderRef = useRef(null);
 
-  // Detect if the device is mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -36,26 +35,21 @@ export default function Slider() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Handle desktop click interaction
   const handleInteraction = (index) => {
     if (index === currentIndex || isTransitioning) return;
-
     setPreviousIndex(currentIndex);
     setCurrentIndex(index);
     setIsTransitioning(true);
     setTransitionProgress(0);
   };
 
-  // Handle touch start
   const handleTouchStart = (e) => {
     setTouchStartX(e.touches[0].clientX);
     setIsDragging(true);
   };
 
-  // Handle touch move
   const handleTouchMove = (e) => {
     if (!isDragging || touchStartX === null) return;
-
     const touchCurrentX = e.touches[0].clientX;
     const deltaX = touchCurrentX - touchStartX;
     const slideWidth = sliderRef.current.offsetWidth / 5;
@@ -63,33 +57,27 @@ export default function Slider() {
     setTouchOffset(offsetPercentage);
   };
 
-  // Handle touch end
   const handleTouchEnd = () => {
     if (!isDragging) return;
-
     setIsDragging(false);
     setTouchOffset(0);
-
     const slideWidth = sliderRef.current.offsetWidth / 5;
     const swipeDistance = (touchOffset / (100 / 5)) * slideWidth;
     const swipeThreshold = slideWidth * 0.3;
-
     let newIndex = currentIndex;
     if (Math.abs(swipeDistance) > swipeThreshold) {
       if (swipeDistance > 0) {
-        newIndex = currentIndex - 1; // Swipe right
+        newIndex = currentIndex - 1;
       } else {
-        newIndex = currentIndex + 1; // Swipe left
+        newIndex = currentIndex + 1;
       }
     }
-
     setPreviousIndex(currentIndex);
     setCurrentIndex(newIndex);
     setIsTransitioning(true);
     setTransitionProgress(0);
   };
 
-  // Handle infinite loop
   useEffect(() => {
     if (currentIndex < 2 || currentIndex >= totalItems - 2) {
       setPreviousIndex(currentIndex);
@@ -100,7 +88,6 @@ export default function Slider() {
     }
   }, [currentIndex]);
 
-  // Handle background transition animation
   useEffect(() => {
     let animationFrame;
     if (isTransitioning) {
@@ -126,7 +113,7 @@ export default function Slider() {
     <div className="relative w-full h-[100vh] overflow-hidden bg-black overscroll-y-none" style={{ touchAction: 'pan-x' }}>
       {/* Fondo anterior */}
       <Image
-        src={extendedOptions[previousIndex]?.bgImage}
+        src={isMobile ? extendedOptions[previousIndex]?.mobileBgImage : extendedOptions[previousIndex]?.bgImage}
         alt="Previous slide"
         fill
         className="absolute inset-0 object-cover transition-opacity duration-500 ease-in-out"
@@ -135,7 +122,7 @@ export default function Slider() {
 
       {/* Fondo actual */}
       <Image
-        src={extendedOptions[currentIndex]?.bgImage}
+        src={isMobile ? extendedOptions[currentIndex]?.mobileBgImage : extendedOptions[currentIndex]?.bgImage}
         alt="Current slide"
         fill
         className="absolute inset-0 object-cover transition-opacity duration-500 ease-in-out"
@@ -144,7 +131,7 @@ export default function Slider() {
 
       {/* Slider */}
       <div className="absolute top-[350px] md:top-[400px] left-[-290px] right-[-290px] lg:left-[-140px] lg:right-[-140px] transform -translate-y-1/2 h-full flex items-center">
-        <div className="relative w-full   overflow-hidden">
+        <div className="relative w-full overflow-hidden">
           <div
             ref={sliderRef}
             className={`flex transition-transform duration-300 ease-out touch-none select-none ${
