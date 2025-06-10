@@ -94,10 +94,27 @@ const Product = () => {
 
   // Function to format price with Argentine conventions
   const formatPrice = (price) => {
-    return price.toLocaleString('es-AR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    // Convert price to number and handle invalid inputs
+    const num = Number(price);
+    if (isNaN(num)) return '0';
+  
+    // Split into integer and decimal parts
+    const [integerPart, decimalPart] = num.toFixed(2).split('.');
+  
+    // Add dots as thousand separators to integer part
+    const formattedInteger = integerPart
+      .split('')
+      .reverse()
+      .reduce((acc, digit, index) => {
+        const separator = index > 0 && index % 3 === 0 ? '.' : '';
+        return digit + separator + acc;
+      }, '');
+  
+    // Handle decimal part: show only if non-zero
+    if (parseInt(decimalPart) === 0) {
+      return formattedInteger;
+    }
+    return `${formattedInteger},${decimalPart}`;
   };
 
   useEffect(() => {
