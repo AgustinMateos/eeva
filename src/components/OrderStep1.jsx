@@ -368,8 +368,9 @@ const OrderStep1 = () => {
                     src={"/products/" + item.image + ".webp"}
                     alt={item.name}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                   />
+                  
                 </div>
                 <div className="flex flex-col gap-4">
                   <h3 className="font-medium">{item.name.toUpperCase()}</h3>
