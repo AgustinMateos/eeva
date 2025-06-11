@@ -236,10 +236,10 @@ const Initiation = () => {
                 className="object-cover"
                 priority
               />
-              <div className="absolute top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px]">
+              <div className="absolute top-[15px] flex flex-col justify-end md:top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px]">
                 <h5 className="text-sm md:text-lg font-semibold flex justify-end">{title}</h5>
                 <div className="text-[8px] text-end md:text-[12px] w-[100%] flex justify-end md:w-[480px]">
-                  <p className="w-[281px] md:w-[480px]">
+                  <p className="w-[221px] md:w-[480px]">
                     Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla
                     eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor
                     hendrerit.
@@ -249,7 +249,7 @@ const Initiation = () => {
             </div>
           )}
 
-          <div className="h-[315px] md:h-[415px] flex md:min-w-[1315px]">
+          <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px]">
             <Footer />
           </div>
         </div>
