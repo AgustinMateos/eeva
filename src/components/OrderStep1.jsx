@@ -20,7 +20,7 @@ const OrderStep1 = () => {
   const [address, setAddress] = useState({
     codigoArea: '',
     telefono: '',
-    tipoDocumento: 'DNI',
+    tipoDocumento: 'DNI', // Valor inicial
     numeroDocumento: '',
     pais: '',
     region: '',
@@ -34,6 +34,12 @@ const OrderStep1 = () => {
   // Estado para el método de envío seleccionado
   const [selectedShipping, setSelectedShipping] = useState('');
 
+  // Estado para controlar la visibilidad del dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Opciones para el dropdown
+  const documentOptions = ['DNI', 'Pasaporte'];
+
   // Manejar cambios en los inputs de información
   const handleInfoChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +50,12 @@ const OrderStep1 = () => {
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Manejar la selección del tipo de documento
+  const handleDocumentSelect = (option) => {
+    setAddress((prev) => ({ ...prev, tipoDocumento: option }));
+    setIsDropdownOpen(false); // Cerrar el dropdown tras seleccionar
   };
 
   // Validar que todos los inputs estén completos
@@ -65,7 +77,7 @@ const OrderStep1 = () => {
   // Manejar el clic en "Continuar"
   const handleContinue = () => {
     if (areAllFieldsFilled()) {
-      setShowAdditionalInputs(true); // Mostrar nuevos inputs y ocultar los anteriores
+      setShowAdditionalInputs(true);
     } else {
       alert('Por favor, completa todos los campos antes de continuar.');
     }
@@ -73,7 +85,7 @@ const OrderStep1 = () => {
 
   // Manejar el clic en "Volver a editar información"
   const handleBack = () => {
-    setShowAdditionalInputs(false); // Volver a mostrar los inputs originales
+    setShowAdditionalInputs(false);
   };
 
   // Manejar la selección del método de envío
@@ -117,18 +129,59 @@ const OrderStep1 = () => {
         .custom-radio:checked::before {
           background-color: white;
         }
+        .custom-dropdown {
+          position: relative;
+          width: 139px;
+          height: 48px;
+        }
+        .dropdown-button {
+          width: 100%;
+          height: 100%;
+          padding: 0 16px;
+          border: 1px solid #F2F2F2;
+          background: #F2F2F203;
+          color: white;
+          font-size: 14px;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          cursor: pointer;
+        }
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background: #F2F2F203;
+          border: 1px solid #F2F2F2;
+          border-radius: 2px;
+          z-index: 10;
+          margin-top: 4px;
+        }
+        .dropdown-item {
+          padding: 8px 16px;
+          color: white;
+          font-size: 14px;
+          cursor: pointer;
+        }
+        .dropdown-item:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
       `}</style>
 
       <div className="w-[100%] flex-col-reverse md:w-[85%] flex md:flex-row">
         <div className="w-[100%] md:w-[70%] border-r border-r-[#D7D7D780]">
-           <div className='w-full flex justify-center md:justify-start'> <h2 className="font-ibm w-[90%] md:w-[713px] text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
-            INFORMACIÓN
-          </h2></div>
+          <div className='w-full flex justify-center md:justify-start'>
+            <h2 className="font-ibm w-[90%] md:w-[713px] text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
+              INFORMACIÓN
+            </h2>
+          </div>
           {!showAdditionalInputs ? (
             <div className="flex flex-col gap-8">
               <div className="h-[256px] flex flex-col justify-between items-center md:items-start">
                 <input
-                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="nombres"
                   value={info.nombres}
@@ -136,7 +189,7 @@ const OrderStep1 = () => {
                   placeholder="Nombres"
                 />
                 <input
-                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="apellidos"
                   value={info.apellidos}
@@ -144,7 +197,7 @@ const OrderStep1 = () => {
                   placeholder="Apellidos"
                 />
                 <input
-                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] md:w-[713px] text-[14px] placeholder-white h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="email"
                   name="correo"
                   value={info.correo}
@@ -157,20 +210,16 @@ const OrderStep1 = () => {
                 <h2 className="font-ibm text-[22px] w-[90%] md:w-[713px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
                   DIRECCIÓN DE ENVÍO
                 </h2>
-                <div className="flex justify-between  w-[90%] md:w-[713px]">
-                  <select
-                    className="w-[109px] md:w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                <div className="flex justify-between w-[90%] md:w-[713px]">
+                  <input
+                    className="w-[109px] text-[14px] placeholder-white md:w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     name="codigoArea"
                     value={address.codigoArea}
                     onChange={handleAddressChange}
-                  >
-                    <option value="">C. Área</option>
-                    <option value="+54">+54</option>
-                    <option value="+1">+1</option>
-                    {/* Agrega más opciones según sea necesario */}
-                  </select>
+                    placeholder="C. Área"
+                  />
                   <input
-                    className="w-[205px] md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[205px] text-[14px] placeholder-white md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     type="text"
                     name="telefono"
                     value={address.telefono}
@@ -179,17 +228,31 @@ const OrderStep1 = () => {
                   />
                 </div>
                 <div className="flex justify-between w-[90%] md:w-[713px]">
-                  <select
-                    className="w-[109px] md:w-[139px]  text-white h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50"
-                    name="tipoDocumento"
-                    value={address.tipoDocumento}
-                    onChange={handleAddressChange}
-                  >
-                    <option value="DNI">DNI</option>
-                    <option value="Pasaporte">Pasaporte</option>
-                  </select>
+                  {/* Custom Dropdown for tipoDocumento */}
+                  <div className="custom-dropdown">
+                    <div
+                      className="dropdown-button"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    >
+                      <span>{address.tipoDocumento}</span>
+                      <Image height={14} width={14} alt='flecha' src={'/check.svg'}/>
+                    </div>
+                    {isDropdownOpen && (
+                      <div className="dropdown-menu">
+                        {documentOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="dropdown-item backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                            onClick={() => handleDocumentSelect(option)}
+                          >
+                            {option}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <input
-                    className="w-[205px] md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[205px] text-[14px] placeholder-white md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     type="text"
                     name="numeroDocumento"
                     value={address.numeroDocumento}
@@ -198,7 +261,7 @@ const OrderStep1 = () => {
                   />
                 </div>
                 <input
-                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="pais"
                   value={address.pais}
@@ -206,7 +269,7 @@ const OrderStep1 = () => {
                   placeholder="País / Región"
                 />
                 <input
-                  className="w-[90%] md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                   type="text"
                   name="region"
                   value={address.region}
@@ -214,19 +277,15 @@ const OrderStep1 = () => {
                   placeholder="Región / Provincia"
                 />
                 <div className="flex justify-between w-[90%] md:w-[713px]">
-                  <select
-                    className="w-[109px] md:w-[139px]  h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                  <input
+                    className="w-[109px] text-[14px] placeholder-white md:w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     name="codigoPostal"
                     value={address.codigoPostal}
                     onChange={handleAddressChange}
-                  >
-                    <option value="">C. Postal</option>
-                    <option value="1000">1000</option>
-                    <option value="2000">2000</option>
-                    {/* Agrega más opciones según sea necesario */}
-                  </select>
+                    placeholder="C. Postal"
+                  />
                   <input
-                    className="w-[205px] md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                    className="w-[205px] text-[14px] placeholder-white md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                     type="text"
                     name="calle"
                     value={address.calle}
@@ -238,10 +297,9 @@ const OrderStep1 = () => {
             </div>
           ) : (
             <div className="mt-8 flex flex-col gap-4">
-              {/* Sección de Contacto y Enviar a */}
               <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
                 <div className="flex flex-row">
-                  <span className="font-ibm-mono font-semibold text-[14px]  tracking-[-0.04em] align-middle pr-3">Contacto</span>
+                  <span className="font-ibm-mono font-semibold text-[14px] tracking-[-0.04em] align-middle pr-3">Contacto</span>
                   <span className="text-sm">{info.correo}</span>
                 </div>
                 <button
@@ -253,7 +311,7 @@ const OrderStep1 = () => {
               </div>
               <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
                 <div className="flex flex-row">
-                  <span className="font-ibm-mono font-semibold text-[14px]  tracking-[-0.04em] align-middle pr-3">Enviar a</span>
+                  <span className="font-ibm-mono font-semibold text-[14px] tracking-[-0.04em] align-middle pr-3">Enviar a</span>
                   <span className="text-sm">{formattedAddress}</span>
                 </div>
                 <button
@@ -264,34 +322,13 @@ const OrderStep1 = () => {
                 </button>
               </div>
 
-              {/* Sección de Método de Envío */}
               <div className="mt-8">
                 <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
                   MÉTODO DE ENVÍO
                 </h2>
                 <div className="flex flex-col gap-4">
-                  {/* Opción 1: Andreani a Domicilio */}
-                  {/* <div className="flex justify-between items-center w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="shipping"
-                        value="andreani"
-                        checked={selectedShipping === 'andreani'}
-                        onChange={handleShippingChange}
-                        className="custom-radio"
-                      />
-                      <span className="text-sm">Andreani a Domicilio</span>
-                    </div>
-                    <span className="text-sm">ARS $16.000</span>
-                  </div>
-                  <p className="text-xs text-gray-400">
-                    Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit felis nostra interdum, diam pretium turpis ut est libero dapibus vehicula purus sollicitudin
-                  </p> */}
-
-                  {/* Opción 2: Correo Argentino a Domicilio */}
                   <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
-                    <div className="flex items-center gap-2">
+                    <div className="flex placeholder-white items-center gap-2">
                       <input
                         type="radio"
                         name="shipping"
@@ -307,9 +344,7 @@ const OrderStep1 = () => {
                   <p className="text-xs text-gray-400">
                     Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit felis nostra interdum, diam pretium turpis ut est libero dapibus vehicula purus sollicitudin
                   </p>
-
-                  {/* Opción 3: Retiro en sucursal */}
-                  <div className="flex justify-between items-center w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
+                  <div className="flex justify-between items-center w-[90%] md:w-[713px] h-[48px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] text-white">
                     <div className="flex items-center gap-2">
                       <input
                         type="radio"
@@ -356,7 +391,6 @@ const OrderStep1 = () => {
           </div>
         </div>
         <div className="w-[90%] md:w-[30%] pl-6">
-          {/* Cart Products Section */}
           <div className="divide-y divide-gray-400 text-white">
             {cart.map((item, index) => (
               <div
@@ -370,7 +404,6 @@ const OrderStep1 = () => {
                     fill
                     className="object-contain"
                   />
-                  
                 </div>
                 <div className="flex flex-col gap-4">
                   <h3 className="font-medium">{item.name.toUpperCase()}</h3>

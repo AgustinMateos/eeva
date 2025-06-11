@@ -426,6 +426,8 @@ const Product = () => {
         return '#FFFFFF';
       case 'NEGRO':
         return '#232323';
+      case 'MOON':
+        return '#4f5576';
       default:
         return '#000000';
     }
@@ -644,7 +646,7 @@ const Product = () => {
                 </p>
               </div>
               <div className="flex flex-row md:flex-col justify-around md:justify-center">
-                <div className="h-auto md:h-[140px] w-[35%] md:w-full flex justify-evenly flex-col">
+                <div className="h-auto md:h-[140px] w-[42%] md:w-full flex justify-evenly flex-col">
                   {product.discount > 0 && (
                     <div className="flex items-center">
                       <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
@@ -665,10 +667,10 @@ const Product = () => {
                     <span>{formatPrice(discountedPrice)}</span>
                   </div>
                   <div>
-                    <p>3 cuotas sin interés en bancos seleccionados</p>
+                    <p className=" h-[152px] md:h-auto font-['IBM_Plex_Mono'] font-normal text-[12px] leading-[16px] tracking-[-0.04em] align-middle" >3 cuotas sin interés en bancos seleccionados</p>
                   </div>
                 </div>
-                <div className="h-[213px] flex flex-col justify-around w-[45%] md:w-full">
+                <div className="h-[213px] flex flex-col justify-around w-[35%] md:w-full">
                   <div>
                     <p className="uppercase">Color</p>
                     <div className="flex w-[50%] md:w-[19%] justify-between mt-2">
