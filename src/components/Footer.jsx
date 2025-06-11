@@ -25,7 +25,7 @@ const Footer = () => {
         </div>
 
         {/* Redes sociales */}
-        <div className="flex flex-wrap justify-around w-full md:w-auto gap-4 md:gap-8 text-sm md:text-base order-1 md:order-2">
+        <div className="flex flex-wrap justify-end md:justify-around w-full md:w-auto gap-4 md:gap-8 text-sm md:text-base order-1 md:order-2">
           {/* Instagram */}
           <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center">
             <p className="pr-[40px] block md:hidden">IG</p>
