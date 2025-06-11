@@ -114,7 +114,8 @@ const Initiation = () => {
               className="absolute bottom-4 flex justify-center items-center left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded-md text-sm"
             >
               {isMuted ? 'ALLOW SOUND' : 'DENY SOUND'}
-              <Image src="/sound.svg" alt="Control de Sonido" width={32} height={32} />
+              <Image 
+              src="/sound.svg"  alt="Control de Sonido" width={32} height={32} />
             </button>
           </div>
 
@@ -132,6 +133,7 @@ const Initiation = () => {
                       src={card.image}
                       alt={card.title}
                       fill
+                      loading="eager"
                       className="object-contain w-full h-auto"
                     /></div>
 
@@ -163,6 +165,7 @@ const Initiation = () => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={900}
+                      loading="eager"
                       className="object-cover w-full h-[400px] md:h-auto"
                     />
                   </div>
@@ -182,6 +185,7 @@ const Initiation = () => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={625}
+                      loading="eager"
                       className="object-contain w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5]"
                     />
                     {/* Render the text below the first image only */}
@@ -210,6 +214,7 @@ const Initiation = () => {
                         src={card.image}
                         alt={card.title}
                         fill
+                        loading="eager"
                         className="object-contain w-full h-auto"
                       /></div>
                     <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
@@ -233,6 +238,7 @@ const Initiation = () => {
                 src={footerImage}
                 alt="Fondo Initiation"
                 fill
+                loading="eager"
                 className="object-cover"
                 priority
               />
