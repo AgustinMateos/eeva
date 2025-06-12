@@ -617,23 +617,23 @@ const Product = () => {
                   <div className="pl-[20px]">
                     <div className="flex justify-between">
                       <p>Nombre</p>{' '}
-                      <p className="w-[48px] lowercase">{product.models.modelName}</p>
+                      <p className="w-[60px] lowercase">{product.models.modelName}</p>
                     </div>
                     <div className="flex justify-between">
                       <p>Altura</p>{' '}
-                      <p className="w-[48px] lowercase">{product.models.height}</p>
+                      <p className="w-[60px] lowercase">{product.models.height}</p>
                     </div>
                     <div className="flex justify-between">
                       <p>Peso</p>{' '}
-                      <p className="w-[48px] lowercase">{product.models.weight} kg.</p>
+                      <p className="w-[60px] lowercase">{product.models.weight} kg.</p>
                     </div>
                     <div className="flex justify-between">
                       <p>Talle</p>{' '}
-                      <p className="w-[48px] lowercase">{product.models.size.name}</p>
+                      <p className="w-[60px] lowercase">{product.models.size.name}</p>
                     </div>
                     <div className="flex justify-between">
                       <p>Género</p>{' '}
-                      <p className="w-[48px] lowercase">{product.models.gender}</p>
+                      <p className="w-[60px] lowercase">{product.models.gender}</p>
                     </div>
                   </div>
                 </div>
