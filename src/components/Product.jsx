@@ -131,25 +131,25 @@ const Product = () => {
       const fetchedProduct = response.data;
       setProduct(fetchedProduct);
 
-      const newImages = fetchedProduct.models?.images?.gif360
-        ? [
-            `/360/${fetchedProduct.models.images.gif360}-1.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-2.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-3.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-4.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-5.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-6.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-7.webp`,
-            `/360/${fetchedProduct.models.images.gif360}-8.webp`,
-          ]
-        : [
-            "/rotate1.svg",
-            "/rotate2.svg",
-            "/rotate3.svg",
-            "/rotate4.svg",
-            "/rotate5.svg",
-          ];
-      setCachedImages(newImages);
+      // const newImages = fetchedProduct.models?.images?.gif360
+      //   ? [
+      //       `/360/${fetchedProduct.models.images.gif360}-1.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-2.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-3.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-4.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-5.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-6.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-7.webp`,
+      //       `/360/${fetchedProduct.models.images.gif360}-8.webp`,
+      //     ]
+      //   : [
+      //       "/rotate1.svg",
+      //       "/rotate2.svg",
+      //       "/rotate3.svg",
+      //       "/rotate4.svg",
+      //       "/rotate5.svg",
+      //     ];
+      // setCachedImages(newImages);
 
       if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
         const firstAvailableColor = fetchedProduct.colors.find((color) =>
@@ -274,7 +274,7 @@ const Product = () => {
       setCurrentImageIndex(
         (prevIndex) => (prevIndex + 1) % cachedImages.length
       );
-    }, 600);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, [cachedImages.length, isPaused]);
