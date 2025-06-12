@@ -35,7 +35,7 @@ export default function ComingSoon() {
     <div className="w-full min-h-screen">
       <div
         className="w-full h-[100vh] bg-cover bg-no-repeat flex items-center bg-center md:bg-top"
-        style={{ backgroundImage: "url('/bgHome.svg')" }}
+        style={{ backgroundImage: "url('/bgHome.webp')" }}
       >
         <div className="flex flex-col items-center justify-between w-full h-full py-6 md:py-12">
           {/* Logo superior */}
