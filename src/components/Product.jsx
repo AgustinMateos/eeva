@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
-import axios from 'axios';
-import Image from 'next/image';
-import { useCart } from './context/CartContext';
-import Marquee from './Marquee';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
+import Image from "next/image";
+import { useCart } from "./context/CartContext";
+import Marquee from "./Marquee";
 
 // Inline Loader Component
 const Loader = ({ loading }) => {
@@ -34,14 +40,14 @@ const Loader = ({ loading }) => {
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-[20ms] ease-linear"
         style={{
-          backgroundImage: 'url(/lineasCodigo.svg)',
+          backgroundImage: "url(/lineasCodigo.svg)",
           clipPath: `polygon(0 0, 100% 0, 100% ${progress}%, 0 ${progress}%)`,
         }}
       ></div>
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-10">
         <span
           className="font-medium text-2xl leading-none tracking-[-0.02em] text-center uppercase text-[#F9F9F9]"
-          style={{ fontFamily: 'IBM Plex Mono' }}
+          style={{ fontFamily: "IBM Plex Mono" }}
         >
           Initiating SYSTEM
         </span>
@@ -53,7 +59,7 @@ const Loader = ({ loading }) => {
         </div>
         <span
           className="font-light text-lg leading-none tracking-[-0.02em] text-center uppercase text-[#F9F9F9]"
-          style={{ fontFamily: 'IBM Plex Mono' }}
+          style={{ fontFamily: "IBM Plex Mono" }}
         >
           {progress}%
         </span>
@@ -96,19 +102,19 @@ const Product = () => {
   const formatPrice = (price) => {
     // Convert price to number and handle invalid inputs
     const num = Number(price);
-    if (isNaN(num)) return '0';
+    if (isNaN(num)) return "0";
 
     // Split into integer and decimal parts
-    const [integerPart, decimalPart] = num.toFixed(2).split('.');
+    const [integerPart, decimalPart] = num.toFixed(2).split(".");
 
     // Add dots as thousand separators to integer part
     const formattedInteger = integerPart
-      .split('')
+      .split("")
       .reverse()
       .reduce((acc, digit, index) => {
-        const separator = index > 0 && index % 3 === 0 ? '.' : '';
+        const separator = index > 0 && index % 3 === 0 ? "." : "";
         return digit + separator + acc;
-      }, '');
+      }, "");
 
     // Handle decimal part: show only if non-zero
     if (parseInt(decimalPart) === 0) {
@@ -117,87 +123,100 @@ const Product = () => {
     return `${formattedInteger},${decimalPart}`;
   };
 
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(
+        `https://eeva-api.vercel.app/api/v1/products/${id}`
+      );
+      const fetchedProduct = response.data;
+      setProduct(fetchedProduct);
+
+      const newImages = fetchedProduct.models?.images?.gif360
+        ? [
+            `/360/${fetchedProduct.models.images.gif360}-1.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-2.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-3.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-4.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-5.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-6.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-7.webp`,
+            `/360/${fetchedProduct.models.images.gif360}-8.webp`,
+          ]
+        : [
+            "/rotate1.svg",
+            "/rotate2.svg",
+            "/rotate3.svg",
+            "/rotate4.svg",
+            "/rotate5.svg",
+          ];
+      setCachedImages(newImages);
+
+      if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
+        const firstAvailableColor = fetchedProduct.colors.find((color) =>
+          color.sizes.some((size) => size.stock > 0)
+        );
+        if (firstAvailableColor) {
+          setSelectedColor(firstAvailableColor.color.name);
+          const firstAvailableSize = firstAvailableColor.sizes.find(
+            (size) => size.stock > 0
+          );
+          setSelectedSize(
+            firstAvailableSize ? firstAvailableSize.size.name : null
+          );
+        } else {
+          setSelectedColor(fetchedProduct.colors[0].color.name);
+          setSelectedSize(null);
+        }
+      }
+
+      if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
+        const initialLookColors = {};
+        const initialLookSizes = {};
+        fetchedProduct.looks.forEach((look, index) => {
+          if (look.colors && look.colors.length > 0) {
+            const lookId = look._id || index;
+            const firstAvailableColor = look.colors.find((color) =>
+              color.sizes.some((size) => size.stock > 0)
+            );
+            initialLookColors[lookId] = firstAvailableColor
+              ? firstAvailableColor.color.name
+              : look.colors[0].color.name;
+            const selectedColor = firstAvailableColor || look.colors[0];
+            const firstAvailableSize = selectedColor.sizes.find(
+              (size) => size.stock > 0
+            );
+            initialLookSizes[lookId] = firstAvailableSize
+              ? firstAvailableSize.size.name
+              : null;
+          }
+        });
+        setSelectedLookColors(initialLookColors);
+        setSelectedLookSizes(initialLookSizes);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching product:", err);
+      setError("Error al cargar el producto. Por favor, intenta de nuevo.");
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!id) return;
 
-    const fetchProduct = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://eeva-api.vercel.app/api/v1/products/${id}`
-        );
-        const fetchedProduct = response.data;
-        setProduct(fetchedProduct);
-
-        // const newImages = fetchedProduct.models?.images?.gif360
-        //   ? [
-        //     `/360/${fetchedProduct.models.images.gif360}-1.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-2.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-3.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-4.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-5.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-6.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-7.webp`,
-        //     `/360/${fetchedProduct.models.images.gif360}-8.webp`,
-        //   ]
-        //   : [
-        //     '/rotate1.svg',
-        //     '/rotate2.svg',
-        //     '/rotate3.svg',
-        //     '/rotate4.svg',
-        //     '/rotate5.svg',
-        //   ];
-        // setCachedImages(newImages);
-
-        if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
-          const firstAvailableColor = fetchedProduct.colors.find((color) =>
-            color.sizes.some((size) => size.stock > 0)
-          );
-          if (firstAvailableColor) {
-            setSelectedColor(firstAvailableColor.color.name);
-            const firstAvailableSize = firstAvailableColor.sizes.find(
-              (size) => size.stock > 0
-            );
-            setSelectedSize(firstAvailableSize ? firstAvailableSize.size.name : null);
-          } else {
-            setSelectedColor(fetchedProduct.colors[0].color.name);
-            setSelectedSize(null);
-          }
-        }
-
-        if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
-          const initialLookColors = {};
-          const initialLookSizes = {};
-          fetchedProduct.looks.forEach((look, index) => {
-            if (look.colors && look.colors.length > 0) {
-              const lookId = look._id || index;
-              const firstAvailableColor = look.colors.find((color) =>
-                color.sizes.some((size) => size.stock > 0)
-              );
-              initialLookColors[lookId] = firstAvailableColor
-                ? firstAvailableColor.color.name
-                : look.colors[0].color.name;
-              const selectedColor = firstAvailableColor || look.colors[0];
-              const firstAvailableSize = selectedColor.sizes.find(
-                (size) => size.stock > 0
-              );
-              initialLookSizes[lookId] = firstAvailableSize
-                ? firstAvailableSize.size.name
-                : null;
-            }
-          });
-          setSelectedLookColors(initialLookColors);
-          setSelectedLookSizes(initialLookSizes);
-        }
-
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching product:', err);
-        setError('Error al cargar el producto. Por favor, intenta de nuevo.');
+        setLoading(true);
+        await fetchProduct();
+      } catch (error) {
+        setError("Error al cargar el producto");
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchProduct();
+    fetchData();
   }, [id]);
 
   useEffect(() => {
@@ -207,15 +226,17 @@ const Product = () => {
       (color) => color.color.name === selectedColor
     );
     if (selectedColorData) {
-      const availableSize = selectedColorData.sizes.find((size) => size.stock > 0);
+      const availableSize = selectedColorData.sizes.find(
+        (size) => size.stock > 0
+      );
       setSelectedSize(availableSize ? availableSize.size.name : null);
     } else {
       setSelectedSize(null);
     }
   }, [selectedColor, product]);
 
-  useEffect(() => {
-    if (!product || !product.looks) return;
+  const updateLookSizes = useCallback(() => {
+    if (!product?.looks) return;
 
     setSelectedLookSizes((prevSizes) => {
       const updatedSizes = { ...prevSizes };
@@ -230,7 +251,9 @@ const Product = () => {
             const availableSize = selectedColorData.sizes.find(
               (size) => size.stock > 0
             );
-            updatedSizes[lookId] = availableSize ? availableSize.size.name : null;
+            updatedSizes[lookId] = availableSize
+              ? availableSize.size.name
+              : null;
           } else {
             updatedSizes[lookId] = null;
           }
@@ -238,13 +261,19 @@ const Product = () => {
       });
       return updatedSizes;
     });
-  }, [selectedLookColors, product]);
+  }, [product]);
+
+  useEffect(() => {
+    updateLookSizes();
+  }, [updateLookSizes, selectedLookColors]);
 
   useEffect(() => {
     if (isPaused || cachedImages.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % cachedImages.length);
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % cachedImages.length
+      );
     }, 600);
 
     return () => clearInterval(interval);
@@ -268,7 +297,10 @@ const Product = () => {
     const halfLensWidth = lensWidth / 2;
     const halfLensHeight = lensHeight / 2;
 
-    const boundedX = Math.max(halfLensWidth, Math.min(x, imageWidth - halfLensWidth));
+    const boundedX = Math.max(
+      halfLensWidth,
+      Math.min(x, imageWidth - halfLensWidth)
+    );
     const boundedY = Math.max(
       halfLensHeight,
       Math.min(y, imageHeight - halfLensHeight)
@@ -335,17 +367,17 @@ const Product = () => {
     const selectedColor = selectedLookColors[lookId];
     const selectedSize = selectedLookSizes[lookId];
     if (!selectedColor || !selectedSize) {
-      alert('Por favor selecciona color y talla para el look');
+      alert("Por favor selecciona color y talla para el look");
       return;
     }
     const lookSizeStockMap = getLookSizeStockMap(look, selectedColor);
     const stock = lookSizeStockMap[selectedSize] || 0;
     if (stock <= 0) {
-      alert('El talle seleccionado no tiene stock');
+      alert("El talle seleccionado no tiene stock");
       return;
     }
 
-    console.log('Producto seleccionado en Shop Look:', {
+    console.log("Producto seleccionado en Shop Look:", {
       lookId: look._id || lookId,
       displayName: look.displayName,
       selectedColor,
@@ -367,7 +399,7 @@ const Product = () => {
   };
 
   const handleFinishAdding = () => {
-    console.log('Todos los looks seleccionados:', {
+    console.log("Todos los looks seleccionados:", {
       selectedLookColors,
       selectedLookSizes,
       looks: product.looks.map((look, index) => {
@@ -380,7 +412,7 @@ const Product = () => {
           displayName: look.displayName,
           selectedColor,
           selectedSize,
-          stock: selectedSize ? lookSizeStockMap[selectedSize] || 0 : 'N/A',
+          stock: selectedSize ? lookSizeStockMap[selectedSize] || 0 : "N/A",
         };
       }),
     });
@@ -394,58 +426,202 @@ const Product = () => {
     }
   };
 
-  const allSizes = ['S', 'M', 'L'];
+  const allSizes = ["S", "M", "L"];
 
-  const sizeStockMap = selectedColor
-    ? product.colors
-      .find((color) => color.color.name === selectedColor)
-      ?.sizes.reduce((acc, size) => {
+  const sizeStockMap = useMemo(() => {
+    if (!selectedColor || !product) return {};
+    const colorData = product.colors.find(
+      (c) => c.color.name === selectedColor
+    );
+    return (
+      colorData?.sizes.reduce((acc, size) => {
         acc[size.size.name] = size.stock;
         return acc;
       }, {}) || {}
-    : {};
+    );
+  }, [selectedColor, product]);
 
   const discountedPrice = product?.discount
     ? product.price - product.price * (product.discount / 100)
     : product?.price;
 
-  const getLookSizeStockMap = (look, selectedColor) => {
-    return selectedColor
-      ? look.colors
-        .find((color) => color.color.name === selectedColor)
-        ?.sizes.reduce((acc, size) => {
-          acc[size.size.name] = size.stock;
-          return acc;
-        }, {}) || {}
-      : {};
-  };
+  const getLookSizeStockMap = useCallback((look, colorName) => {
+    const selectedColorData = look.colors.find(
+      (c) => c.color.name === colorName
+    );
+    return (
+      selectedColorData?.sizes.reduce((acc, size) => {
+        acc[size.size.name] = size.stock;
+        return acc;
+      }, {}) || {}
+    );
+  }, []);
 
   const getColorBackground = (colorName) => {
     switch (colorName.toUpperCase()) {
-      case 'BLANCO':
-        return '#FFFFFF';
-      case 'NEGRO':
-        return '#232323';
-      case 'MOON':
-        return '#4f5576';
+      case "BLANCO":
+        return "#FFFFFF";
+      case "NEGRO":
+        return "#232323";
+      case "MOON":
+        return "#4f5576";
       default:
-        return '#000000';
+        return "#000000";
     }
   };
 
   const handleAddToCart = () => {
     if (!product || !selectedColor || !selectedSize) {
-      alert('Por favor selecciona color y talla');
+      alert("Por favor selecciona color y talla");
       return;
     }
     const stock = sizeStockMap[selectedSize] || 0;
     if (stock <= 0) {
-      alert('El talle seleccionado no tiene stock');
+      alert("El talle seleccionado no tiene stock");
       return;
     }
     addToCart(product, selectedColor, selectedSize, cachedImages);
     setAddCount((prevCount) => prevCount + 1);
   };
+
+  useEffect(() => {
+    if (!product || !selectedColor) {
+      setSelectedSize(null);
+      return;
+    }
+
+    const selectedColorData = product.colors.find(
+      (c) => c.color.name === selectedColor
+    );
+    const availableSize = selectedColorData?.sizes.find((s) => s.stock > 0);
+    setSelectedSize(availableSize ? availableSize.size.name : null);
+  }, [selectedColor, product]);
+
+  const handleImageChange = useCallback(() => {
+    if (!isPaused && cachedImages.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % cachedImages.length);
+    }
+  }, [isPaused, cachedImages.length]);
+
+  useEffect(() => {
+    const interval = setInterval(handleImageChange, 600);
+    return () => clearInterval(interval);
+  }, [handleImageChange]);
+
+  const renderLook = useCallback(
+    (look, index) => {
+      const lookId = look._id || index;
+      const discountedPrice = look.discount
+        ? look.price - look.price * (look.discount / 100)
+        : look.price;
+      const selectedLookColor = selectedLookColors[lookId];
+      const selectedLookSize = selectedLookSizes[lookId];
+      const lookSizeStockMap = getLookSizeStockMap(look, selectedLookColor);
+
+      return (
+        <div
+          key={index}
+          className="w-full flex-shrink-0 flex flex-col items-center justify-between p-4"
+        >
+          <div className="w-[284px] h-[200px] relative">
+            <Image
+              src={`/products/${look.image}.webp`}
+              alt={look.displayName}
+              fill
+              className="object-contain"
+            />
+          </div>
+          <p className="text-white text-xs uppercase mt-2 text-center">
+            {look.displayName}
+          </p>
+          {look.discount > 0 && (
+            <div className="flex items-center justify-center mt-1">
+              <div className="w-[43px] flex justify-center h-[25px] px-2 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323]">
+                <p className="font-normal text-[12px] tracking-[-0.04em] align-middle">
+                  {look.discount}%
+                </p>
+              </div>
+              <span className="line-through text-gray-400 text-[12px] ml-2">
+                <span className="uppercase">Ars $</span>{" "}
+                {formatPrice(look.price)}
+              </span>
+            </div>
+          )}
+          <p className="text-white text-xs text-center mt-1">
+            <span className="uppercase">Ars $</span>{" "}
+            {formatPrice(discountedPrice)}
+          </p>
+          <div>
+            <div className="flex w-full justify-center gap-2 mt-1">
+              {look.colors.map((color, colorIndex) => (
+                <button
+                  key={colorIndex}
+                  onClick={() =>
+                    handleLookColorChange(lookId, color.color.name)
+                  }
+                  className="w-[40px] h-[40px] p-1 rounded-[20px] border"
+                  style={{
+                    borderColor:
+                      selectedLookColor === color.color.name
+                        ? "#FFFFFF"
+                        : "transparent",
+                    borderWidth:
+                      selectedLookColor === color.color.name ? "0.5px" : "1px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: getColorBackground(color.color.name),
+                      borderRadius: "18px",
+                      padding:
+                        selectedLookColor === color.color.name ? "2px" : "0",
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col items-center mt-2">
+            <div className="flex gap-2 mt-1">
+              {allSizes.map((size, sizeIndex) => {
+                const stock = lookSizeStockMap[size] || 0;
+                return (
+                  <button
+                    key={sizeIndex}
+                    onClick={() =>
+                      handleLookSizeSelect(lookId, size, lookSizeStockMap)
+                    }
+                    className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${
+                      stock <= 0 ? "line-through opacity-50" : ""
+                    } ${selectedLookSize === size ? "bg-[#E7E7E766]" : ""}`}
+                    disabled={stock <= 0}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
+            </div>
+            {Object.values(lookSizeStockMap).every((stock) => stock <= 0) && (
+              <p className="text-white text-xs mt-2">No hay stock disponible</p>
+            )}
+          </div>
+          <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
+            <button
+              onClick={() => handleAddLookToCart(look, lookId)}
+              className="w-full text-white uppercase text-xs"
+            >
+              {lookAddCounts[lookId] > 0
+                ? `(${lookAddCounts[lookId]}) Added`
+                : "+ Add"}
+            </button>
+          </div>
+        </div>
+      );
+    },
+    [selectedLookColors, selectedLookSizes, getLookSizeStockMap]
+  );
 
   return (
     <div className="min-h-screen w-full flex flex-col pt-[90px]">
@@ -453,9 +629,7 @@ const Product = () => {
         <Loader loading={loading} />
       ) : error ? (
         <div>{error}</div>
-      ) : !product ? (
-        null
-      ) : (
+      ) : !product ? null : (
         <>
           <div className="max-w-[1252px] mx-auto flex flex-col md:flex-row py-8">
             <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
@@ -467,7 +641,7 @@ const Product = () => {
                 >
                   <Image
                     ref={imageRef}
-                    src={cachedImages[currentImageIndex] || '/rotate1.svg'}
+                    src={cachedImages[currentImageIndex] || "/rotate1.svg"}
                     alt={`Product image ${currentImageIndex + 1}`}
                     width={545}
                     height={900}
@@ -476,7 +650,7 @@ const Product = () => {
                     onLoad={(e) => {
                       const img = e.target;
                       console.log(
-                        'Image dimensions:',
+                        "Image dimensions:",
                         img.naturalWidth,
                         img.naturalHeight
                       );
@@ -490,15 +664,23 @@ const Product = () => {
                         height: `${lensHeight}px`,
                         top: `${lensPosition.y - lensHeight / 2}px`,
                         left: `${lensPosition.x - lensWidth / 1.5}px`,
-                        backgroundImage: `url(${cachedImages[currentImageIndex] || '/rotate1.svg'
-                          })`,
-                        backgroundSize: `${imageRef.current?.getBoundingClientRect().width * zoomFactor
-                          }px ${imageRef.current?.getBoundingClientRect().height * zoomFactor
-                          }px`,
-                        backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor
-                          }px -${(lensPosition.y - lensHeight / 3.5) * zoomFactor}px`,
-                        backgroundRepeat: 'no-repeat',
-                        pointerEvents: 'none',
+                        backgroundImage: `url(${
+                          cachedImages[currentImageIndex] || "/rotate1.svg"
+                        })`,
+                        backgroundSize: `${
+                          imageRef.current?.getBoundingClientRect().width *
+                          zoomFactor
+                        }px ${
+                          imageRef.current?.getBoundingClientRect().height *
+                          zoomFactor
+                        }px`,
+                        backgroundPosition: `-${
+                          (lensPosition.x - lensWidth / 2) * zoomFactor
+                        }px -${
+                          (lensPosition.y - lensHeight / 3.5) * zoomFactor
+                        }px`,
+                        backgroundRepeat: "no-repeat",
+                        pointerEvents: "none",
                         zIndex: 20,
                       }}
                     />
@@ -534,7 +716,7 @@ const Product = () => {
                     const maxHeightOptions = [5, 10, 15, 30];
                     const maxHeight =
                       maxHeightOptions[
-                      Math.floor(Math.random() * maxHeightOptions.length)
+                        Math.floor(Math.random() * maxHeightOptions.length)
                       ];
                     const animationClass = `animate-pulseHeight-${maxHeight}`;
                     const delay = Math.random() * 2;
@@ -544,7 +726,9 @@ const Product = () => {
                         key={index}
                         className={`bg-white w-[1px] md:w-[2px] mx-[1px] md:mx-[2px] transition-all ${animationClass}`}
                         style={{
-                          height: `${Math.floor(Math.random() * maxHeight) + 10}px`,
+                          height: `${
+                            Math.floor(Math.random() * maxHeight) + 10
+                          }px`,
                           animationDelay: `${delay}s`,
                         }}
                       ></div>
@@ -612,28 +796,38 @@ const Product = () => {
                 <div className="relative">
                   <div
                     className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]"
-                    style={{ height: '100%' }}
+                    style={{ height: "100%" }}
                   ></div>
                   <div className="pl-[20px]">
                     <div className="flex justify-between">
-                      <p>Nombre</p>{' '}
-                      <p className="w-[60px] lowercase">{product.models.modelName}</p>
+                      <p>Nombre</p>{" "}
+                      <p className="w-[60px] lowercase">
+                        {product.models.modelName}
+                      </p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Altura</p>{' '}
-                      <p className="w-[60px] lowercase">{product.models.height}</p>
+                      <p>Altura</p>{" "}
+                      <p className="w-[60px] lowercase">
+                        {product.models.height}
+                      </p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Peso</p>{' '}
-                      <p className="w-[60px] lowercase">{product.models.weight} kg.</p>
+                      <p>Peso</p>{" "}
+                      <p className="w-[60px] lowercase">
+                        {product.models.weight} kg.
+                      </p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Talle</p>{' '}
-                      <p className="w-[60px] lowercase">{product.models.size.name}</p>
+                      <p>Talle</p>{" "}
+                      <p className="w-[60px] lowercase">
+                        {product.models.size.name}
+                      </p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Género</p>{' '}
-                      <p className="w-[60px] lowercase">{product.models.gender}</p>
+                      <p>Género</p>{" "}
+                      <p className="w-[60px] lowercase">
+                        {product.models.gender}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -642,7 +836,7 @@ const Product = () => {
             <div className="text-[#FCFDFD] w-auto md:w-[551px] h-auto flex flex-col">
               <div className="flex items-center justify-center md:justify-start">
                 <p className="h-[40px] w-[90%] md:w-[100%] px-4 border uppercase flex items-center">
-                  {product.displayName || 'Camisa Oversize'}
+                  {product.displayName || "Camisa Oversize"}
                 </p>
               </div>
               <div className="flex flex-row md:flex-col justify-around md:justify-center">
@@ -656,7 +850,7 @@ const Product = () => {
                       </div>
                       <div className="flex items-baseline w-full">
                         <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
-                          <p className="uppercase mr-1 w-auto">Ars $</p>{' '}
+                          <p className="uppercase mr-1 w-auto">Ars $</p>{" "}
                           {formatPrice(product.price)}
                         </span>
                       </div>
@@ -667,7 +861,9 @@ const Product = () => {
                     <span>{formatPrice(discountedPrice)}</span>
                   </div>
                   <div>
-                    <p className=" h-[152px] md:h-auto font-['IBM_Plex_Mono'] font-normal text-[12px] leading-[16px] tracking-[-0.04em] align-middle" >3 cuotas sin interés en bancos seleccionados</p>
+                    <p className=" h-[152px] md:h-auto font-['IBM_Plex_Mono'] font-normal text-[12px] leading-[16px] tracking-[-0.04em] align-middle">
+                      3 cuotas sin interés en bancos seleccionados
+                    </p>
                   </div>
                 </div>
                 <div className="h-[213px] flex flex-col justify-around w-[35%] md:w-full">
@@ -682,19 +878,26 @@ const Product = () => {
                           style={{
                             borderColor:
                               selectedColor === color.color.name
-                                ? '#FFFFFF'
-                                : 'transparent',
+                                ? "#FFFFFF"
+                                : "transparent",
                             borderWidth:
-                              selectedColor === color.color.name ? '0.5px' : '1px',
+                              selectedColor === color.color.name
+                                ? "0.5px"
+                                : "1px",
                           }}
                         >
                           <div
                             style={{
-                              width: '100%',
-                              height: '100%',
-                              backgroundColor: getColorBackground(color.color.name),
-                              borderRadius: '18px',
-                              padding: selectedColor === color.color.name ? '2px' : '0',
+                              width: "100%",
+                              height: "100%",
+                              backgroundColor: getColorBackground(
+                                color.color.name
+                              ),
+                              borderRadius: "18px",
+                              padding:
+                                selectedColor === color.color.name
+                                  ? "2px"
+                                  : "0",
                             }}
                           />
                         </button>
@@ -724,8 +927,11 @@ const Product = () => {
                             <button
                               key={index}
                               onClick={() => handleSizeSelect(size)}
-                              className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${stock <= 0 ? 'line-through opacity-50' : ''
-                                } ${selectedSize === size ? 'bg-[#E7E7E766]' : ''}`}
+                              className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
+                                stock <= 0 ? "line-through opacity-50" : ""
+                              } ${
+                                selectedSize === size ? "bg-[#E7E7E766]" : ""
+                              }`}
                               disabled={stock <= 0}
                             >
                               {size}
@@ -733,8 +939,12 @@ const Product = () => {
                           );
                         })}
                       </div>
-                      {Object.values(sizeStockMap).every((stock) => stock <= 0) && (
-                        <p className="text-white text-sm mt-2">No hay stock disponible</p>
+                      {Object.values(sizeStockMap).every(
+                        (stock) => stock <= 0
+                      ) && (
+                        <p className="text-white text-sm mt-2">
+                          No hay stock disponible
+                        </p>
                       )}
                     </div>
                   </div>
@@ -745,7 +955,7 @@ const Product = () => {
                   onClick={handleAddToCart}
                   className="w-full max-w-[280px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
                 >
-                  {addCount > 0 ? `(${addCount}) Added` : '+ Add to Bag'}
+                  {addCount > 0 ? `(${addCount}) Added` : "+ Add to Bag"}
                 </button>
                 <button
                   onClick={() => setIsShopLookOpen(true)}
@@ -762,10 +972,14 @@ const Product = () => {
                   >
                     <span>Details</span>
                     <Image
-                      src={isDetailsOpen ? '/flechamobileup.svg' : '/flechamobiledown.svg'}
+                      src={
+                        isDetailsOpen
+                          ? "/flechamobileup.svg"
+                          : "/flechamobiledown.svg"
+                      }
                       width={24}
                       height={24}
-                      alt={isDetailsOpen ? 'arrow up' : 'arrow down'}
+                      alt={isDetailsOpen ? "arrow up" : "arrow down"}
                     />
                   </button>
                   {isDetailsOpen && (
@@ -785,17 +999,17 @@ const Product = () => {
                     <Image
                       src={
                         isProductCareOpen
-                          ? '/flechamobileup.svg'
-                          : '/flechamobiledown.svg'
+                          ? "/flechamobileup.svg"
+                          : "/flechamobiledown.svg"
                       }
                       width={24}
                       height={24}
-                      alt={isProductCareOpen ? 'arrow up' : 'arrow down'}
+                      alt={isProductCareOpen ? "arrow up" : "arrow down"}
                     />
                   </button>
                   {isProductCareOpen && (
                     <div className="p-4 z-10 relative">
-                      {product.productCare.split('\n').map((line, index) => (
+                      {product.productCare.split("\n").map((line, index) => (
                         <p
                           key={index}
                           className="text-white font-normal text-[12px] leading-[170%] tracking-[-4%] text-justify align-middle"
@@ -852,283 +1066,30 @@ const Product = () => {
                             onTouchMove={handleTouchMove}
                             onTouchEnd={handleTouchEnd}
                           >
-                            {product.looks.map((look, index) => {
-                              const discountedPrice = look.discount
-                                ? look.price - look.price * (look.discount / 100)
-                                : look.price;
-                              const lookId = look._id || index;
-                              const selectedLookColor = selectedLookColors[lookId];
-                              const selectedLookSize = selectedLookSizes[lookId];
-                              const lookSizeStockMap = getLookSizeStockMap(
-                                look,
-                                selectedLookColor
-                              );
-
-                              return (
-                                <div
-                                  key={index}
-                                  className="w-full flex-shrink-0 flex flex-col items-center justify-between p-4"
-                                >
-                                  <div className="w-[284px] h-[200px] relative">
-                                    <Image
-                                      src={`/products/${look.image}.webp`}
-                                      alt={look.displayName}
-                                      fill
-                                      className="object-contain"
-                                    />
-                                  </div>
-                                  <p className="text-white text-xs uppercase mt-2 text-center">
-                                    {look.displayName}
-                                  </p>
-                                  {look.discount > 0 && (
-                                    <div className="flex items-center justify-center mt-1">
-                                      <div className="w-[43px] flex justify-center h-[25px] px-2 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323]">
-                                        <p className="font-normal text-[12px] tracking-[-0.04em] align-middle">
-                                          {look.discount}%
-                                        </p>
-                                      </div>
-                                      <span className="line-through text-gray-400 text-[12px] ml-2">
-                                        <span className="uppercase">Ars $</span>{' '}
-                                        {formatPrice(look.price)}
-                                      </span>
-                                    </div>
-                                  )}
-                                  <p className="text-white text-xs text-center mt-1">
-                                    <span className="uppercase">Ars $</span>{' '}
-                                    {formatPrice(discountedPrice)}
-                                  </p>
-                                  <div>
-                                    <div className="flex w-full md:w-[50%] justify-center gap-2 mt-1">
-                                      {look.colors.map((color, colorIndex) => (
-                                        <button
-                                          key={colorIndex}
-                                          onClick={() =>
-                                            handleLookColorChange(lookId, color.color.name)
-                                          }
-                                          className="w-[40px] h-[40px] p-1 rounded-[20px] border"
-                                          style={{
-                                            borderColor:
-                                              selectedLookColor === color.color.name
-                                                ? '#FFFFFF'
-                                                : 'transparent',
-                                            borderWidth:
-                                              selectedLookColor === color.color.name
-                                                ? '0.5px'
-                                                : '1px',
-                                          }}
-                                        >
-                                          <div
-                                            style={{
-                                              width: '100%',
-                                              height: '100%',
-                                              backgroundColor: getColorBackground(
-                                                color.color.name
-                                              ),
-                                              borderRadius: '18px',
-                                              padding:
-                                                selectedLookColor === color.color.name
-                                                  ? '2px'
-                                                  : '0',
-                                            }}
-                                          />
-                                        </button>
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <div className="flex flex-col items-center mt-2">
-                                    <div className="flex gap-2 mt-1">
-                                      {allSizes.map((size, sizeIndex) => {
-                                        const stock = lookSizeStockMap[size] || 0;
-                                        return (
-                                          <button
-                                            key={sizeIndex}
-                                            onClick={() =>
-                                              handleLookSizeSelect(
-                                                lookId,
-                                                size,
-                                                lookSizeStockMap
-                                              )
-                                            }
-                                            className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0 ? 'line-through opacity-50' : ''
-                                              } ${selectedLookSize === size
-                                                ? 'bg-[#E7E7E766]'
-                                                : ''
-                                              }`}
-                                            disabled={stock <= 0}
-                                          >
-                                            {size}
-                                          </button>
-                                        );
-                                      })}
-                                    </div>
-                                    {Object.values(lookSizeStockMap).every(
-                                      (stock) => stock <= 0
-                                    ) && (
-                                        <p className="text-white text-xs mt-2">
-                                          No hay stock disponible
-                                        </p>
-                                      )}
-                                  </div>
-                                  <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
-                                    <button
-                                      onClick={() => handleAddLookToCart(look, lookId)}
-                                      className="w-full text-white uppercase text-xs"
-                                    >
-                                      {lookAddCounts[lookId] > 0
-                                        ? `(${lookAddCounts[lookId]}) Added`
-                                        : '+ Add'}
-                                    </button>
-                                  </div>
-                                </div>
-                              );
-                            })}
+                            {product.looks.map(renderLook)}
                           </div>
                           <div className="flex justify-center mt-4 space-x-2">
                             {product.looks.map((_, index) => (
                               <button
                                 key={index}
                                 onClick={() => handleDotClick(index)}
-                                className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index ? 'bg-white' : 'bg-gray-500'
-                                  }`}
+                                className={`w-[20px] h-[3px] rounded-[2px] ${
+                                  currentSlide === index
+                                    ? "bg-white"
+                                    : "bg-gray-500"
+                                }`}
                               />
                             ))}
                           </div>
                         </div>
                         <div className="hidden sm:flex flex-row flex-wrap justify-center gap-4 w-full">
-                          {product.looks.map((look, index) => {
-                            const discountedPrice = look.discount
-                              ? look.price - look.price * (look.discount / 100)
-                              : look.price;
-                            const lookId = look._id || index;
-                            const selectedLookColor = selectedLookColors[lookId];
-                            const selectedLookSize = selectedLookSizes[lookId];
-                            const lookSizeStockMap = getLookSizeStockMap(
-                              look,
-                              selectedLookColor
-                            );
-
-                            return (
-                              <div
-                                key={index}
-                                className="w-[300px] h-auto rounded-[6px] flex flex-col items-center justify-between p-4"
-                              >
-                                <div className="w-[284px] h-[200px] relative">
-                                  <Image
-                                    src={`/products/${look.image}.webp`}
-                                    alt={look.displayName}
-                                    fill
-                                    className="object-contain"
-                                  />
-                                </div>
-                                <p className="text-white text-sm md:text-[14px] uppercase mt-2 text-center">
-                                  {look.displayName}
-                                </p>
-                                {look.discount > 0 && (
-                                  <div className="flex items-center justify-center mt-1">
-                                    <div className="w-[43px] flex justify-center h-[25px] px-2 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323]">
-                                      <p className="font-normal text-[12px] tracking-[-0.04em] align-middle">
-                                        {look.discount}%
-                                      </p>
-                                    </div>
-                                    <span className="line-through text-gray-400 text-[12px] md:text-[14px] ml-2">
-                                      <span className="uppercase">Ars $</span>{' '}
-                                      {formatPrice(look.price)}
-                                    </span>
-                                  </div>
-                                )}
-                                <p className="text-white text-sm md:text-[14px] text-center mt-1">
-                                  <span className="uppercase">Ars $</span>{' '}
-                                  {formatPrice(discountedPrice)}
-                                </p>
-                                <div>
-                                  <div className="flex w-[100%] justify-center gap-2 mt-1">
-                                    {look.colors.map((color, colorIndex) => (
-                                      <button
-                                        key={colorIndex}
-                                        onClick={() =>
-                                          handleLookColorChange(lookId, color.color.name)
-                                        }
-                                        className="w-[40px] h-[40px] p-1 rounded-[20px] border"
-                                        style={{
-                                          borderColor:
-                                            selectedLookColor === color.color.name
-                                              ? '#FFFFFF'
-                                              : 'transparent',
-                                          borderWidth:
-                                            selectedLookColor === color.color.name
-                                              ? '0.5px'
-                                              : '1px',
-                                        }}
-                                      >
-                                        <div
-                                          style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            backgroundColor: getColorBackground(
-                                              color.color.name
-                                            ),
-                                            borderRadius: '18px',
-                                            padding:
-                                              selectedLookColor === color.color.name
-                                                ? '2px'
-                                                : '0',
-                                          }}
-                                        />
-                                      </button>
-                                    ))}
-                                  </div>
-                                </div>
-                                <div className="flex flex-col items-center mt-2">
-                                  <div className="flex gap-2 mt-1">
-                                    {allSizes.map((size, sizeIndex) => {
-                                      const stock = lookSizeStockMap[size] || 0;
-                                      return (
-                                        <button
-                                          key={sizeIndex}
-                                          onClick={() =>
-                                            handleLookSizeSelect(
-                                              lookId,
-                                              size,
-                                              lookSizeStockMap
-                                            )
-                                          }
-                                          className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-sm transition-all duration-200 hover:bg-[#A8A8A84D] ${stock <= 0 ? 'line-through opacity-50' : ''
-                                            } ${selectedLookSize === size
-                                              ? 'bg-[#E7E7E766]'
-                                              : ''
-                                            }`}
-                                          disabled={stock <= 0}
-                                        >
-                                          {size}
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-                                  {Object.values(lookSizeStockMap).every(
-                                    (stock) => stock <= 0
-                                  ) && (
-                                      <p className="text-white text-sm mt-2">
-                                        No hay stock disponible
-                                      </p>
-                                    )}
-                                </div>
-                                <div className="w-full max-w-[207px] mt-4 h-10 px-4 py-2 gap-2 rounded-[2px] border border-white bg-[#A8A8A81A] hover:bg-[#A8A8A84D]">
-                                  <button
-                                    onClick={() => handleAddLookToCart(look, lookId)}
-                                    className="w-full text-white uppercase text-sm"
-                                  >
-                                    {lookAddCounts[lookId] > 0
-                                      ? `(${lookAddCounts[lookId]}) Added`
-                                      : '+ Add'}
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          })}
+                          {product.looks.map(renderLook)}
                         </div>
                       </>
                     ) : (
-                      <p className="text-white text-center">No hay looks disponibles</p>
+                      <p className="text-white text-center">
+                        No hay looks disponibles
+                      </p>
                     )}
                     <div className="w-full flex justify-end mt-4">
                       <button
@@ -1174,14 +1135,12 @@ const Product = () => {
                   <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
                     {product.sizeGuide && product.sizeGuide.length >= 2 ? (
                       <>
-                        <div className= "w-[300px] h-[196px] md:w-[402px] md:h-[296px] relative">
+                        <div className="w-[300px] h-[196px] md:w-[402px] md:h-[296px] relative">
                           <Image
                             src={`/sizeGuide/${product.sizeGuide[0]}.webp`}
                             fill
                             className="object-contain"
                             alt="Size guide table"
-
-
                           />
                         </div>
                         <div className="w-[300px] h-[196px] md:w-[600px] md:h-[296px] relative">
@@ -1190,10 +1149,8 @@ const Product = () => {
                             fill
                             className="object-contain"
                             alt="Size guide table"
-
                           />
                         </div>
-
                       </>
                     ) : (
                       <p className="text-white text-center">
