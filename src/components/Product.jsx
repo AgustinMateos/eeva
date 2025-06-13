@@ -124,32 +124,33 @@ const Product = () => {
   };
 
   const fetchProduct = async () => {
-    try {
-      const response = await axios.get(
-        `https://eeva-api.vercel.app/api/v1/products/${id}`
-      );
-      const fetchedProduct = response.data;
-      setProduct(fetchedProduct);
+  try {
+    const response = await axios.get(
+      `https://eeva-api.vercel.app/api/v1/products/${id}`
+    );
+    const fetchedProduct = response.data;
+    console.log("GIF360 value:", fetchedProduct.models?.images?.gif360); // Debug API
+    setProduct(fetchedProduct);
 
-      // const newImages = fetchedProduct.models?.images?.gif360
-      //   ? [
-      //       `/360/${fetchedProduct.models.images.gif360}-1.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-2.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-3.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-4.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-5.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-6.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-7.webp`,
-      //       `/360/${fetchedProduct.models.images.gif360}-8.webp`,
-      //     ]
-      //   : [
-      //       "/rotate1.svg",
-      //       "/rotate2.svg",
-      //       "/rotate3.svg",
-      //       "/rotate4.svg",
-      //       "/rotate5.svg",
-      //     ];
-      // setCachedImages(newImages);
+    const newImages = fetchedProduct.models?.images?.gif360
+      ? Array.from({ length: 8 }, (_, i) => {
+          const url = `/360/${fetchedProduct.models.images.gif360}-${i + 1}.webp`;
+          return url;
+        }).filter((url) => {
+          // Optional: Validate image existence
+          return fetch(url, { method: "HEAD" })
+            .then((res) => res.ok)
+            .catch(() => false);
+        })
+      : [
+          "/rotate1.svg",
+          "/rotate2.svg",
+          "/rotate3.svg",
+          "/rotate4.svg",
+          "/rotate5.svg",
+        ];
+    console.log("Cached Images:", newImages); // Debug image array
+    setCachedImages(newImages);
 
       if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
         const firstAvailableColor = fetchedProduct.colors.find((color) =>
@@ -196,28 +197,29 @@ const Product = () => {
 
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching product:", err);
-      setError("Error al cargar el producto. Por favor, intenta de nuevo.");
+    console.error("Error fetching product:", err);
+    setError("Error al cargar el producto. Por favor, intenta de nuevo.");
+    setLoading(false);
+  }
+};
+
+ useEffect(() => {
+  if (!id) return;
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      await fetchProduct();
+      console.log("Cached Images:", cachedImages); // Add this
+    } catch (error) {
+      setError("Error al cargar el producto");
+    } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await fetchProduct();
-      } catch (error) {
-        setError("Error al cargar el producto");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+  fetchData();
+}, [id]);
 
   useEffect(() => {
     if (!product || !selectedColor) return;
@@ -267,17 +269,7 @@ const Product = () => {
     updateLookSizes();
   }, [updateLookSizes, selectedLookColors]);
 
-  useEffect(() => {
-    if (isPaused || cachedImages.length === 0) return;
 
-    const interval = setInterval(() => {
-      setCurrentImageIndex(
-        (prevIndex) => (prevIndex + 1) % cachedImages.length
-      );
-    }, 1500);
-
-    return () => clearInterval(interval);
-  }, [cachedImages.length, isPaused]);
 
   const handleMagnifyClick = () => {
     setIsPaused(true);
@@ -497,16 +489,17 @@ const Product = () => {
     setSelectedSize(availableSize ? availableSize.size.name : null);
   }, [selectedColor, product]);
 
-  const handleImageChange = useCallback(() => {
-    if (!isPaused && cachedImages.length > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % cachedImages.length);
-    }
-  }, [isPaused, cachedImages.length]);
-
   useEffect(() => {
-    const interval = setInterval(handleImageChange, 600);
+    const interval = setInterval(() => {
+      if (!isPaused && cachedImages.length > 0) {
+        setCurrentImageIndex((prev) => {
+          console.log("Current Image Index:", prev); // Debug index
+          return (prev + 1) % cachedImages.length;
+        });
+      }
+    }, 1000); // 1000ms for smoother cycling
     return () => clearInterval(interval);
-  }, [handleImageChange]);
+  }, [isPaused, cachedImages.length]);
 
   const renderLook = useCallback(
     (look, index) => {
@@ -639,23 +632,23 @@ const Product = () => {
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleCloseMagnifier}
                 >
-                  <Image
-                    ref={imageRef}
-                    src={cachedImages[currentImageIndex] || "/rotate1.svg"}
-                    alt={`Product image ${currentImageIndex + 1}`}
-                    width={545}
-                    height={900}
-                    className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
-                    priority
-                    onLoad={(e) => {
-                      const img = e.target;
-                      console.log(
-                        "Image dimensions:",
-                        img.naturalWidth,
-                        img.naturalHeight
-                      );
-                    }}
-                  />
+                 <Image
+  ref={imageRef}
+  src={cachedImages[currentImageIndex] || "/rotate1.svg"}
+  alt={`Product image ${currentImageIndex + 1}`}
+  width={545}
+  height={900}
+  className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
+  priority
+  onLoad={(e) => {
+    console.log("Image loaded:", cachedImages[currentImageIndex]);
+    }
+  }
+  onError={() => {
+    console.error("Image failed to load:", cachedImages[currentImageIndex]);
+    }
+  }
+/>
                   {isMagnifying && (
                     <div
                       className="absolute rounded-md shadow-lg bg-white bg-opacity-10"
