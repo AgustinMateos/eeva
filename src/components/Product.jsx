@@ -456,7 +456,7 @@ const Product = () => {
       case "NEGRO":
         return "#232323";
       case "MOON":
-        return "#4f5576";
+        return "#748088f";
       default:
         return "#000000";
     }
