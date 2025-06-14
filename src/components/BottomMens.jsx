@@ -162,9 +162,9 @@ export default function BottomMens() {
         </div>
       </div>
 
-      <div className="h-[315px] flex md:min-w-[1315px]">
-        <Footer />
-      </div>
+      <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px]">
+            <Footer />
+          </div>
     </div>
   );
 }

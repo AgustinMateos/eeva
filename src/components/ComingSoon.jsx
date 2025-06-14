@@ -81,8 +81,9 @@ export default function ComingSoon() {
             </div>
           </div>
 
-          {/* Footer */}
-          <Footer />
+          <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px]">
+            <Footer />
+          </div>
         </div>
       </div>
     </div>

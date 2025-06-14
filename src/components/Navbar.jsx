@@ -155,7 +155,7 @@ const Navbar = () => {
           transition: background-color 0.3s ease;
         }
       `}</style>
-      <div className="flex justify-between md:justify-around h-[90px] items-center">
+      <div className="flex justify-between md:justify-around h-[90px] items-center max-w-[1220px] mx-auto">
         <div className="min-w-[90px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
           {/* Botón hamburguesa */}
           <div ref={menuRef}>
@@ -210,7 +210,7 @@ const Navbar = () => {
                           src="/XMenuIcon.svg"
                           width={24}
                           height={24}
-                          alt="close menu"
+              alt="close menu"
                         />
                       </button>
                     </div>
@@ -409,8 +409,7 @@ const Navbar = () => {
               <div ref={hombreRef} className="relative">
                 <button
                   onClick={toggleHombreDropdown}
-                  className={`w-[50px] transition-all duration-200 ${isHombreOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
-                    } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
+                  className={`w-[50px] transition-all duration-200 ${isHombreOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"} backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
                 >
                   H
                 </button>
@@ -466,8 +465,7 @@ const Navbar = () => {
               <div ref={mujerRef} className="relative">
                 <button
                   onClick={toggleMujerDropdown}
-                  className={`w-[50px] transition-all duration-200 ${isMujerOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"
-                    } backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
+                  className={`w-[50px] transition-all duration-200 ${isMujerOpen ? "dropdown-active" : "hover:bg-[#A8A8A84D]"} backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none`}
                 >
                   M
                 </button>
@@ -525,14 +523,14 @@ const Navbar = () => {
         </div>
 
         {/* Logo */}
-        <div>
+        <div className="flex justify-center items-center flex-grow">
           <Link href="/collections/slider" className="hidden md:block">
             <Image
               src={"/LogoFullEEVA.svg"}
               width={262}
               height={31}
               alt="logo"
-              className="absolute top-[30px] left-[80px] md:left-[600px] xl:left-[590px] 2xl:left-[740px]"
+              className="relative "
             />
           </Link>
           <Link href="/collections/slider" className="md:hidden">
