@@ -1104,7 +1104,7 @@ const Product = () => {
               className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50 overflow-y-auto"
               onClick={handleOverlayClick}
             >
-              <div className="w-full max-w-[90%] md:max-w-[1062px] h-[585px] md:h-[500px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
+              <div className="w-full max-w-[90%] md:max-w-[1062px] min-h-[485px] items-center md:h-[500px] border-[#f2f2f2] border-[0.5px] bg-[#83838366] rounded-[6px] relative mx-4 sm:mx-6 md:mx-8 p-4 sm:p-6 md:p-10">
                 <div className="w-full h-[60px] flex justify-center items-center">
                   <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
                     <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
@@ -1125,7 +1125,7 @@ const Product = () => {
                   </div>
                 </div>
                 <div className="w-full flex justify-center items-center ">
-                  <div className="w-full max-w-[1002px] flex flex-col md:flex-row h-auto md:h-[356px]">
+                  <div className="w-full max-w-[1002px] items-center flex flex-col md:flex-row h-auto md:h-[356px]">
                     {product.sizeGuide && product.sizeGuide.length >= 2 ? (
                       <>
                         <div className="w-[300px] h-[196px] md:w-[402px] md:h-[296px] relative">
