@@ -156,7 +156,7 @@ const Navbar = () => {
         }
       `}</style>
       <div className="flex justify-between md:justify-around h-[90px] items-center max-w-[1220px] mx-auto">
-        <div className="min-w-[90px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
+        <div className="min-w-[90px] w-auto md:w-[340px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
           {/* Botón hamburguesa */}
           <div ref={menuRef}>
             <button
@@ -523,17 +523,9 @@ const Navbar = () => {
         </div>
 
         {/* Logo */}
-        <div className="flex justify-center items-center flex-grow">
-          <Link href="/collections/slider" className="hidden md:block">
-            <Image
-              src={"/LogoFullEEVA.svg"}
-              width={262}
-              height={31}
-              alt="logo"
-              className="relative "
-            />
-          </Link>
-          <Link href="/collections/slider" className="md:hidden">
+        <div className="flex justify-center w-[390px] items-center flex-grow">
+        
+          <Link href="/collections/slider" >
             <Image
               src={"/LogoFullEEVA.svg"}
               width={262}
