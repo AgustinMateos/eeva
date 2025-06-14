@@ -285,7 +285,7 @@ const OrderStep1 = () => {
           height: 48px;
         }
         .dropdown-button {
-          width: 100%;
+          
           height: 100%;
           padding: 0 16px;
           border: 1px solid #F2F2F2;
@@ -396,7 +396,7 @@ const OrderStep1 = () => {
                 <div className="flex justify-between w-[90%] md:w-[713px]">
                   <div className="custom-dropdown">
                     <div
-                      className="dropdown-button"
+                      className="dropdown-button w-[109px] md:w-[100%]"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                       <span>{address.tipoDocumento}</span>
