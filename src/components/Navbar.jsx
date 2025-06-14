@@ -537,7 +537,7 @@ const Navbar = () => {
         </div>
 
         {/* Sección derecha */}
-        <div className="w-[90px] md:w-[350px] text-[#FFFFFF] flex justify-end">
+        <div className="w-[90px] md:w-[345px] text-[#FFFFFF] flex justify-end">
           <div className="flex w-[188px] md:w-[288px] justify-around items-center">
             <button
               onClick={toggleSearchModal}
