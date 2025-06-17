@@ -389,7 +389,7 @@ const Navbar = () => {
           {currentCollection && (
             <div className="hidden md:flex text-[12px] h-[34px] items-center text-white w-[190px] md:justify-evenly">
               <div className="h-full flex flex-col justify-between">
-                <p className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[15px]">
+                <p className=" font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase border-white border-r-[1px] pr-[15px]">
                   Collection
                 </p>
                 <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]">
@@ -397,7 +397,7 @@ const Navbar = () => {
                 </span>
               </div>
               <div className="flex h-full">
-                <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em] uppercase">
+                <span className="font-normal pl-[10px] text-[12px] leading-[100%] tracking-[-0.02em] uppercase">
                   {currentCollection.name}
                 </span>
               </div>
