@@ -47,6 +47,7 @@ export default function Marquee ()  {
                   className="flex-shrink-0 mx-4 flex flex-col items-center snap-center"
                 >
                   <Image
+                  priority
                     src={
                       // On mobile, always use static image; on desktop, toggle based on hover
                       window.innerWidth < 768
