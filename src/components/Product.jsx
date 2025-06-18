@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
@@ -100,14 +94,9 @@ const Product = () => {
 
   // Function to format price with Argentine conventions
   const formatPrice = (price) => {
-    // Convert price to number and handle invalid inputs
     const num = Number(price);
     if (isNaN(num)) return "0";
-
-    // Split into integer and decimal parts
     const [integerPart, decimalPart] = num.toFixed(2).split(".");
-
-    // Add dots as thousand separators to integer part
     const formattedInteger = integerPart
       .split("")
       .reverse()
@@ -115,42 +104,21 @@ const Product = () => {
         const separator = index > 0 && index % 3 === 0 ? "." : "";
         return digit + separator + acc;
       }, "");
-
-    // Handle decimal part: show only if non-zero
-    if (parseInt(decimalPart) === 0) {
-      return formattedInteger;
-    }
-    return `${formattedInteger},${decimalPart}`;
+    return parseInt(decimalPart) === 0 ? formattedInteger : `${formattedInteger},${decimalPart}`;
   };
 
   const fetchProduct = async () => {
-  try {
-    const response = await axios.get(
-      `https://eeva-api.vercel.app/api/v1/products/${id}`
-    );
-    const fetchedProduct = response.data;
-    console.log("GIF360 value:", fetchedProduct.models?.images?.gif360); // Debug API
-    setProduct(fetchedProduct);
+    try {
+      const response = await axios.get(`https://eeva-api.vercel.app/api/v1/products/${id}`);
+      const fetchedProduct = response.data;
+      console.log("GIF360 value:", fetchedProduct.models?.images?.gif360);
+      setProduct(fetchedProduct);
 
-    const newImages = fetchedProduct.models?.images?.gif360
-      ? Array.from({ length: 8 }, (_, i) => {
-          const url = `/360/${fetchedProduct.models.images.gif360}-${i + 1}.webp`;
-          return url;
-        }).filter((url) => {
-          // Optional: Validate image existence
-          return fetch(url, { method: "HEAD" })
-            .then((res) => res.ok)
-            .catch(() => false);
-        })
-      : [
-          "/rotate1.svg",
-          "/rotate2.svg",
-          "/rotate3.svg",
-          "/rotate4.svg",
-          "/rotate5.svg",
-        ];
-    console.log("Cached Images:", newImages); // Debug image array
-    setCachedImages(newImages);
+      const newImages = fetchedProduct.models?.images?.gif360
+        ? Array.from({ length: 8 }, (_, i) => `/360/${fetchedProduct.models.images.gif360}-${i + 1}.webp`)
+        : ["/rotate1.svg", "/rotate2.svg", "/rotate3.svg", "/rotate4.svg", "/rotate5.svg"];
+      console.log("Cached Images:", newImages);
+      setCachedImages(newImages);
 
       if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
         const firstAvailableColor = fetchedProduct.colors.find((color) =>
@@ -158,12 +126,8 @@ const Product = () => {
         );
         if (firstAvailableColor) {
           setSelectedColor(firstAvailableColor.color.name);
-          const firstAvailableSize = firstAvailableColor.sizes.find(
-            (size) => size.stock > 0
-          );
-          setSelectedSize(
-            firstAvailableSize ? firstAvailableSize.size.name : null
-          );
+          const firstAvailableSize = firstAvailableColor.sizes.find((size) => size.stock > 0);
+          setSelectedSize(firstAvailableSize ? firstAvailableSize.size.name : null);
         } else {
           setSelectedColor(fetchedProduct.colors[0].color.name);
           setSelectedSize(null);
@@ -183,12 +147,8 @@ const Product = () => {
               ? firstAvailableColor.color.name
               : look.colors[0].color.name;
             const selectedColor = firstAvailableColor || look.colors[0];
-            const firstAvailableSize = selectedColor.sizes.find(
-              (size) => size.stock > 0
-            );
-            initialLookSizes[lookId] = firstAvailableSize
-              ? firstAvailableSize.size.name
-              : null;
+            const firstAvailableSize = selectedColor.sizes.find((size) => size.stock > 0);
+            initialLookSizes[lookId] = firstAvailableSize ? firstAvailableSize.size.name : null;
           }
         });
         setSelectedLookColors(initialLookColors);
@@ -197,40 +157,32 @@ const Product = () => {
 
       setLoading(false);
     } catch (err) {
-    console.error("Error fetching product:", err);
-    setError("Error al cargar el producto. Por favor, intenta de nuevo.");
-    setLoading(false);
-  }
-};
-
- useEffect(() => {
-  if (!id) return;
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      await fetchProduct();
-      console.log("Cached Images:", cachedImages); // Add this
-    } catch (error) {
-      setError("Error al cargar el producto");
-    } finally {
+      console.error("Error fetching product:", err);
+      setError("Error al cargar el producto. Por favor, intenta de nuevo.");
       setLoading(false);
     }
   };
 
-  fetchData();
-}, [id]);
+  useEffect(() => {
+    if (!id) return;
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        await fetchProduct();
+      } catch (error) {
+        setError("Error al cargar el producto");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
     if (!product || !selectedColor) return;
-
-    const selectedColorData = product.colors.find(
-      (color) => color.color.name === selectedColor
-    );
+    const selectedColorData = product.colors.find((color) => color.color.name === selectedColor);
     if (selectedColorData) {
-      const availableSize = selectedColorData.sizes.find(
-        (size) => size.stock > 0
-      );
+      const availableSize = selectedColorData.sizes.find((size) => size.stock > 0);
       setSelectedSize(availableSize ? availableSize.size.name : null);
     } else {
       setSelectedSize(null);
@@ -239,23 +191,16 @@ const Product = () => {
 
   const updateLookSizes = useCallback(() => {
     if (!product?.looks) return;
-
     setSelectedLookSizes((prevSizes) => {
       const updatedSizes = { ...prevSizes };
       product.looks.forEach((look, index) => {
         const lookId = look._id || index;
         const selectedColor = selectedLookColors[lookId];
         if (selectedColor) {
-          const selectedColorData = look.colors.find(
-            (color) => color.color.name === selectedColor
-          );
+          const selectedColorData = look.colors.find((color) => color.color.name === selectedColor);
           if (selectedColorData) {
-            const availableSize = selectedColorData.sizes.find(
-              (size) => size.stock > 0
-            );
-            updatedSizes[lookId] = availableSize
-              ? availableSize.size.name
-              : null;
+            const availableSize = selectedColorData.sizes.find((size) => size.stock > 0);
+            updatedSizes[lookId] = availableSize ? availableSize.size.name : null;
           } else {
             updatedSizes[lookId] = null;
           }
@@ -263,13 +208,11 @@ const Product = () => {
       });
       return updatedSizes;
     });
-  }, [product]);
+  }, [product, selectedLookColors]);
 
   useEffect(() => {
     updateLookSizes();
-  }, [updateLookSizes, selectedLookColors]);
-
-
+  }, [updateLookSizes]);
 
   const handleMagnifyClick = () => {
     setIsPaused(true);
@@ -278,26 +221,15 @@ const Product = () => {
 
   const handleMouseMove = (e) => {
     if (!isMagnifying || !imageRef.current) return;
-
     const rect = imageRef.current.getBoundingClientRect();
     const imageWidth = rect.width;
     const imageHeight = rect.height;
-
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-
     const halfLensWidth = lensWidth / 2;
     const halfLensHeight = lensHeight / 2;
-
-    const boundedX = Math.max(
-      halfLensWidth,
-      Math.min(x, imageWidth - halfLensWidth)
-    );
-    const boundedY = Math.max(
-      halfLensHeight,
-      Math.min(y, imageHeight - halfLensHeight)
-    );
-
+    const boundedX = Math.max(halfLensWidth, Math.min(x, imageWidth - halfLensWidth));
+    const boundedY = Math.max(halfLensHeight, Math.min(y, imageHeight - halfLensHeight));
     setLensPosition({ x: boundedX, y: boundedY });
   };
 
@@ -317,7 +249,6 @@ const Product = () => {
   const handleTouchEnd = () => {
     const deltaX = touchStartX.current - touchEndX.current;
     const minSwipeDistance = 50;
-
     if (Math.abs(deltaX) > minSwipeDistance) {
       if (deltaX > 0 && currentSlide < (product?.looks?.length || 0) - 1) {
         setCurrentSlide(currentSlide + 1);
@@ -364,8 +295,14 @@ const Product = () => {
     }
     const lookSizeStockMap = getLookSizeStockMap(look, selectedColor);
     const stock = lookSizeStockMap[selectedSize] || 0;
+    const currentCount = lookAddCounts[lookId] || 0;
+
     if (stock <= 0) {
       alert("El talle seleccionado no tiene stock");
+      return;
+    }
+    if (currentCount >= stock) {
+      alert(`No puedes agregar más de ${stock} unidades de este producto`);
       return;
     }
 
@@ -375,9 +312,7 @@ const Product = () => {
       selectedColor,
       selectedSize,
       stock,
-      price: look.discount
-        ? look.price - look.price * (look.discount / 100)
-        : look.price,
+      price: look.discount ? look.price - look.price * (look.discount / 100) : look.price,
       image: `/${look.image}.webp`,
     });
 
@@ -386,7 +321,7 @@ const Product = () => {
 
     setLookAddCounts((prevCounts) => ({
       ...prevCounts,
-      [lookId]: (prevCounts[lookId] || 0) + 1,
+      [lookId]: currentCount + 1,
     }));
   };
 
@@ -422,15 +357,11 @@ const Product = () => {
 
   const sizeStockMap = useMemo(() => {
     if (!selectedColor || !product) return {};
-    const colorData = product.colors.find(
-      (c) => c.color.name === selectedColor
-    );
-    return (
-      colorData?.sizes.reduce((acc, size) => {
-        acc[size.size.name] = size.stock;
-        return acc;
-      }, {}) || {}
-    );
+    const colorData = product.colors.find((c) => c.color.name === selectedColor);
+    return colorData?.sizes.reduce((acc, size) => {
+      acc[size.size.name] = size.stock;
+      return acc;
+    }, {}) || {};
   }, [selectedColor, product]);
 
   const discountedPrice = product?.discount
@@ -438,15 +369,11 @@ const Product = () => {
     : product?.price;
 
   const getLookSizeStockMap = useCallback((look, colorName) => {
-    const selectedColorData = look.colors.find(
-      (c) => c.color.name === colorName
-    );
-    return (
-      selectedColorData?.sizes.reduce((acc, size) => {
-        acc[size.size.name] = size.stock;
-        return acc;
-      }, {}) || {}
-    );
+    const selectedColorData = look.colors.find((c) => c.color.name === colorName);
+    return selectedColorData?.sizes.reduce((acc, size) => {
+      acc[size.size.name] = size.stock;
+      return acc;
+    }, {}) || {};
   }, []);
 
   const getColorBackground = (colorName) => {
@@ -472,6 +399,10 @@ const Product = () => {
       alert("El talle seleccionado no tiene stock");
       return;
     }
+    if (addCount >= stock) {
+      alert(`No puedes agregar más de ${stock} unidades de este producto`);
+      return;
+    }
     addToCart(product, selectedColor, selectedSize, cachedImages);
     setAddCount((prevCount) => prevCount + 1);
   };
@@ -481,10 +412,7 @@ const Product = () => {
       setSelectedSize(null);
       return;
     }
-
-    const selectedColorData = product.colors.find(
-      (c) => c.color.name === selectedColor
-    );
+    const selectedColorData = product.colors.find((c) => c.color.name === selectedColor);
     const availableSize = selectedColorData?.sizes.find((s) => s.stock > 0);
     setSelectedSize(availableSize ? availableSize.size.name : null);
   }, [selectedColor, product]);
@@ -492,12 +420,9 @@ const Product = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isPaused && cachedImages.length > 0) {
-        setCurrentImageIndex((prev) => {
-          console.log("Current Image Index:", prev); // Debug index
-          return (prev + 1) % cachedImages.length;
-        });
+        setCurrentImageIndex((prev) => (prev + 1) % cachedImages.length);
       }
-    }, 1000); // 1000ms for smoother cycling
+    }, 1000);
     return () => clearInterval(interval);
   }, [isPaused, cachedImages.length]);
 
@@ -514,7 +439,7 @@ const Product = () => {
       return (
         <div
           key={index}
-          className="w-full flex-shrink-0 flex flex-col items-center justify-between p-4"
+          className="w-full sm:w-[284px] flex-shrink-0 flex flex-col items-center justify-between p-4"
         >
           <div className="w-[284px] h-[200px] relative">
             <Image
@@ -535,31 +460,23 @@ const Product = () => {
                 </p>
               </div>
               <span className="line-through text-gray-400 text-[12px] ml-2">
-                <span className="uppercase">Ars $</span>{" "}
-                {formatPrice(look.price)}
+                <span className="uppercase">Ars $</span> {formatPrice(look.price)}
               </span>
             </div>
           )}
           <p className="text-white text-xs text-center mt-1">
-            <span className="uppercase">Ars $</span>{" "}
-            {formatPrice(discountedPrice)}
+            <span className="uppercase">Ars $</span> {formatPrice(discountedPrice)}
           </p>
           <div>
             <div className="flex w-full justify-center gap-2 mt-1">
               {look.colors.map((color, colorIndex) => (
                 <button
                   key={colorIndex}
-                  onClick={() =>
-                    handleLookColorChange(lookId, color.color.name)
-                  }
+                  onClick={() => handleLookColorChange(lookId, color.color.name)}
                   className="w-[40px] h-[40px] p-1 rounded-[20px] border"
                   style={{
-                    borderColor:
-                      selectedLookColor === color.color.name
-                        ? "#FFFFFF"
-                        : "transparent",
-                    borderWidth:
-                      selectedLookColor === color.color.name ? "0.5px" : "1px",
+                    borderColor: selectedLookColor === color.color.name ? "#FFFFFF" : "transparent",
+                    borderWidth: selectedLookColor === color.color.name ? "0.5px" : "1px",
                   }}
                 >
                   <div
@@ -568,8 +485,7 @@ const Product = () => {
                       height: "100%",
                       backgroundColor: getColorBackground(color.color.name),
                       borderRadius: "18px",
-                      padding:
-                        selectedLookColor === color.color.name ? "2px" : "0",
+                      padding: selectedLookColor === color.color.name ? "2px" : "0",
                     }}
                   />
                 </button>
@@ -583,9 +499,7 @@ const Product = () => {
                 return (
                   <button
                     key={sizeIndex}
-                    onClick={() =>
-                      handleLookSizeSelect(lookId, size, lookSizeStockMap)
-                    }
+                    onClick={() => handleLookSizeSelect(lookId, size, lookSizeStockMap)}
                     className={`w-[40px] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white text-xs transition-all duration-200 hover:bg-[#A8A8A84D] ${
                       stock <= 0 ? "line-through opacity-50" : ""
                     } ${selectedLookSize === size ? "bg-[#E7E7E766]" : ""}`}
@@ -605,15 +519,13 @@ const Product = () => {
               onClick={() => handleAddLookToCart(look, lookId)}
               className="w-full text-white uppercase text-xs"
             >
-              {lookAddCounts[lookId] > 0
-                ? `(${lookAddCounts[lookId]}) Added`
-                : "+ Add"}
+              {lookAddCounts[lookId] > 0 ? `+ Add (${lookAddCounts[lookId]})` : "+ Add"}
             </button>
           </div>
         </div>
       );
     },
-    [selectedLookColors, selectedLookSizes, getLookSizeStockMap]
+    [selectedLookColors, selectedLookSizes, getLookSizeStockMap, lookAddCounts]
   );
 
   return (
@@ -627,28 +539,18 @@ const Product = () => {
           <div className="max-w-[1252px] mx-auto flex flex-col md:flex-row py-8">
             <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
               {cachedImages.length > 0 && (
-                <div
-                  className="relative"
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={handleCloseMagnifier}
-                >
-                 <Image
-  ref={imageRef}
-  src={cachedImages[currentImageIndex] || "/rotate1.svg"}
-  alt={`Product image ${currentImageIndex + 1}`}
-  width={545}
-  height={900}
-  className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
-  priority
-  onLoad={(e) => {
-    console.log("Image loaded:", cachedImages[currentImageIndex]);
-    }
-  }
-  onError={() => {
-    console.error("Image failed to load:", cachedImages[currentImageIndex]);
-    }
-  }
-/>
+                <div className="relative" onMouseMove={handleMouseMove} onMouseLeave={handleCloseMagnifier}>
+                  <Image
+                    ref={imageRef}
+                    src={cachedImages[currentImageIndex] || "/rotate1.svg"}
+                    alt={`Product image ${currentImageIndex + 1}`}
+                    width={545}
+                    height={900}
+                    className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
+                    priority
+                    onLoad={() => console.log("Image loaded:", cachedImages[currentImageIndex])}
+                    onError={() => console.error("Image failed to load:", cachedImages[currentImageIndex])}
+                  />
                   {isMagnifying && (
                     <div
                       className="absolute rounded-md shadow-lg bg-white bg-opacity-10"
@@ -657,19 +559,11 @@ const Product = () => {
                         height: `${lensHeight}px`,
                         top: `${lensPosition.y - lensHeight / 2}px`,
                         left: `${lensPosition.x - lensWidth / 1.5}px`,
-                        backgroundImage: `url(${
-                          cachedImages[currentImageIndex] || "/rotate1.svg"
-                        })`,
-                        backgroundSize: `${
-                          imageRef.current?.getBoundingClientRect().width *
-                          zoomFactor
-                        }px ${
-                          imageRef.current?.getBoundingClientRect().height *
-                          zoomFactor
+                        backgroundImage: `url(${cachedImages[currentImageIndex] || "/rotate1.svg"})`,
+                        backgroundSize: `${imageRef.current?.getBoundingClientRect().width * zoomFactor}px ${
+                          imageRef.current?.getBoundingClientRect().height * zoomFactor
                         }px`,
-                        backgroundPosition: `-${
-                          (lensPosition.x - lensWidth / 2) * zoomFactor
-                        }px -${
+                        backgroundPosition: `-${(lensPosition.x - lensWidth / 2) * zoomFactor}px -${
                           (lensPosition.y - lensHeight / 3.5) * zoomFactor
                         }px`,
                         backgroundRepeat: "no-repeat",
@@ -694,12 +588,7 @@ const Product = () => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </button>
               </div>
@@ -707,120 +596,61 @@ const Product = () => {
                 <div className="w-[190px] md:w-[170px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
                   {Array.from({ length: 40 }, (_, index) => {
                     const maxHeightOptions = [5, 10, 15, 30];
-                    const maxHeight =
-                      maxHeightOptions[
-                        Math.floor(Math.random() * maxHeightOptions.length)
-                      ];
+                    const maxHeight = maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)];
                     const animationClass = `animate-pulseHeight-${maxHeight}`;
                     const delay = Math.random() * 2;
-
                     return (
                       <div
                         key={index}
                         className={`bg-white w-[1px] md:w-[2px] mx-[1px] md:mx-[2px] transition-all ${animationClass}`}
-                        style={{
-                          height: `${
-                            Math.floor(Math.random() * maxHeight) + 10
-                          }px`,
-                          animationDelay: `${delay}s`,
-                        }}
+                        style={{ height: `${Math.floor(Math.random() * maxHeight) + 10}px`, animationDelay: `${delay}s` }}
                       ></div>
                     );
                   })}
                 </div>
                 <style jsx>{`
                   @keyframes pulseHeight-5 {
-                    0% {
-                      height: 10px;
-                    }
-                    50% {
-                      height: 5px;
-                    }
-                    100% {
-                      height: 10px;
-                    }
+                    0% { height: 10px; }
+                    50% { height: 5px; }
+                    100% { height: 10px; }
                   }
-                  .animate-pulseHeight-5 {
-                    animation: pulseHeight-5 2s ease-in-out infinite;
-                  }
+                  .animate-pulseHeight-5 { animation: pulseHeight-5 2s ease-in-out infinite; }
                   @keyframes pulseHeight-10 {
-                    0% {
-                      height: 10px;
-                    }
-                    50% {
-                      height: 10px;
-                    }
-                    100% {
-                      height: 10px;
-                    }
+                    0% { height: 10px; }
+                    50% { height: 10px; }
+                    100% { height: 10px; }
                   }
-                  .animate-pulseHeight-10 {
-                    animation: pulseHeight-10 2s ease-in-out infinite;
-                  }
+                  .animate-pulseHeight-10 { animation: pulseHeight-10 2s ease-in-out infinite; }
                   @keyframes pulseHeight-15 {
-                    0% {
-                      height: 10px;
-                    }
-                    50% {
-                      height: 15px;
-                    }
-                    100% {
-                      height: 10px;
-                    }
+                    0% { height: 10px; }
+                    50% { height: 15px; }
+                    100% { height: 10px; }
                   }
-                  .animate-pulseHeight-15 {
-                    animation: pulseHeight-15 2s ease-in-out infinite;
-                  }
+                  .animate-pulseHeight-15 { animation: pulseHeight-15 2s ease-in-out infinite; }
                   @keyframes pulseHeight-30 {
-                    0% {
-                      height: 10px;
-                    }
-                    50% {
-                      height: 30px;
-                    }
-                    100% {
-                      height: 10px;
-                    }
+                    0% { height: 10px; }
+                    50% { height: 30px; }
+                    100% { height: 10px; }
                   }
-                  .animate-pulseHeight-30 {
-                    animation: pulseHeight-30 2s ease-in-out infinite;
-                  }
+                  .animate-pulseHeight-30 { animation: pulseHeight-30 2s ease-in-out infinite; }
                 `}</style>
                 <div className="relative">
-                  <div
-                    className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]"
-                    style={{ height: "100%" }}
-                  ></div>
+                  <div className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]" style={{ height: "100%" }}></div>
                   <div className="pl-[20px]">
                     <div className="flex justify-between">
-                      <p>Nombre</p>{" "}
-                      <p className="w-[60px] lowercase">
-                        {product.models.modelName}
-                      </p>
+                      <p>Nombre</p> <p className="w-[60px] lowercase">{product.models.modelName}</p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Altura</p>{" "}
-                      <p className="w-[60px] lowercase">
-                        {product.models.height}
-                      </p>
+                      <p>Altura</p> <p className="w-[60px] lowercase">{product.models.height}</p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Peso</p>{" "}
-                      <p className="w-[60px] lowercase">
-                        {product.models.weight} kg.
-                      </p>
+                      <p>Peso</p> <p className="w-[60px] lowercase">{product.models.weight} kg.</p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Talle</p>{" "}
-                      <p className="w-[60px] lowercase">
-                        {product.models.size.name}
-                      </p>
+                      <p>Talle</p> <p className="w-[60px] lowercase">{product.models.size.name}</p>
                     </div>
                     <div className="flex justify-between">
-                      <p>Género</p>{" "}
-                      <p className="w-[60px] lowercase">
-                        {product.models.gender}
-                      </p>
+                      <p>Género</p> <p className="w-[60px] lowercase">{product.models.gender}</p>
                     </div>
                   </div>
                 </div>
@@ -837,14 +667,11 @@ const Product = () => {
                   {product.discount > 0 && (
                     <div className="flex items-center">
                       <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
-                        <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">
-                          {product.discount}%
-                        </p>
+                        <p className="font-normal text-[16px] tracking-[-0.04em] align-middle">{product.discount}%</p>
                       </div>
                       <div className="flex items-baseline w-full">
                         <span className="line-through text-gray-400 text-[14px] md:text-[16px] w-auto flex">
-                          <p className="uppercase mr-1 w-auto">Ars $</p>{" "}
-                          {formatPrice(product.price)}
+                          <p className="uppercase mr-1 w-auto">Ars $</p> {formatPrice(product.price)}
                         </span>
                       </div>
                     </div>
@@ -854,7 +681,7 @@ const Product = () => {
                     <span>{formatPrice(discountedPrice)}</span>
                   </div>
                   <div>
-                    <p className=" h-[152px] md:h-auto font-['IBM_Plex_Mono'] font-normal text-[12px] leading-[16px] tracking-[-0.04em] align-middle">
+                    <p className="h-[152px] md:h-auto font-['IBM_Plex_Mono'] font-normal text-[12px] leading-[16px] tracking-[-0.04em] align-middle">
                       3 cuotas sin interés en bancos seleccionados
                     </p>
                   </div>
@@ -869,28 +696,17 @@ const Product = () => {
                           onClick={() => setSelectedColor(color.color.name)}
                           className="w-[40px] h-[40px] p-1 rounded-[20px] border"
                           style={{
-                            borderColor:
-                              selectedColor === color.color.name
-                                ? "#FFFFFF"
-                                : "transparent",
-                            borderWidth:
-                              selectedColor === color.color.name
-                                ? "0.5px"
-                                : "1px",
+                            borderColor: selectedColor === color.color.name ? "#FFFFFF" : "transparent",
+                            borderWidth: selectedColor === color.color.name ? "0.5px" : "1px",
                           }}
                         >
                           <div
                             style={{
                               width: "100%",
                               height: "100%",
-                              backgroundColor: getColorBackground(
-                                color.color.name
-                              ),
+                              backgroundColor: getColorBackground(color.color.name),
                               borderRadius: "18px",
-                              padding:
-                                selectedColor === color.color.name
-                                  ? "2px"
-                                  : "0",
+                              padding: selectedColor === color.color.name ? "2px" : "0",
                             }}
                           />
                         </button>
@@ -904,13 +720,7 @@ const Product = () => {
                       className="text-white cursor-pointer flex w-full justify-between mt-2"
                     >
                       Size guide
-                      <Image
-                        src="/flechamobilediagonal.svg"
-                        width={24}
-                        height={24}
-                        alt="diagonal arrow"
-                        className="ml-2"
-                      />
+                      <Image src="/flechamobilediagonal.svg" width={24} height={24} alt="diagonal arrow" className="ml-2" />
                     </button>
                     <div>
                       <div className="flex gap-2 mt-2">
@@ -922,9 +732,7 @@ const Product = () => {
                               onClick={() => handleSizeSelect(size)}
                               className={`w-[40px] transition-all duration-200 hover:bg-[#A8A8A84D] h-[40px] p-[10px] lowercase border-white border-[0.5px] rounded-[1px] text-white ${
                                 stock <= 0 ? "line-through opacity-50" : ""
-                              } ${
-                                selectedSize === size ? "bg-[#E7E7E766]" : ""
-                              }`}
+                              } ${selectedSize === size ? "bg-[#E7E7E766]" : ""}`}
                               disabled={stock <= 0}
                             >
                               {size}
@@ -932,12 +740,8 @@ const Product = () => {
                           );
                         })}
                       </div>
-                      {Object.values(sizeStockMap).every(
-                        (stock) => stock <= 0
-                      ) && (
-                        <p className="text-white text-sm mt-2">
-                          No hay stock disponible
-                        </p>
+                      {Object.values(sizeStockMap).every((stock) => stock <= 0) && (
+                        <p className="text-white text-sm mt-2">No hay stock disponible</p>
                       )}
                     </div>
                   </div>
@@ -965,11 +769,7 @@ const Product = () => {
                   >
                     <span>Details</span>
                     <Image
-                      src={
-                        isDetailsOpen
-                          ? "/flechamobileup.svg"
-                          : "/flechamobiledown.svg"
-                      }
+                      src={isDetailsOpen ? "/flechamobileup.svg" : "/flechamobiledown.svg"}
                       width={24}
                       height={24}
                       alt={isDetailsOpen ? "arrow up" : "arrow down"}
@@ -990,11 +790,7 @@ const Product = () => {
                   >
                     <span>Product Care</span>
                     <Image
-                      src={
-                        isProductCareOpen
-                          ? "/flechamobileup.svg"
-                          : "/flechamobiledown.svg"
-                      }
+                      src={isProductCareOpen ? "/flechamobileup.svg" : "/flechamobiledown.svg"}
                       width={24}
                       height={24}
                       alt={isProductCareOpen ? "arrow up" : "arrow down"}
@@ -1030,17 +826,8 @@ const Product = () => {
                     <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
                       SHOP ALL THE LOOK
                     </h2>
-                    <button
-                      onClick={() => setIsShopLookOpen(false)}
-                      className="text-gray-500 hover:text-gray-700"
-                    >
-                      <Image
-                        src="/crossSize.svg"
-                        width={16}
-                        height={16}
-                        alt="close modal"
-                        className="ml-2"
-                      />
+                    <button onClick={() => setIsShopLookOpen(false)} className="text-gray-500 hover:text-gray-700">
+                      <Image src="/crossSize.svg" width={16} height={16} alt="close modal" className="ml-2" />
                     </button>
                   </div>
                 </div>
@@ -1052,9 +839,7 @@ const Product = () => {
                           <div
                             ref={sliderRef}
                             className="flex transition-transform duration-300 ease-in-out"
-                            style={{
-                              transform: `translateX(-${currentSlide * 100}%)`,
-                            }}
+                            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                             onTouchStart={handleTouchStart}
                             onTouchMove={handleTouchMove}
                             onTouchEnd={handleTouchEnd}
@@ -1066,23 +851,25 @@ const Product = () => {
                               <button
                                 key={index}
                                 onClick={() => handleDotClick(index)}
-                                className={`w-[20px] h-[3px] rounded-[2px] ${
-                                  currentSlide === index
-                                    ? "bg-white"
-                                    : "bg-gray-500"
-                                }`}
+                                className={`w-[20px] h-[3px] rounded-[2px] ${currentSlide === index ? "bg-white" : "bg-gray-500"}`}
                               />
                             ))}
                           </div>
                         </div>
-                        <div className="hidden sm:flex flex-row flex-wrap justify-center gap-4 w-full">
+                        <div
+                          className={`hidden sm:grid sm:grid-cols-3 gap-4 mx-auto ${
+                            product.looks.length === 1
+                              ? "max-w-[284px]"
+                              : product.looks.length === 2
+                              ? "max-w-[568px]"
+                              : "max-w-[852px]"
+                          }`}
+                        >
                           {product.looks.map(renderLook)}
                         </div>
                       </>
                     ) : (
-                      <p className="text-white text-center">
-                        No hay looks disponibles
-                      </p>
+                      <p className="text-white text-center">No hay looks disponibles</p>
                     )}
                     <div className="w-full flex justify-end mt-4">
                       <button
@@ -1110,45 +897,24 @@ const Product = () => {
                     <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
                       Size Guide
                     </h2>
-                    <button
-                      onClick={() => setIsSizeGuideOpen(false)}
-                      className="text-gray-500 hover:text-gray-700"
-                    >
-                      <Image
-                        src="/crossSize.svg"
-                        width={16}
-                        height={16}
-                        alt="close modal"
-                        className="ml-2"
-                      />
+                    <button onClick={() => setIsSizeGuideOpen(false)} className="text-gray-500 hover:text-gray-700">
+                      <Image src="/crossSize.svg" width={16} height={16} alt="close modal" className="ml-2" />
                     </button>
                   </div>
                 </div>
-                <div className="w-full flex justify-center items-center ">
+                <div className="w-full flex justify-center items-center">
                   <div className="w-full max-w-[1002px] items-center flex flex-col md:flex-row h-auto md:h-[356px]">
                     {product.sizeGuide && product.sizeGuide.length >= 2 ? (
                       <>
                         <div className="w-[300px] h-[196px] md:w-[402px] md:h-[296px] relative">
-                          <Image
-                            src={`/sizeGuide/${product.sizeGuide[0]}.webp`}
-                            fill
-                            className="object-contain"
-                            alt="Size guide table"
-                          />
+                          <Image src={`/sizeGuide/${product.sizeGuide[0]}.webp`} fill className="object-contain" alt="Size guide table" />
                         </div>
                         <div className="w-[300px] h-[196px] md:w-[600px] md:h-[296px] relative">
-                          <Image
-                            src={`/sizeGuide/${product.sizeGuide[1]}.webp`}
-                            fill
-                            className="object-contain"
-                            alt="Size guide table"
-                          />
+                          <Image src={`/sizeGuide/${product.sizeGuide[1]}.webp`} fill className="object-contain" alt="Size guide table" />
                         </div>
                       </>
                     ) : (
-                      <p className="text-white text-center">
-                        No hay imágenes de guía de talles disponibles
-                      </p>
+                      <p className="text-white text-center">No hay imágenes de guía de talles disponibles</p>
                     )}
                   </div>
                 </div>

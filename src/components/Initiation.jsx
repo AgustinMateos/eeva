@@ -231,9 +231,8 @@ const Initiation = ({ initialData }) => {
                 <h5 className="text-sm md:text-lg font-semibold flex justify-end">{title}</h5>
                 <div className="text-[8px] text-end md:text-[12px] w-[100%] flex justify-end md:w-[480px]">
                   <p className="w-[221px] md:w-[480px]">
-                    Lorem ipsum dolor sit amet consectetur, adipiscing elit curae mi tincidunt nec, nulla
-                    eleifend nullam mattis. Sapien erat curae pellentesque parturient porta vel tempor
-                    hendrerit.
+                    Se buscó construir un universo que transmitiera una vision futurista y dramática.
+                    Se crea una sensacion de precisión, movimiento y poder generando una atmósfera única.
                   </p>
                 </div>
               </div>
