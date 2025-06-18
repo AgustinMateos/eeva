@@ -104,7 +104,7 @@ const Initiation = ({ initialData }) => {
             alt={card.title}
             fill
             priority
-            sizes="(max-width: 768px) 139px, 289px" // Optimize image sizes
+             // Optimize image sizes
             className="object-contain w-full h-auto"
           />
         </div>
@@ -192,8 +192,8 @@ const Initiation = ({ initialData }) => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={625}
-                      loading="lazy" // Lazy load for off-screen images
-                      sizes="(max-width: 768px) 500px, 560px"
+                     priority
+                      
                       className="object-contain w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5]"
                     />
                     {index === 0 && (
