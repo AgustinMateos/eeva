@@ -138,7 +138,7 @@ const Accessoriesg = () => {
         href={`/collections/initiation/product/${product._id}`}
         className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
       >
-        <div className="relative w-full h-[315px] md:h-[589px] xl:h-[500px] 2xl:h-[540px]">
+        <div className="relative w-full h-[315px] md:h-[589px] xl:h-[440px] 2xl:h-[440px]">
           <Image
             src={`/static/${product.models.images.static}.webp`}
             alt={product.displayName}
