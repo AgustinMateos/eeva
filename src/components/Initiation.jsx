@@ -21,6 +21,12 @@ const Initiation = ({ initialData }) => {
   const [footerImage, setFooterImage] = useState(initialData?.footerImage || '');
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState(null);
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
+  const hasModalBeenClosed = useRef(false);
 
   useEffect(() => {
     // Only fetch if no initial data is provided (client-side fallback)
@@ -28,7 +34,7 @@ const Initiation = ({ initialData }) => {
       const fetchInitiationCollection = async () => {
         try {
           const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections', {
-            headers: { 'Cache-Control': 'public, max-age=3600' }, // Cache for 1 hour
+            headers: { 'Cache-Control': 'public, max-age=3600' },
           });
           const initiationCollection = response.data.find(
             (collection) => collection.title.toUpperCase() === 'INITIATION'
@@ -81,6 +87,15 @@ const Initiation = ({ initialData }) => {
 
       fetchInitiationCollection();
     }
+
+    // Show modal after 5 seconds if it hasn't been closed
+    const timer = setTimeout(() => {
+      if (!hasModalBeenClosed.current) {
+        setShowModal(true);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, [initialData]);
 
   const toggleSound = () => {
@@ -88,6 +103,38 @@ const Initiation = ({ initialData }) => {
       videoRef.current.muted = !videoRef.current.muted;
       setIsMuted(videoRef.current.muted);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage('');
+    setIsError(false);
+
+    try {
+      const response = await Axios.post('https://eeva-api.vercel.app/api/v1/newsletters/create', {
+        email,
+      });
+      setMessage('Successfully subscribed! You will be notified when we go live.');
+      setEmail('');
+      setTimeout(() => {
+        closeModal();
+      }, 2000); // Close modal after 2 seconds
+    } catch (error) {
+      setIsError(true);
+      if (error.response?.status === 400) {
+        setMessage('This email is already subscribed.');
+      } else {
+        setMessage('An error occurred. Please try again later.');
+      }
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    hasModalBeenClosed.current = true;
+    setEmail('');
+    setMessage('');
+    setIsError(false);
   };
 
   // Memoize product cards to prevent unnecessary re-renders
@@ -104,7 +151,6 @@ const Initiation = ({ initialData }) => {
             alt={card.title}
             fill
             priority
-             // Optimize image sizes
             className="object-contain w-full h-auto"
           />
         </div>
@@ -141,7 +187,7 @@ const Initiation = ({ initialData }) => {
               loop
               muted={isMuted}
               playsInline
-              poster="/initiation-poster.jpg" // Add poster for better UX
+              poster="/initiation-poster.jpg"
               className="w-full h-full object-cover"
             />
             <button
@@ -170,7 +216,7 @@ const Initiation = ({ initialData }) => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={900}
-                      loading="lazy" // Lazy load for off-screen images
+                      loading="lazy"
                       sizes="(max-width: 768px) 80vw, 500px"
                       className="object-cover w-full h-[400px] md:h-auto"
                     />
@@ -192,8 +238,7 @@ const Initiation = ({ initialData }) => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={625}
-                     priority
-                      
+                      priority
                       className="object-contain w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5]"
                     />
                     {index === 0 && (
@@ -223,7 +268,7 @@ const Initiation = ({ initialData }) => {
                 src={footerImage}
                 alt="Fondo Initiation"
                 fill
-                priority // Above-the-fold, so keep priority
+                priority
                 sizes="100vw"
                 className="object-cover"
               />
@@ -242,6 +287,49 @@ const Initiation = ({ initialData }) => {
           <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px]">
             <Footer />
           </div>
+
+          {/* Newsletter Modal */}
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-md mx-4 relative">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-2 right-2 text-white hover:text-gray-300"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <h3 className="text-white text-lg font-semibold mb-4 text-center">
+                  Subscribe to Our Newsletter
+                </h3>
+                <p className="text-gray-300 text-sm mb-4 text-center">
+                  Be the first to know when we go live!
+                </p>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-10 w-full bg-white bg-opacity-20 text-white placeholder-gray-300 rounded-md px-4 text-sm focus:outline-none border border-[#DFDFDF]"
+                    placeholder="Enter your email address"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="h-10 w-full bg-[#DFDFDF] rounded-md text-black text-sm hover:bg-[#cccccc] transition-colors"
+                  >
+                    Notify Me
+                  </button>
+                </form>
+                {message && (
+                  <p className={`text-sm text-center mt-4 ${isError ? 'text-red-500' : 'text-green-500'}`}>
+                    {message}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>
@@ -292,9 +380,9 @@ export async function getServerSideProps() {
       props: {
         initialData: {
           products: sortedProducts,
-          description: initiationCollection.description || 'Descripción no disponible',
+          description: initiationCollection.description || 'Descripción no definida',
           title: initiationCollection.title || 'Sin título',
-          subtitle: initiationCollection.subtitle || 'Subtítulo no disponible',
+          subtitle: initiationCollection.subtitle || 'Subtítulo no definido',
           middleImages: formattedMiddleImages,
           footerImage: initiationCollection.images.footer
             ? `/${initiationCollection.images.footer}.webp`
