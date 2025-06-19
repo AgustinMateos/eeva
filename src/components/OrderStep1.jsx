@@ -481,8 +481,8 @@ const OrderStep1 = () => {
                         </div>
                         <span className="text-sm">ARS $16.000</span>
                       </label>
-                      <p className="text-xs text-gray-400 w-[90%] md:w-full">
-                        Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit felis nostra interdum, diam pretium turpis ut est libero dapibus vehicula purus sollicitudin
+                      <p className="text-xs text-gray-400 w-[80%] md:w-[90%]">
+                     Una vez despachado el paquete, la gestion y entrega quedan a cargo de Correo Argentino.
                       </p>
                     </div>
                   </div>
@@ -502,7 +502,7 @@ const OrderStep1 = () => {
                       onClick={generateOrder}
                       className="text-white w-[90%] pb-[10px] md:w-[160px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
                     >
-                      Confirmar Orden
+                      Confirmar
                     </button>
                   </>
                 ) : (

@@ -14,19 +14,31 @@ const Loader = ({ loading, imageLoaded }) => {
   useEffect(() => {
     let rafId;
     const maxLoadingTime = 5000; // 5 seconds max
+    const increment = 0.3; // Smaller increment for smoother progress
+    let startTime = performance.now();
 
-    const updateProgress = () => {
+    const updateProgress = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const duration = maxLoadingTime;
+
       setProgress((prev) => {
-        const dataProgress = loading ? prev / 2 : 50;
-        const imageProgress = imageLoaded ? 50 : prev / 2;
-        const totalProgress = Math.min(dataProgress + imageProgress, 100);
+        // Simulate progress with an easing curve (ease-in-out)
+        let baseProgress = (elapsed / duration) * 100;
+        if (!loading) baseProgress = Math.max(baseProgress, 50); // Data loaded = at least 50%
+        if (imageLoaded) baseProgress = Math.max(baseProgress, 80); // Image loaded = at least 80%
+        
+        // Apply ease-in-out curve
+        const easedProgress = 100 * (1 - Math.cos((baseProgress / 100) * Math.PI)) / 2;
+        const totalProgress = Math.min(easedProgress, 100);
 
-        if (totalProgress >= 100) {
-          setTimeout(() => setIsVisible(false), 500);
+        if (totalProgress >= 100 || elapsed >= duration) {
+          setTimeout(() => setIsVisible(false), 500); // Delay hiding for smooth transition
           return 100;
         }
-        return prev + 1;
+
+        return Math.min(prev + increment, totalProgress);
       });
+
       rafId = requestAnimationFrame(updateProgress);
     };
 
@@ -55,7 +67,7 @@ const Loader = ({ loading, imageLoaded }) => {
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden z-50 bg-gradient-to-r from-[#303F48] to-[#6D7276]">
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-[30ms] ease-linear"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-[100ms] ease-in-out"
         style={{
           backgroundImage: 'url(/lineasCodigo.svg)',
           clipPath: `polygon(0 0, 100% 0, 100% ${progress}%, 0 ${progress}%)`,
@@ -70,7 +82,7 @@ const Loader = ({ loading, imageLoaded }) => {
         </span>
         <div className="w-[305px] md:w-[405px] h-7 rounded-[2px] border border-[#F2F2F2] p-2 bg-[#FFFFFF1A] overflow-hidden">
           <div
-            className="h-full bg-[#D9D9D9] transition-all duration-[30ms] ease-linear"
+            className="h-full bg-[#D9D9D9] transition-all duration-[100ms] ease-in-out"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -98,7 +110,7 @@ const BottomMens = () => {
     img.onload = () => setImageLoaded(true);
     img.onerror = () => {
       console.error('Failed to load background image');
-      setImageLoaded(true); // Proceed even if image fails
+      setImageLoaded(true);
     };
 
     // Fetch products
@@ -119,7 +131,6 @@ const BottomMens = () => {
     fetchProducts();
   }, []);
 
-  // Memoize the product list to prevent unnecessary re-renders
   const productList = useMemo(() => {
     return products.map((product) => (
       <Link
@@ -147,6 +158,7 @@ const BottomMens = () => {
     ));
   }, [products]);
 
+
   if (loading || !imageLoaded) {
     return <Loader loading={loading} imageLoaded={imageLoaded} />;
   }
@@ -157,7 +169,7 @@ const BottomMens = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w-[95rem] border-b border-[#AEAEAE] uppercase">
+      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w[95rem] border-b border-[#AEAEAE] uppercase">
         BOTTOM - MEN
       </p>
       <div className="w-full max-w-[90%] mx-auto mt-[40px]">
