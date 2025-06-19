@@ -7,7 +7,39 @@ import Image from "next/image";
 import { useCart } from "./context/CartContext";
 import Marquee from "./Marquee";
 
-// Inline Loader Component
+// Modal Component
+const Modal = ({ isOpen, onClose, message }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex justify-center items-center z-50"
+      onClick={onClose}
+    >
+      <div className="w-full max-w-[500px] mx-4 my-8 bg-[#83838366] border-[#f2f2f2] border-[0.5px] rounded-[6px] p-6 backdrop-blur-[30px] relative">
+        <div className="w-full flex justify-between items-center mb-4">
+          <h2 className="font-medium text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
+            Notificación
+          </h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <Image src="/crossSize.svg" width={16} height={16} alt="close modal" />
+          </button>
+        </div>
+        <p className="text-white text-center text-sm">{message}</p>
+        <div className="w-full flex justify-center mt-6">
+          <button
+            onClick={onClose}
+            className="w-[120px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5] backdrop-blur-[6px] text-[#F2F2F2] uppercase text-xs"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Loader Component
 const Loader = ({ loading }) => {
   const [progress, setProgress] = useState(0);
 
@@ -81,18 +113,29 @@ const Product = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isMagnifying, setIsMagnifying] = useState(false);
   const [lensPosition, setLensPosition] = useState({ x: 0, y: 0 });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const imageRef = useRef(null);
   const sliderRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const { addToCart } = useCart();
-  const [lookAddCounts, setLookAddCounts] = useState({});
-  const [addCount, setAddCount] = useState(0);
+  const [lookAddCounts, setLookAddCounts] = useState({}); // Updated to track counts by lookId, color, and size
+  const [addCounts, setAddCounts] = useState({});
   const lensWidth = 160;
   const lensHeight = 160;
   const zoomFactor = 2;
 
-  // Function to format price with Argentine conventions
+  const showModal = (message) => {
+    setModalMessage(message);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage("");
+  };
+
   const formatPrice = (price) => {
     const num = Number(price);
     if (isNaN(num)) return "0";
@@ -137,6 +180,7 @@ const Product = () => {
       if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
         const initialLookColors = {};
         const initialLookSizes = {};
+        const initialLookAddCounts = {};
         fetchedProduct.looks.forEach((look, index) => {
           if (look.colors && look.colors.length > 0) {
             const lookId = look._id || index;
@@ -149,10 +193,12 @@ const Product = () => {
             const selectedColor = firstAvailableColor || look.colors[0];
             const firstAvailableSize = selectedColor.sizes.find((size) => size.stock > 0);
             initialLookSizes[lookId] = firstAvailableSize ? firstAvailableSize.size.name : null;
+            initialLookAddCounts[lookId] = {};
           }
         });
         setSelectedLookColors(initialLookColors);
         setSelectedLookSizes(initialLookSizes);
+        setLookAddCounts(initialLookAddCounts);
       }
 
       setLoading(false);
@@ -179,15 +225,51 @@ const Product = () => {
   }, [id]);
 
   useEffect(() => {
-    if (!product || !selectedColor) return;
-    const selectedColorData = product.colors.find((color) => color.color.name === selectedColor);
-    if (selectedColorData) {
-      const availableSize = selectedColorData.sizes.find((size) => size.stock > 0);
-      setSelectedSize(availableSize ? availableSize.size.name : null);
-    } else {
+    if (!product || !selectedColor) {
       setSelectedSize(null);
+      setAddCounts({});
+      return;
     }
+    const selectedColorData = product.colors.find((color) => color.color.name === selectedColor);
+    const availableSize = selectedColorData?.sizes.find((size) => size.stock > 0);
+    setSelectedSize(availableSize ? availableSize.size.name : null);
+    setAddCounts((prev) => ({
+      ...prev,
+      [selectedColor]: prev[selectedColor] || {},
+    }));
   }, [selectedColor, product]);
+
+  useEffect(() => {
+    if (selectedSize && selectedColor) {
+      setAddCounts((prev) => ({
+        ...prev,
+        [selectedColor]: {
+          ...prev[selectedColor],
+          [selectedSize]: prev[selectedColor]?.[selectedSize] || 0,
+        },
+      }));
+    }
+  }, [selectedSize, selectedColor]);
+
+  useEffect(() => {
+    if (!product?.looks) return;
+    setLookAddCounts((prev) => {
+      const updatedCounts = { ...prev };
+      product.looks.forEach((look, index) => {
+        const lookId = look._id || index;
+        const selectedColor = selectedLookColors[lookId];
+        if (selectedColor && !updatedCounts[lookId]) {
+          updatedCounts[lookId] = {};
+        }
+        if (selectedColor && selectedLookSizes[lookId]) {
+          updatedCounts[lookId][selectedColor] = updatedCounts[lookId][selectedColor] || {};
+          updatedCounts[lookId][selectedColor][selectedLookSizes[lookId]] =
+            updatedCounts[lookId][selectedColor]?.[selectedLookSizes[lookId]] || 0;
+        }
+      });
+      return updatedCounts;
+    });
+  }, [selectedLookColors, selectedLookSizes, product]);
 
   const updateLookSizes = useCallback(() => {
     if (!product?.looks) return;
@@ -267,6 +349,13 @@ const Product = () => {
       ...prev,
       [lookId]: colorName,
     }));
+    setLookAddCounts((prev) => ({
+      ...prev,
+      [lookId]: {
+        ...prev[lookId],
+        [colorName]: prev[lookId]?.[colorName] || {},
+      },
+    }));
   };
 
   const handleSizeSelect = (size) => {
@@ -290,19 +379,19 @@ const Product = () => {
     const selectedColor = selectedLookColors[lookId];
     const selectedSize = selectedLookSizes[lookId];
     if (!selectedColor || !selectedSize) {
-      alert("Por favor selecciona color y talla para el look");
+      showModal("Por favor selecciona color y talla para el look");
       return;
     }
     const lookSizeStockMap = getLookSizeStockMap(look, selectedColor);
     const stock = lookSizeStockMap[selectedSize] || 0;
-    const currentCount = lookAddCounts[lookId] || 0;
+    const currentCount = lookAddCounts[lookId]?.[selectedColor]?.[selectedSize] || 0;
 
     if (stock <= 0) {
-      alert("El talle seleccionado no tiene stock");
+      showModal("El talle seleccionado no tiene stock");
       return;
     }
     if (currentCount >= stock) {
-      alert(`No puedes agregar más de ${stock} unidades de este producto`);
+      showModal(`No puedes agregar más de ${stock} unidades de este producto en este talle`);
       return;
     }
 
@@ -321,7 +410,13 @@ const Product = () => {
 
     setLookAddCounts((prevCounts) => ({
       ...prevCounts,
-      [lookId]: currentCount + 1,
+      [lookId]: {
+        ...prevCounts[lookId],
+        [selectedColor]: {
+          ...prevCounts[lookId]?.[selectedColor],
+          [selectedSize]: (prevCounts[lookId]?.[selectedColor]?.[selectedSize] || 0) + 1,
+        },
+      },
     }));
   };
 
@@ -350,6 +445,7 @@ const Product = () => {
     if (e.target === e.currentTarget) {
       setIsSizeGuideOpen(false);
       setIsShopLookOpen(false);
+      closeModal();
     }
   };
 
@@ -391,20 +487,29 @@ const Product = () => {
 
   const handleAddToCart = () => {
     if (!product || !selectedColor || !selectedSize) {
-      alert("Por favor selecciona color y talla");
+      showModal("Por favor selecciona color y talla");
       return;
     }
     const stock = sizeStockMap[selectedSize] || 0;
+    const currentCount = addCounts[selectedColor]?.[selectedSize] || 0;
+
     if (stock <= 0) {
-      alert("El talle seleccionado no tiene stock");
+      showModal("El talle seleccionado no tiene stock");
       return;
     }
-    if (addCount >= stock) {
-      alert(`No puedes agregar más de ${stock} unidades de este producto`);
+    if (currentCount >= stock) {
+      showModal(`No puedes agregar más de ${stock} unidades de este producto en este talle`);
       return;
     }
+
     addToCart(product, selectedColor, selectedSize, cachedImages);
-    setAddCount((prevCount) => prevCount + 1);
+    setAddCounts((prevCounts) => ({
+      ...prevCounts,
+      [selectedColor]: {
+        ...prevCounts[selectedColor],
+        [selectedSize]: (prevCounts[selectedColor]?.[selectedSize] || 0) + 1,
+      },
+    }));
   };
 
   useEffect(() => {
@@ -519,7 +624,9 @@ const Product = () => {
               onClick={() => handleAddLookToCart(look, lookId)}
               className="w-full text-white uppercase text-xs"
             >
-              {lookAddCounts[lookId] > 0 ? `+ Add (${lookAddCounts[lookId]})` : "+ Add"}
+              {lookAddCounts[lookId]?.[selectedLookColor]?.[selectedLookSize] > 0
+                ? `+ Add (${lookAddCounts[lookId][selectedLookColor][selectedLookSize]})`
+                : "+ Add"}
             </button>
           </div>
         </div>
@@ -752,7 +859,7 @@ const Product = () => {
                   onClick={handleAddToCart}
                   className="w-full max-w-[280px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
                 >
-                  {addCount > 0 ? `(${addCount}) Added` : "+ Add to Bag"}
+                  {addCounts[selectedColor]?.[selectedSize] > 0 ? `(${addCounts[selectedColor]?.[selectedSize]}) Added` : "+ Add to Bag"}
                 </button>
                 <button
                   onClick={() => setIsShopLookOpen(true)}
@@ -876,7 +983,7 @@ const Product = () => {
                         onClick={handleFinishAdding}
                         className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5] backdrop-blur-[6px]"
                       >
-                        <p className="font-medium text-xs sm:text-sm md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#F2F2F2]">
+                        <p className="font-medium text-xs sm:text-sm md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
                           Finish Adding
                         </p>
                       </button>
@@ -921,6 +1028,7 @@ const Product = () => {
               </div>
             </div>
           )}
+          <Modal isOpen={isModalOpen} onClose={closeModal} message={modalMessage} />
         </>
       )}
     </div>
