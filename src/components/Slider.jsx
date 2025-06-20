@@ -37,6 +37,7 @@ export default function InitiationCollection() {
         src={isMobile ? option.mobileBgImage : option.bgImage}
         alt="Initiation collection"
         fill
+        priority
         className="absolute inset-0 object-cover"
       />
 
