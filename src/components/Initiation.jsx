@@ -182,12 +182,12 @@ const Initiation = ({ initialData }) => {
           <div className="relative h-[610px] w-full">
             <video
               ref={videoRef}
-              src="/initiation.mp4"
+              src="/initiation1.mp4"
               autoPlay
               loop
               muted={isMuted}
               playsInline
-              poster="/initiation-poster.jpg"
+              
               className="w-full h-full object-cover"
             />
             <button
