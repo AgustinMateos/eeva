@@ -54,8 +54,7 @@ const createPaymentLink = async (orderId) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': '*/*',
-      },
+        'Accept': '*/*' },
     });
 
     if (!response.ok) {
@@ -127,7 +126,15 @@ const OrderStep1 = () => {
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
-    setAddress((prev) => ({ ...prev, [name]: value }));
+
+    // Handle numeric inputs for telefono and numeroDocumento
+    if (name === 'telefono' || name === 'numeroDocumento') {
+      // Remove non-numeric characters
+      const numericValue = value.replace(/[^0-9]/g, '');
+      setAddress((prev) => ({ ...prev, [name]: numericValue }));
+    } else {
+      setAddress((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleDocumentSelect = (option) => {
@@ -329,9 +336,9 @@ const OrderStep1 = () => {
         .dropdown-item { padding: 8px 16px; color: white; font-size: 14px; cursor: pointer; }
         .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); }
         .email-overflow { max-width: 70%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .error-message { color: #ff4d4f; font-size: 12px; mar gin-top: 4px; }
+        .error-message { color: #ff4d4f; font-size: 12px; margin-top: 4px; }
         .custom-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .custom-alert-content {  border: 1px solid #F2F2F2; border-radius: 8px; padding: 24px; max-width: 400px; width: 90%; text-align: center; color: white; }
+        .custom-alert-content { border: 1px solid #F2F2F2; border-radius: 8px; padding: 24px; max-width: 400px; width: 90%; text-align: center; color: white; }
         .custom-alert-content p { font-size: 16px; margin-bottom: 20px; }
         .custom-alert-content button { background: #0D0D0DE5; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
         .custom-alert-content button:hover { background: #2C2C2CE5; }
@@ -400,14 +407,17 @@ const OrderStep1 = () => {
                         onChange={handleAddressChange}
                         placeholder="C. Área"
                       />
-                      <input
-                        className="w-[205px] text-[14px] placeholder-white md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
-                        type="text"
-                        name="telefono"
-                        value={address.telefono}
-                        onChange={handleAddressChange}
-                        placeholder="Teléfono / Celular"
-                      />
+                      <div className="w-[205px] md:w-[558px]">
+                        <input
+                          className="w-full text-[14px] placeholder-white h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                          type="number"
+                          name="telefono"
+                          value={address.telefono}
+                          onChange={handleAddressChange}
+                          placeholder="Teléfono / Celular"
+                          onWheel={(e) => e.target.blur()}
+                        />
+                      </div>
                     </div>
                     <div className="flex justify-between w-[90%] md:w-[713px]">
                       <div className="custom-dropdown">
@@ -432,14 +442,17 @@ const OrderStep1 = () => {
                           </div>
                         )}
                       </div>
-                      <input
-                        className="w-[205px] text-[14px] placeholder-white md:w-[558px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
-                        type="text"
-                        name="numeroDocumento"
-                        value={address.numeroDocumento}
-                        onChange={handleAddressChange}
-                        placeholder="Número de documento"
-                      />
+                      <div className="w-[205px] md:w-[558px]">
+                        <input
+                          className="w-full text-[14px] placeholder-white h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
+                          type="number"
+                          name="numeroDocumento"
+                          value={address.numeroDocumento}
+                          onChange={handleAddressChange}
+                          placeholder="Número de documento"
+                          onWheel={(e) => e.target.blur()}
+                        />
+                      </div>
                     </div>
                     <input
                       className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
@@ -650,72 +663,72 @@ const OrderStep1 = () => {
           </>
         ) : (
           <div className="w-[100%] md:w-[90%] flex flex-col items-start p-[10px]">
-    <h2 className="font-ibm-mono text-[22px] sm:text-[28px] leading-[64px] tracking-[-0.75px] align-middle uppercase text-white mb-4">
-      Detalle de la Orden
-    </h2>
-    <div className="w-[90%] md:w-[90%] xl:w-[100%] border-r border-r-[#D7D7D780]">
-      {/* Order Details Section */}
-      <div className="p-[15px] text-white">
-        <h3 className="font-ibm-mono text-[18px] leading-[24px] tracking-[-0.04em] uppercase text-white mb-4">
-          Información del Cliente
-        </h3>
-        <div className="flex flex-col gap-2">
-          <p className="text-sm">
-            <span className="font-medium">ID de la Orden:</span> {orderId}
-          </p>
-          <p className="text-sm">
-            <span className="font-medium">Nombre:</span> {info.nombres} {info.apellidos}
-          </p>
-          <p className="text-sm">
-            <span className="font-medium">Correo Electrónico:</span> {info.correo}
-          </p>
-          <p className="text-sm">
-            <span className="font-medium">Teléfono:</span> {address.codigoArea} {address.telefono}
-          </p>
-          <p className="text-sm">
-            <span className="font-medium">Dirección de Envío:</span> {formattedAddress}
-          </p>
-        </div>
-      </div>
-      {/* Existing Cart Items and Totals */}
-      <div className="divide-y divide-gray-400 p-[10px] text-white">
-        {cart.map((item, index) => (
-          <div
-            key={`${item.id}-${item.color}-${item.size}`}
-            className="relative w-full py-4 flex justify-between gap-4 pt-10"
-          >
-            <div className="w-24 h-24 relative">
-              <Image
-                src={'/products/' + item.image + '.webp'}
-                alt={item.name}
-                fill
-                className="object-contain"
-              />
-            </div>
-            <div className="flex flex-col gap-4">
-              <h3 className="font-medium">{item.name.toUpperCase()}</h3>
-              <div className="flex gap-2 items-center">
-                <p className="text-xs">{item.color}</p>
-                <p className="text-sm">|</p>
-                <p className="text-xs">{item.size}</p>
+            <h2 className="font-ibm-mono text-[22px] sm:text-[28px] leading-[64px] tracking-[-0.75px] align-middle uppercase text-white mb-4">
+              Detalle de la Orden
+            </h2>
+            <div className="w-[90%] md:w-[90%] xl:w-[100%] border-r border-r-[#D7D7D780]">
+              {/* Order Details Section */}
+              <div className="p-[15px] text-white">
+                <h3 className="font-ibm-mono text-[18px] leading-[24px] tracking-[-0.04em] uppercase text-white mb-4">
+                  Información del Cliente
+                </h3>
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm">
+                    <span className="font-medium">ID de la Orden:</span> {orderId}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">Nombre:</span> {info.nombres} {info.apellidos}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">Correo Electrónico:</span> {info.correo}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">Teléfono:</span> {address.codigoArea} {address.telefono}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">Dirección de Envío:</span> {formattedAddress}
+                  </p>
+                </div>
               </div>
-              <div className="flex gap-2 items-center">
-                <p className="text-xs">Item:</p>
-                <p className="text-xs">{item.quantity}</p>
-              </div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="flex gap-2 items-center">
-                <h3 className="font-medium text-md">ARS</h3>
-                <span className="text-lg font-medium text-md">
-                  ${(item.price * item.quantity).toLocaleString('es-ES', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </span>
-              </div>
-            </div>
-          </div>
+              {/* Existing Cart Items and Totals */}
+              <div className="divide-y divide-gray-400 p-[10px] text-white">
+                {cart.map((item, index) => (
+                  <div
+                    key={`${item.id}-${item.color}-${item.size}`}
+                    className="relative w-full py-4 flex justify-between gap-4 pt-10"
+                  >
+                    <div className="w-24 h-24 relative">
+                      <Image
+                        src={'/products/' + item.image + '.webp'}
+                        alt={item.name}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-4">
+                      <h3 className="font-medium">{item.name.toUpperCase()}</h3>
+                      <div className="flex gap-2 items-center">
+                        <p className="text-xs">{item.color}</p>
+                        <p className="text-sm">|</p>
+                        <p className="text-xs">{item.size}</p>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <p className="text-xs">Item:</p>
+                        <p className="text-xs">{item.quantity}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="flex gap-2 items-center">
+                        <h3 className="font-medium text-md">ARS</h3>
+                        <span className="text-lg font-medium text-md">
+                          ${(item.price * item.quantity).toLocaleString('es-ES', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 ))}
                 <div className="pt-10">
                   <div className="w-full flex gap-2 items-center justify-between text-white">
