@@ -97,7 +97,7 @@ const Loader = ({ loading, imageLoaded }) => {
   );
 };
 
-const Accessoriesm = () => {
+const Accesoriesm = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -138,14 +138,12 @@ const Accessoriesm = () => {
         href={`/collections/initiation/product/${product._id}`}
         className="group w-full max-w-[289px] mx-auto h-auto relative flex flex-col"
       >
-        <div className="relative w-full h-[315px] md:h-[589px] xl:h-[440px] 2xl:h-[450px]">
+        <div className="relative w-full h-[240px] sm:h-[315px] md:h-[589px] xl:h-[440px] 2xl:h-[450px]">
           <Image
             src={`/static/${product.models.images.static}.webp`}
             alt={product.displayName}
-            width={289}
-            height={540}
-            sizes="(max-width: 768px) 139px, 289px"
-            className="object-contain w-full h-auto"
+            fill
+            className="object-contain"
           />
           <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
@@ -169,8 +167,8 @@ const Accessoriesm = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w[95rem] border-b border-[#AEAEAE] uppercase">
-        ACCESORIES - MEN
+      <p className="text-white text-lg w-full max-w-[20rem] sm:max-w-[75rem] 2xl:max-w-[95rem] border-b border-[#AEAEAE] uppercase">
+        ACCESSORIES - MEN
       </p>
       <div className="w-full max-w-[90%] mx-auto mt-[40px]">
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -188,4 +186,4 @@ const Accessoriesm = () => {
   );
 };
 
-export default React.memo(Accessoriesm);
+export default React.memo(Accesoriesm);
