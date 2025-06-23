@@ -7,7 +7,7 @@ export default async function Page({ params }) {
     <div className="min-h-[100vh] w-full bg-gradient-to-r from-[#303F48] to-[#6D7276]">
       <Product id={id} />
       
-      <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px]">
+      <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px] 2xl:w-[100%]">
             <Footer />
           </div>
     </div>

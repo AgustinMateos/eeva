@@ -155,7 +155,7 @@ const Navbar = () => {
           transition: background-color 0.3s ease;
         }
       `}</style>
-      <div className="flex justify-between md:justify-around h-[90px] items-center max-w-[1220px] mx-auto">
+      <div className="flex justify-between md:justify-around h-[90px] items-center max-w-[1220px] 2xl:marker:max-w-[1315px] mx-auto">
         <div className="min-w-[90px] w-auto md:w-[340px] h-[36px] flex justify-around items-center text-[#FFFFFF]">
           {/* Botón hamburguesa */}
           <div ref={menuRef}>
