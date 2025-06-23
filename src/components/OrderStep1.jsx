@@ -54,7 +54,8 @@ const createPaymentLink = async (orderId) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': '*/*' },
+        'Accept': '*/*',
+      },
     });
 
     if (!response.ok) {
@@ -236,7 +237,9 @@ const OrderStep1 = () => {
       },
       shippingAddress: {
         areaCode: String(address.codigoArea),
+        phone: String(address.codigoArea + address.telefono),
         country: address.pais,
+        city: address.region,
         postalCode: String(address.codigoPostal),
         street: address.calle,
       },
@@ -528,14 +531,14 @@ const OrderStep1 = () => {
                             type="radio"
                             name="shipping"
                             value="Correo Argentino a Domicilio"
-                            data-cost="8000"
+                            data-cost="16000"
                             checked={selectedShipping.name === 'Correo Argentino a Domicilio'}
                             onChange={handleShippingChange}
                             className="custom-radio mr-4 ml-4"
                           />
                           <span className="text-sm">Correo Argentino a Domicilio</span>
                         </div>
-                        <span className="text-sm">ARS $8.000</span>
+                        <span className="text-sm">ARS $16.000</span>
                       </label>
                       <p className="text-xs text-gray-400 w-[80%] md:w-[90%]">
                         Una vez despachado el paquete, la gestión y entrega quedan a cargo de Correo Argentino.
