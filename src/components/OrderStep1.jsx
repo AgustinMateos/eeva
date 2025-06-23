@@ -70,6 +70,12 @@ const createPaymentLink = async (orderId) => {
   }
 };
 
+// Function to validate email
+const validateEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+};
+
 const OrderStep1 = () => {
   const { cart, totalPrice } = useCart();
   const router = useRouter();
@@ -90,6 +96,7 @@ const OrderStep1 = () => {
     codigoPostal: '',
     calle: '',
   });
+  const [emailError, setEmailError] = useState('');
   const [showAdditionalInputs, setShowAdditionalInputs] = useState(false);
   const [selectedShipping, setSelectedShipping] = useState({ name: '', cost: 0 });
   const [paymentDetails, setPaymentDetails] = useState({
@@ -99,12 +106,23 @@ const OrderStep1 = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
+  const [customAlert, setCustomAlert] = useState({ show: false, message: '' });
 
   const documentOptions = ['DNI', 'Pasaporte'];
 
   const handleInfoChange = (e) => {
     const { name, value } = e.target;
     setInfo((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'correo') {
+      if (!value) {
+        setEmailError('El correo electrónico es obligatorio.');
+      } else if (!validateEmail(value)) {
+        setEmailError('Por favor, ingrese un correo electrónico válido (ejemplo: usuario@dominio.com).');
+      } else {
+        setEmailError('');
+      }
+    }
   };
 
   const handleAddressChange = (e) => {
@@ -122,6 +140,7 @@ const OrderStep1 = () => {
       info.nombres &&
       info.apellidos &&
       info.correo &&
+      !emailError &&
       address.codigoArea &&
       address.telefono &&
       address.numeroDocumento &&
@@ -136,8 +155,13 @@ const OrderStep1 = () => {
     if (areAllFieldsFilled()) {
       setShowAdditionalInputs(true);
     } else {
-      alert('Por favor, completa todos los campos antes de continuar.');
+      const errorMessage = emailError || 'Por favor, completa todos los campos antes de continuar.';
+      setCustomAlert({ show: true, message: errorMessage });
     }
+  };
+
+  const closeCustomAlert = () => {
+    setCustomAlert({ show: false, message: '' });
   };
 
   const handleBack = () => {
@@ -154,12 +178,12 @@ const OrderStep1 = () => {
 
   const generateOrder = async () => {
     if (!selectedShipping.name) {
-      alert('Por favor, selecciona un método de envío antes de confirmar la orden.');
+      setCustomAlert({ show: true, message: 'Por favor, selecciona un método de envío antes de confirmar la orden.' });
       return;
     }
 
     if (!cart.length) {
-      alert('El carrito está vacío.');
+      setCustomAlert({ show: true, message: 'El carrito está vacío.' });
       return;
     }
 
@@ -173,23 +197,23 @@ const OrderStep1 = () => {
 
     for (const item of cartWithIds) {
       if (!item.id) {
-        alert('ID de producto faltante.');
+        setCustomAlert({ show: true, message: 'ID de producto faltante.' });
         return;
       }
       if (!item.quantity || item.quantity < 1) {
-        alert('Cantidad inválida.');
+        setCustomAlert({ show: true, message: 'Cantidad inválida.' });
         return;
       }
       if (!item.price || item.price <= 0) {
-        alert('Precio inválido.');
+        setCustomAlert({ show: true, message: 'Precio inválido.' });
         return;
       }
       if (!item.colorId) {
-        alert(`No se pudo obtener el ID del color para ${item.color}.`);
+        setCustomAlert({ show: true, message: `No se pudo obtener el ID del color para ${item.color}.` });
         return;
       }
       if (!item.sizeId) {
-        alert(`No se pudo obtener el ID del talle para ${item.size}.`);
+        setCustomAlert({ show: true, message: `No se pudo obtener el ID del talle para ${item.size}.` });
         return;
       }
     }
@@ -232,11 +256,11 @@ const OrderStep1 = () => {
     };
 
     if (!order.userInfo.firstName || !order.userInfo.email || !order.shippingAddress.street) {
-      alert('Datos de usuario o dirección incompletos.');
+      setCustomAlert({ show: true, message: 'Datos de usuario o dirección incompletos.' });
       return;
     }
     if (!order.items.length) {
-      alert('No hay ítems en la orden.');
+      setCustomAlert({ show: true, message: 'No hay ítems en la orden.' });
       return;
     }
 
@@ -265,16 +289,16 @@ const OrderStep1 = () => {
 
       setOrderId(newOrderId);
       setShowOrderConfirmation(true);
-      alert('Orden creada exitosamente!');
+      setCustomAlert({ show: true, message: 'Orden creada exitosamente!' });
     } catch (error) {
       console.error('Error creating order:', error);
-      alert(`Error: ${error.message}`);
+      setCustomAlert({ show: true, message: `Error: ${error.message}` });
     }
   };
 
   const handlePayOrder = async () => {
     if (!orderId) {
-      alert('No hay una orden válida para pagar.');
+      setCustomAlert({ show: true, message: 'No hay una orden válida para pagar.' });
       return;
     }
 
@@ -286,7 +310,7 @@ const OrderStep1 = () => {
       window.location.href = paymentLink;
     } catch (error) {
       console.error('Error generating payment link:', error);
-      alert(`Error: ${error.message}`);
+      setCustomAlert({ show: true, message: `Error: ${error.message}` });
     }
   };
 
@@ -305,8 +329,24 @@ const OrderStep1 = () => {
         .dropdown-item { padding: 8px 16px; color: white; font-size: 14px; cursor: pointer; }
         .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); }
         .email-overflow { max-width: 70%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .error-message { color: #ff4d4f; font-size: 12px; mar gin-top: 4px; }
+        .custom-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .custom-alert-content {  border: 1px solid #F2F2F2; border-radius: 8px; padding: 24px; max-width: 400px; width: 90%; text-align: center; color: white; }
+        .custom-alert-content p { font-size: 16px; margin-bottom: 20px; }
+        .custom-alert-content button { background: #0D0D0DE5; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+        .custom-alert-content button:hover { background: #2C2C2CE5; }
+        .disabled-button { background: #4B4B4B !important; cursor: not-allowed !important; }
         @media (max-width: 767px) { .info-section button { padding: 4px 8px !important; font-size: 12px !important; } .email-overflow { max-width: 60% !important; } }
       `}</style>
+
+      {customAlert.show && (
+        <div className="custom-alert">
+          <div className="custom-alert-content bg-gray-500/40">
+            <p>{customAlert.message}</p>
+            <button onClick={closeCustomAlert}>Aceptar</button>
+          </div>
+        </div>
+      )}
 
       <div className="w-[100%] flex-col-reverse md:w-[85%] flex md:flex-row">
         {!showOrderConfirmation ? (
@@ -336,14 +376,17 @@ const OrderStep1 = () => {
                       onChange={handleInfoChange}
                       placeholder="Apellidos"
                     />
-                    <input
-                      className="w-[90%] md:w-[713px] text-[14px] placeholder-white h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
-                      type="email"
-                      name="correo"
-                      value={info.correo}
-                      onChange={handleInfoChange}
-                      placeholder="Correo electrónico"
-                    />
+                    <div className="w-[90%] md:w-[713px]">
+                      <input
+                        className={`w-full text-[14px] placeholder-white h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border ${emailError ? 'border-[#ff4d4f]' : 'border-[#F2F2F2]'} bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white`}
+                        type="email"
+                        name="correo"
+                        value={info.correo}
+                        onChange={handleInfoChange}
+                        placeholder="Correo electrónico"
+                      />
+                      {emailError && <p className="error-message">{emailError}</p>}
+                    </div>
                   </div>
                   <div className="h-[400px] flex flex-col justify-between items-center md:items-start">
                     <h2 className="font-ibm text-[22px] w-[90%] md:w-[713px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white">
@@ -482,7 +525,7 @@ const OrderStep1 = () => {
                         <span className="text-sm">ARS $16.000</span>
                       </label>
                       <p className="text-xs text-gray-400 w-[80%] md:w-[90%]">
-                     Una vez despachado el paquete, la gestion y entrega quedan a cargo de Correo Argentino.
+                        Una vez despachado el paquete, la gestión y entrega quedan a cargo de Correo Argentino.
                       </p>
                     </div>
                   </div>
@@ -515,7 +558,10 @@ const OrderStep1 = () => {
                     </Link>
                     <button
                       onClick={handleContinue}
-                      className="text-white w-[90%] pb-[10px] md:w-[160px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
+                      className={`text-white w-[90%] pb-[10px] md:w-[160px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] transition-all duration-200 uppercase text-center ${
+                        areAllFieldsFilled() ? 'bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5]' : 'disabled-button'
+                      }`}
+                      disabled={!areAllFieldsFilled()}
                     >
                       Continuar
                     </button>
@@ -603,46 +649,73 @@ const OrderStep1 = () => {
             </div>
           </>
         ) : (
-          <div className="w-[100%] md:w-[85%] flex flex-col items-center">
-            <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white mb-4">
-              Detalle de la Orden
-            </h2>
-            <div className="w-[90%] md:w-[70%] xl:w-[100%] border-r border-r-[#D7D7D780]">
-              <div className="divide-y divide-gray-400 p-[10px] text-white">
-                {cart.map((item, index) => (
-                  <div
-                    key={`${item.id}-${item.color}-${item.size}`}
-                    className="relative w-full py-4 flex justify-between gap-4 pt-10"
-                  >
-                    <div className="w-24 h-24 relative">
-                      <Image
-                        src={'/products/' + item.image + '.webp'}
-                        alt={item.name}
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-4">
-                      <h3 className="font-medium">{item.name.toUpperCase()}</h3>
-                      <div className="flex gap-2 items-center">
-                        <p className="text-xs">{item.color}</p>
-                        <p className="text-sm">|</p>
-                        <p className="text-xs">{item.size}</p>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <p className="text-xs">Item:</p>
-                        <p className="text-xs">{item.quantity}</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="flex gap-2 items-center">
-                        <h3 className="font-medium text-md">ARS</h3>
-                        <span className="text-lg font-medium text-md">
-                          ${(item.price * item.quantity).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+          <div className="w-[100%] md:w-[90%] flex flex-col items-start p-[10px]">
+    <h2 className="font-ibm-mono text-[22px] sm:text-[28px] leading-[64px] tracking-[-0.75px] align-middle uppercase text-white mb-4">
+      Detalle de la Orden
+    </h2>
+    <div className="w-[90%] md:w-[90%] xl:w-[100%] border-r border-r-[#D7D7D780]">
+      {/* Order Details Section */}
+      <div className="p-[15px] text-white">
+        <h3 className="font-ibm-mono text-[18px] leading-[24px] tracking-[-0.04em] uppercase text-white mb-4">
+          Información del Cliente
+        </h3>
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">
+            <span className="font-medium">ID de la Orden:</span> {orderId}
+          </p>
+          <p className="text-sm">
+            <span className="font-medium">Nombre:</span> {info.nombres} {info.apellidos}
+          </p>
+          <p className="text-sm">
+            <span className="font-medium">Correo Electrónico:</span> {info.correo}
+          </p>
+          <p className="text-sm">
+            <span className="font-medium">Teléfono:</span> {address.codigoArea} {address.telefono}
+          </p>
+          <p className="text-sm">
+            <span className="font-medium">Dirección de Envío:</span> {formattedAddress}
+          </p>
+        </div>
+      </div>
+      {/* Existing Cart Items and Totals */}
+      <div className="divide-y divide-gray-400 p-[10px] text-white">
+        {cart.map((item, index) => (
+          <div
+            key={`${item.id}-${item.color}-${item.size}`}
+            className="relative w-full py-4 flex justify-between gap-4 pt-10"
+          >
+            <div className="w-24 h-24 relative">
+              <Image
+                src={'/products/' + item.image + '.webp'}
+                alt={item.name}
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <h3 className="font-medium">{item.name.toUpperCase()}</h3>
+              <div className="flex gap-2 items-center">
+                <p className="text-xs">{item.color}</p>
+                <p className="text-sm">|</p>
+                <p className="text-xs">{item.size}</p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <p className="text-xs">Item:</p>
+                <p className="text-xs">{item.quantity}</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="flex gap-2 items-center">
+                <h3 className="font-medium text-md">ARS</h3>
+                <span className="text-lg font-medium text-md">
+                  ${(item.price * item.quantity).toLocaleString('es-ES', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+            </div>
+          </div>
                 ))}
                 <div className="pt-10">
                   <div className="w-full flex gap-2 items-center justify-between text-white">
@@ -676,10 +749,10 @@ const OrderStep1 = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[100%] md:w-[713px] pt-[60px] flex-col-reverse h-[150px] md:flex-row flex items-center justify-between">
+              <div className="w-[100%] md:w-[713px] xl:w-[100%] pr-[10px] pt-[60px] flex-col-reverse h-[150px] md:flex-row flex items-center justify-between">
                 <button
                   onClick={() => setShowOrderConfirmation(false)}
-                  className="inline-block pr-2 text-white underline hover:text-gray-400 transition"
+                  className="inline-block pr-2 text-white underline hover:text-gray-400 transition text-sm"
                 >
                   Volver a editar
                 </button>
