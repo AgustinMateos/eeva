@@ -13,6 +13,7 @@ const Loader = dynamic(() => import('./Loader'), { ssr: false });
 const Initiation = ({ initialData }) => {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [isMobile, setIsMobile] = useState(false); // State to track mobile
   const [products, setProducts] = useState(initialData?.products || []);
   const [description, setDescription] = useState(initialData?.description || '');
   const [title, setTitle] = useState(initialData?.title || '');
@@ -27,7 +28,23 @@ const Initiation = ({ initialData }) => {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const hasModalBeenClosed = useRef(false);
+  const videoSource = isMobile ? '/initiationvertical.mp4' : '/initiation1.mp4';
 
+  // Check window width to determine if mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust threshold as needed
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   useEffect(() => {
     // Only fetch if no initial data is provided (client-side fallback)
     if (!initialData) {
@@ -179,24 +196,24 @@ const Initiation = ({ initialData }) => {
             {description}
           </p>
 
-          <div className="relative w-full  md:aspect-[16/9]">
-  <video
-    ref={videoRef}
-    src="/initiation1.mp4"
-    autoPlay
-    loop
-    muted={isMuted}
-    playsInline
-    className="w-full h-full object-contain md:object-cover"
-  />
-  <button
-    onClick={toggleSound}
-    className="absolute bottom-4 flex justify-center items-center left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded-md text-sm"
-  >
-    {isMuted ? 'ALLOW SOUND' : 'DENY SOUND'}
-    <Image src="/sound.svg" alt="Control de Sonido" width={32} height={32} />
-  </button>
-</div>
+          <div className="relative w-full md:aspect-[16/9]">
+            <video
+              ref={videoRef}
+              src={videoSource}
+              autoPlay
+              loop
+              muted={isMuted}
+              playsInline
+              className="w-full h-full object-contain md:object-cover"
+            />
+            <button
+              onClick={toggleSound}
+              className="absolute bottom-4 flex justify-center items-center left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded-md text-sm"
+            >
+              {isMuted ? 'ALLOW SOUND' : 'DENY SOUND'}
+              <Image src="/sound.svg" alt="Control de Sonido" width={32} height={32} />
+            </button>
+          </div>
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
             {/* Primer grid de tarjetas de productos (primeros 8) */}
