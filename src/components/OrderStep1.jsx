@@ -607,8 +607,8 @@ const OrderStep1 = () => {
             <h2 className="font-ibm text-[22px] leading-[64px] tracking-[-0.04em] align-middle uppercase text-white mb-4">
               Detalle de la Orden
             </h2>
-            <div className="w-[90%] md:w-[70%] border-r border-r-[#D7D7D780]">
-              <div className="divide-y divide-gray-400 text-white">
+            <div className="w-[90%] md:w-[70%] xl:w-[100%] border-r border-r-[#D7D7D780]">
+              <div className="divide-y divide-gray-400 p-[10px] text-white">
                 {cart.map((item, index) => (
                   <div
                     key={`${item.id}-${item.color}-${item.size}`}
