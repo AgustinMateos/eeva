@@ -533,7 +533,7 @@ const OrderStep1 = () => {
                             type="radio"
                             name="shipping"
                             value="Correo Argentino a Domicilio"
-                            data-cost="8000"
+                            data-cost="1"
                             checked={selectedShipping.name === 'Correo Argentino a Domicilio'}
                             onChange={handleShippingChange}
                             className="custom-radio mr-4 ml-4"
