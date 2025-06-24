@@ -770,7 +770,7 @@ const Product = () => {
                 </p>
               </div>
               <div className="flex flex-row md:flex-col justify-around md:justify-center">
-                <div className="h-auto md:h-[140px] w-[42%] md:w-full flex justify-evenly flex-col">
+                <div className="h-auto md:h-[140px] w-[42%] pt-[10px] md:pt-[0px] md:w-full flex md:justify-evenly flex-col">
                   {product.discount > 0 && (
                     <div className="flex items-center">
                       <div className="w-[43px] flex justify-center md:w-[60px] h-[25px] md:px-4 gap-[10px] border rounded-[2px] bg-[#FCFDFD] text-[#232323] mr-[10px]">
