@@ -232,7 +232,7 @@ const Initiation = ({ initialData }) => {
                       alt={`Imagen central ${card.id}`}
                       width={500}
                       height={900}
-                      loading="lazy"
+                      loading="eager"
                       sizes="(max-width: 768px) 80vw, 500px"
                       className="object-cover w-full h-[400px] md:h-auto"
                     />

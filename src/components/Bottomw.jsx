@@ -143,6 +143,7 @@ const Bottomw = () => {
             src={`/static/${product.models.images.static}.webp`}
             alt={product.displayName}
             fill
+            priority
             className="object-contain"
           />
           <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
