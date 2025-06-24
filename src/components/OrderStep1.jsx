@@ -665,11 +665,11 @@ const OrderStep1 = () => {
             </div>
           </>
         ) : (
-          <div className="w-[100%] md:w-[90%] flex flex-col items-start p-[10px]">
+          <div className="w-[100%] md:w-[100%] flex flex-col items-start p-[10px]">
             <h2 className="font-ibm-mono text-[22px] sm:text-[28px] leading-[64px] tracking-[-0.75px] align-middle uppercase text-white mb-4">
               Detalle de la Orden
             </h2>
-            <div className="w-[100%] md:w-[90%] xl:w-[100%] border-r border-r-[#D7D7D780]">
+            <div className="w-[100%] md:w-[100%] xl:w-[100%] border-r border-r-[#D7D7D780]">
               {/* Order Details Section */}
               <div className="p-[15px] text-white">
                 <h3 className="font-ibm-mono text-[18px] leading-[24px] tracking-[-0.04em] uppercase text-white mb-4">
