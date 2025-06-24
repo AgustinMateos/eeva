@@ -44,8 +44,7 @@ export default function CartPage() {
                       Envíos
                     </span>
                     <span className="font-medium text-[10px] text-[#A2A2A2]">
-                      Los pedidos normalmente se envían dentro de los 3 días
-                      habiles.
+                      Los pedidos normalmente se despachan dentro al Corro Argentino dentro de los primeros 3 dias hábiles.
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 max-w-[250px]">

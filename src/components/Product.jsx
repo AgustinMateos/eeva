@@ -966,9 +966,9 @@ const Product = () => {
                         <div
                           className={`hidden sm:grid sm:grid-cols-3 gap-4 mx-auto ${
                             product.looks.length === 1
-                              ? "max-w-[284px]"
+                              ? "max-w-[684px]"
                               : product.looks.length === 2
-                              ? "max-w-[568px]"
+                              ? "max-w-[768px]"
                               : "max-w-[852px]"
                           }`}
                         >

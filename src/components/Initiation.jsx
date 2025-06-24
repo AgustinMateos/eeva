@@ -412,6 +412,7 @@ export async function getServerSideProps() {
 }
 
 export default Initiation;
+
 // 'use client';
 
 // import React, { useState, useEffect, useRef, useMemo } from 'react';

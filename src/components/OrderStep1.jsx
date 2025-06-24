@@ -710,7 +710,7 @@ const OrderStep1 = () => {
                         className="object-contain"
                       />
                     </div>
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col md:min-w-[190px] gap-4">
                       <h3 className="font-medium">{item.name.toUpperCase()}</h3>
                       <div className="flex gap-2 items-center">
                         <p className="text-xs">{item.color}</p>

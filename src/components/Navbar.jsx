@@ -300,11 +300,11 @@ const Navbar = () => {
                               Bottom
                             </a>
                             <a
-                              href="/collections/accesoriesm"
+                              href="/collections/accessoriesm"
                               className="flex h-[30px] text-center"
                               onClick={() => setIsHombreOpen(false)}
                             >
-                              Accesories
+                              Accessories
                             </a>
                           </div>
                         </div>
@@ -348,11 +348,11 @@ const Navbar = () => {
                               Bottom
                             </a>
                             <a
-                              href="/collections/accesoriesg"
+                              href="/collections/accessoriesg"
                               className="flex h-[30px] text-center"
                               onClick={() => setIsMujerOpen(false)}
                             >
-                              Accesories
+                              Accessories
                             </a>
                           </div>
                         </div>
@@ -445,11 +445,11 @@ const Navbar = () => {
                         />
                       </a>
                       <a
-                        href="/collections/accesoriesm"
+                        href="/collections/accessoriesm"
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
                       >
-                        Accesories
+                        Accessories
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -501,11 +501,11 @@ const Navbar = () => {
                         />
                       </a>
                       <a
-                        href="/collections/accesoriesg"
+                        href="/collections/accessoriesg"
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsMujerOpen(false)}
                       >
-                        Accesories
+                        Accessories
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
