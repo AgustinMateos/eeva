@@ -9,8 +9,8 @@ const SuccessPage = () => {
   }, []); // Empty dependency array ensures this runs once on mount
 
   return (
-    <div className="min-h-[100vh] bg-gradient-to-r from-[#303F48] to-[#6D7276] w-full flex flex-col justify-center items-center pt-[150px] text-white">
-     <div className="flex justify-center w-[390px] items-center flex-col flex-grow">
+    <div className="min-h-[100vh] bg-gradient-to-r from-[#303F48] to-[#6D7276] w-full flex flex-col justify-center items-center md:pt-[150px] text-white">
+     <div className="flex justify-center md:w-[590px] items-center flex-col flex-grow">
         
         <Link href="/collections/slider"  >
           <Image
@@ -24,6 +24,13 @@ const SuccessPage = () => {
         <h2 className=" pt-[60px] font-ibm-mono text-[28px] leading-[64px] tracking-[-0.75px] uppercase mb-4">
         ¡Pago Exitoso!
       </h2>
+      <p className="p-[10px] pt-[60px] font-ibm-mono text-[18px] leading-[34px] tracking-[-0.75px] uppercase mb-4">
+        En la brevedad se remitirá la orden al email registrado. Gracias por tu compra!.
+      </p>
+
+      <p className=" pt-[60px]  font-ibm-mono text-[18px] leading-[34px] tracking-[-0.75px] uppercase mb-4">
+         Gracias por tu compra!
+      </p>
       <div className="w-full pt-[60px] flex justify-center">
         <Link
           href="/collections/slider"
