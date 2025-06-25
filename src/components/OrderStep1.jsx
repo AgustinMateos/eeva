@@ -191,12 +191,12 @@ const OrderStep1 = () => {
       setCustomAlert({ show: true, message: 'Por favor, selecciona un método de envío antes de confirmar la orden.' });
       return;
     }
-
+  
     if (!cart.length) {
       setCustomAlert({ show: true, message: 'El carrito está vacío.' });
       return;
     }
-
+  
     const cartWithIds = await Promise.all(
       cart.map(async (item) => {
         const colorId = await fetchColorId(item.color);
@@ -204,7 +204,7 @@ const OrderStep1 = () => {
         return { ...item, colorId, sizeId };
       })
     );
-
+  
     for (const item of cartWithIds) {
       if (!item.id) {
         setCustomAlert({ show: true, message: 'ID de producto faltante.' });
@@ -227,9 +227,9 @@ const OrderStep1 = () => {
         return;
       }
     }
-
+  
     const amountPerInstallment = (totalPrice + selectedShipping.cost) / paymentDetails.numberOfInstallments;
-
+  
     const order = {
       userInfo: {
         firstName: info.nombres,
@@ -250,7 +250,10 @@ const OrderStep1 = () => {
         pickupPoint: null,
       },
       paymentDetails: {
-        totalAmount: Number(totalPrice + selectedShipping.cost),
+        totalAmount: Number((totalPrice + selectedShipping.cost).toFixed(2)),
+        subtotalAmount: Number(totalPrice.toFixed(2)),
+        discountAmount: 0,
+        shippingPrice: Number(selectedShipping.cost.toFixed(2)),
         currency: 'ARS',
         paymentMethod: paymentDetails.paymentMethod.toUpperCase().replace(' ', '_'),
         installments: {
@@ -261,12 +264,12 @@ const OrderStep1 = () => {
       items: cartWithIds.map((item) => ({
         product: item.id,
         quantity: item.quantity,
-        price: Number(item.price),
+        price: Number(item.price.toFixed(2)),
         color: item.colorId,
         size: item.sizeId,
       })),
     };
-
+  
     if (!order.userInfo.firstName || !order.userInfo.email || !order.shippingAddress.street) {
       setCustomAlert({ show: true, message: 'Datos de usuario o dirección incompletos.' });
       return;
@@ -275,30 +278,29 @@ const OrderStep1 = () => {
       setCustomAlert({ show: true, message: 'No hay ítems en la orden.' });
       return;
     }
-
+  
     try {
       const orderResponse = await fetch('https://eeva-api.vercel.app/api/v1/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order),
       });
-
-      console.log('Order response status:', orderResponse.status); // Debug status
+  
+      console.log('Order response status:', orderResponse.status);
       if (!orderResponse.ok) {
         const errorText = await orderResponse.text();
-        console.log('Order response error:', errorText); // Debug error body
+        console.log('Order response error:', errorText);
         throw new Error(`Error al crear la orden: ${orderResponse.statusText} - ${errorText}`);
       }
-
+  
       const orderResult = await orderResponse.json();
-      console.log('Order creation response:', orderResult); // Debug full response
-
-      // Try multiple possible ID fields
+      console.log('Order creation response:', orderResult);
+  
       const newOrderId = orderResult.order?._id || orderResult._id || orderResult.id || orderResult.orderId;
       if (!newOrderId) {
         throw new Error('No se recibió el ID de la orden en la respuesta. Verifica la estructura de la respuesta.');
       }
-
+  
       setOrderId(newOrderId);
       setShowOrderConfirmation(true);
       setCustomAlert({ show: true, message: 'Orden creada exitosamente!' });
