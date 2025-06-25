@@ -12,7 +12,7 @@ const Loader = dynamic(() => import('./Loader'), { ssr: false });
 
 const Initiation = ({ initialData }) => {
   const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isMobile, setIsMobile] = useState(false); // State to track mobile
   const [products, setProducts] = useState(initialData?.products || []);
   const [description, setDescription] = useState(initialData?.description || '');
