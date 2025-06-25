@@ -12,7 +12,7 @@ export default function Home() {
   const today = new Date();
 
   // Fecha de activación del slider (23 de abril de 2025)
-  const releaseDate = new Date("2025-06-26");
+  const releaseDate = new Date("2025-06-25");
 
   // Redirección si la fecha se cumple
   useEffect(() => {
