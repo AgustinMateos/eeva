@@ -320,7 +320,7 @@ const Initiation = ({ initialData }) => {
                   Subscribe to Our Newsletter
                 </h3>
                 <p className="text-gray-300 text-sm mb-4 text-center">
-                  Be the first to know when we go live!
+                  Be the first to know!
                 </p>
                 <form onSubmit={handleSubmit} className="flex flex-col md:flex-row">
                   <input

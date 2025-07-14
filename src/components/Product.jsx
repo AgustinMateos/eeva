@@ -787,11 +787,11 @@ const Product = () => {
                     <p className="uppercase mr-1">Ars $</p>
                     <span>{formatPrice(discountedPrice)}</span>
                   </div>
-                  {/* <div>
+                  <div>
                     <p className="h-[152px] md:h-auto font-['IBM_Plex_Mono'] font-normal text-[12px] leading-[16px] tracking-[-0.04em] align-middle">
                       3 cuotas sin interés en bancos seleccionados
                     </p>
-                  </div> */}
+                  </div>
                 </div>
                 <div className="h-[213px] flex flex-col justify-around w-[35%] md:w-full">
                   <div>
