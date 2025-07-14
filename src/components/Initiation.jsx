@@ -6,14 +6,22 @@ import Link from 'next/link';
 import Axios from 'axios';
 import dynamic from 'next/dynamic';
 
-// Dynamically import Footer to reduce initial bundle size
+// Currency formatter for Argentine Pesos (ARS)
+const priceFormatter = new Intl.NumberFormat('es-AR', {
+  style: 'currency',
+  currency: 'ARS',
+  minimumFractionDigits: 0, // No decimals for whole peso amounts
+  maximumFractionDigits: 0,
+});
+
+// Dynamically import Footer and Loader
 const Footer = dynamic(() => import('./Footer'), { ssr: false });
 const Loader = dynamic(() => import('./Loader'), { ssr: false });
 
 const Initiation = ({ initialData }) => {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false); // State to track mobile
+  const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState(initialData?.products || []);
   const [description, setDescription] = useState(initialData?.description || '');
   const [title, setTitle] = useState(initialData?.title || '');
@@ -22,7 +30,6 @@ const Initiation = ({ initialData }) => {
   const [footerImage, setFooterImage] = useState(initialData?.footerImage || '');
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState(null);
-  // Modal state
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -30,23 +37,16 @@ const Initiation = ({ initialData }) => {
   const hasModalBeenClosed = useRef(false);
   const videoSource = isMobile ? '/initiationvertical.mp4' : '/initiation1.mp4';
 
-  // Check window width to determine if mobile
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust threshold as needed
+      setIsMobile(window.innerWidth <= 768);
     };
-
-    // Set initial value
     handleResize();
-
-    // Add event listener for resize
     window.addEventListener('resize', handleResize);
-
-    // Cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   useEffect(() => {
-    // Only fetch if no initial data is provided (client-side fallback)
     if (!initialData) {
       const fetchInitiationCollection = async () => {
         try {
@@ -57,13 +57,17 @@ const Initiation = ({ initialData }) => {
             (collection) => collection.title.toUpperCase() === 'INITIATION'
           );
           if (initiationCollection) {
-            const formattedProducts = initiationCollection.products.map((product) => ({
-              id: product._id,
-              title: product.displayName || product.name || 'Producto sin título',
-              subtitle: product.subtitle,
-              image: `/static/${product.models.images.static}.webp`,
-              gender: product.gender || 'unknown',
-            }));
+            const formattedProducts = initiationCollection.products.map((product) => {
+              const price = Number(product.price); // Ensure price is a number
+              return {
+                id: product._id,
+                title: product.displayName || product.name || 'Producto sin título',
+                subtitle: product.subtitle,
+                image: `/static/${product.models.images.static}.webp`,
+                gender: product.gender || 'unknown',
+                price: isNaN(price) ? 'N/A' : price, // Fallback if price is not a number
+              };
+            });
 
             const sortedProducts = [];
             const maleProducts = formattedProducts.filter((p) => p.gender.toLowerCase() === 'male');
@@ -105,7 +109,6 @@ const Initiation = ({ initialData }) => {
       fetchInitiationCollection();
     }
 
-    // Show modal after 5 seconds if it hasn't been closed
     const timer = setTimeout(() => {
       if (!hasModalBeenClosed.current) {
         setShowModal(true);
@@ -135,7 +138,7 @@ const Initiation = ({ initialData }) => {
       setEmail('');
       setTimeout(() => {
         closeModal();
-      }, 2000); // Close modal after 2 seconds
+      }, 2000);
     } catch (error) {
       setIsError(true);
       if (error.response?.status === 400) {
@@ -156,29 +159,42 @@ const Initiation = ({ initialData }) => {
 
   // Memoize product cards to prevent unnecessary re-renders
   const productCards = useMemo(() => {
-    return products.map((card) => (
-      <Link
-        key={card.id}
-        href={`/collections/initiation/product/${card.id}`}
-        className="group w-full h-auto relative flex flex-col"
-      >
-        <div className="h-[315px] md:h-[589px] xl:h-[549px] 2xl:h-[650px] w-[139px] md:w-[289px]">
-          <Image
-            src={card.image}
-            alt={card.title}
-            fill
-            priority
-            className="object-contain w-full h-auto"
-          />
-        </div>
-        <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
-            SEE PRODUCT
-          </span>
-        </div>
-        <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px] text-center mt-2">{card.title}</h3>
-      </Link>
-    ));
+    return products.map((card) => {
+      // Debugging: Log invalid prices
+      if (isNaN(card.price) && card.price !== 'N/A') {
+        console.warn(`Invalid price for product ${card.title}: ${card.price}`);
+      }
+
+      return (
+        <Link
+          key={card.id}
+          href={`/collections/initiation/product/${card.id}`}
+          className="group w-full h-auto relative flex flex-col"
+          aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
+        >
+          <div className="h-[315px] md:h-[589px] xl:h-[549px] 2xl:h-[650px] w-[139px] md:w-[289px]">
+            <Image
+              src={card.image}
+              alt={card.title}
+              fill
+              priority
+              className="object-contain w-full h-auto"
+            />
+          </div>
+          <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
+              SEE PRODUCT
+            </span>
+          </div>
+          <div className="text-center mt-2">
+            <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px]">{card.title}</h3>
+            <p className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
+              {card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}
+            </p>
+          </div>
+        </Link>
+      );
+    });
   }, [products]);
 
   return (
@@ -216,14 +232,13 @@ const Initiation = ({ initialData }) => {
           </div>
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
-            {/* Primer grid de tarjetas de productos (primeros 8) */}
+            {/* First product grid (first 8 products) */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {productCards.slice(0, 8)}
             </div>
 
-            {/* Segundo grid con imágenes centradas (slider en móvil) */}
+            {/* Middle images section */}
             <div className="mt-[60px] mb-[60px]">
-              {/* Mobile slider */}
               <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
                 {middleImages.map((card) => (
                   <div key={card.id} className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2">
@@ -239,13 +254,11 @@ const Initiation = ({ initialData }) => {
                   </div>
                 ))}
               </div>
-              {/* Mobile text */}
               <div className="md:hidden max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] flex justify-start">
                 <p className="text-[#FFFFFF] pt-[20px] text-center text-[12px]">
                   INTENSO | FUERTE | AUDAZ W25
                 </p>
               </div>
-              {/* Desktop grid */}
               <div className="hidden md:grid md:grid-cols-2 md:gap-6">
                 {middleImages.map((card, index) => (
                   <div key={card.id} className="flex flex-col items-center h-auto">
@@ -269,7 +282,7 @@ const Initiation = ({ initialData }) => {
               </div>
             </div>
 
-            {/* Segundo grid de tarjetas (resto de productos) */}
+            {/* Second product grid (remaining products) */}
             {products.length > 8 && (
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {productCards.slice(8)}
@@ -277,7 +290,6 @@ const Initiation = ({ initialData }) => {
             )}
           </div>
 
-          {/* Footer image section */}
           {footerImage && (
             <div className="relative h-[410px] md:h-[667px] w-full mt-[40px]">
               <Image
@@ -300,11 +312,10 @@ const Initiation = ({ initialData }) => {
             </div>
           )}
 
-          <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px]">
+          <div className="w-[90%] h-[315px] md:md:h-[415px] flex md:min-w-[1315px]">
             <Footer />
           </div>
 
-          {/* Newsletter Modal */}
           {showModal && (
             <div className="fixed bottom-4 right-4 z-50">
               <div className="bg-gray-500/40 border-[#f2f2f2] border-[0.5px] p-6 rounded-lg w-full max-w-md relative shadow-lg">
@@ -352,7 +363,6 @@ const Initiation = ({ initialData }) => {
   );
 };
 
-// Server-side data fetching
 export async function getServerSideProps() {
   try {
     const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections');
@@ -364,13 +374,17 @@ export async function getServerSideProps() {
       return { props: { initialData: null } };
     }
 
-    const formattedProducts = initiationCollection.products.map((product) => ({
-      id: product._id,
-      title: product.displayName || product.name || 'Producto sin título',
-      subtitle: product.subtitle,
-      image: `/static/${product.models.images.static}.webp`,
-      gender: product.gender || 'unknown',
-    }));
+    const formattedProducts = initiationCollection.products.map((product) => {
+      const price = Number(product.price); // Ensure price is a number
+      return {
+        id: product._id,
+        title: product.displayName || product.name || 'Producto sin título',
+        subtitle: product.subtitle,
+        image: `/static/${product.models.images.static}.webp`,
+        gender: product.gender || 'unknown',
+        price: isNaN(price) ? 'N/A' : price, // Fallback if price is not a number
+      };
+    });
 
     const sortedProducts = [];
     const maleProducts = formattedProducts.filter((p) => p.gender.toLowerCase() === 'male');
@@ -387,11 +401,6 @@ export async function getServerSideProps() {
     );
     sortedProducts.push(...otherProducts);
 
-    const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
-      id: index + 1,
-      image: `/${image}.webp`,
-    }));
-
     return {
       props: {
         initialData: {
@@ -399,7 +408,10 @@ export async function getServerSideProps() {
           description: initiationCollection.description || 'Descripción no definida',
           title: initiationCollection.title || 'Sin título',
           subtitle: initiationCollection.subtitle || 'Subtítulo no definido',
-          middleImages: formattedMiddleImages,
+          middleImages: initiationCollection.images.middle.map((image, index) => ({
+            id: index + 1,
+            image: `/${image}.webp`,
+          })),
           footerImage: initiationCollection.images.footer
             ? `/${initiationCollection.images.footer}.webp`
             : '/evvaprevfooter.svg',
@@ -412,6 +424,7 @@ export async function getServerSideProps() {
 }
 
 export default Initiation;
+
 
 // 'use client';
 
