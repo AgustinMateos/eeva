@@ -15,10 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <Head>
-        <meta
-          name="google-site-verification"
-          content="-aSvPMVt_0To09-nAayMutsKf4wXugkmApyPYVNsaxY"
-        />
+        <meta name="google-site-verification" content="-aSvPMVt_0To09-nAayMutsKf4wXugkmApyPYVNsaxY" />
       </Head>
       <body className={`${ibmMono.className} antialiased bg-[#182025]`}>
         <CartProvider>{children}</CartProvider>
