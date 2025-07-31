@@ -10,8 +10,8 @@ export const metadata = {
     icon: '/e4.svg', // Ruta al archivo SVG en la carpeta public
   },
   other: {
-    "google-site-verification": content="-aSvPMVt_0To09-nAayMutsKf4wXugkmApyPYVNsaxY",
-  },
+  "google-site-verification": "-aSvPMVt_0To09-nAayMutsKf4wXugkmApyPYVNsaxY",
+},
 };
 
 export default function RootLayout({ children }) {
