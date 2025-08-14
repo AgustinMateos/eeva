@@ -317,46 +317,46 @@ const Initiation = ({ initialData }) => {
           </div>
 
           {showModal && (
-            <div className="fixed bottom-4 right-4 z-50">
-              <div className="bg-gray-500/40 border-[#f2f2f2] border-[0.5px] p-6 rounded-lg w-full max-w-md relative shadow-lg">
-                <button
-                  onClick={closeModal}
-                  className="absolute top-2 right-2 text-white hover:text-gray-300"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                <h3 className="text-white text-lg font-semibold mb-4 text-center">
-                  Subscribe to Our Newsletter
-                </h3>
-                <p className="text-gray-300 text-sm mb-4 text-center">
-                  Be the first to know!
-                </p>
-                <form onSubmit={handleSubmit} className="flex flex-col md:flex-row">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-10 w-full bg-white bg-opacity-20 text-white placeholder-gray-300 px-4 text-sm focus:outline-none border border-[#DFDFDF]"
-                    placeholder="Enter your email address"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="h-10 w-full md:w-[147px] bg-[#DFDFDF] text-black text-sm hover:bg-[#cccccc] transition-colors"
-                  >
-                    Notify Me
-                  </button>
-                </form>
-                {message && (
-                  <p className={`text-sm text-center mt-4 ${isError ? 'text-red-500' : 'text-green-500'}`}>
-                    {message}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
+  <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="bg-gray-500/40 border-[#f2f2f2] border-[0.5px] p-6 rounded-lg w-full max-w-md relative shadow-lg">
+      <button
+        onClick={closeModal}
+        className="absolute top-2 right-2 text-white hover:text-gray-300"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <h3 className="text-white text-lg font-semibold mb-4 text-center">
+        Subscribe to Our Newsletter
+      </h3>
+      <p className="text-gray-300 text-sm mb-4 text-center">
+        Be the first to know!
+      </p>
+      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="h-10 w-full bg-white bg-opacity-20 text-white placeholder-gray-300 px-4 text-sm focus:outline-none border border-[#DFDFDF]"
+          placeholder="Enter your email address"
+          required
+        />
+        <button
+          type="submit"
+          className="h-10 w-full md:w-[147px] bg-[#DFDFDF] text-black text-sm hover:bg-[#cccccc] transition-colors"
+        >
+          Notify Me
+        </button>
+      </form>
+      {message && (
+        <p className={`text-sm text-center mt-4 ${isError ? 'text-red-500' : 'text-green-500'}`}>
+          {message}
+        </p>
+      )}
+    </div>
+  </div>
+)}
         </div>
       )}
     </>
