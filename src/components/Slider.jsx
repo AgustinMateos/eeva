@@ -9,7 +9,7 @@ const options = [
     id: 3,
     name: 'Initiation',
     bgImage: '/initiationslider.jpg',
-    mobileBgImage: '/initiation.jpg',
+    mobileBgImage: '/initiation.webp',
     estado: '25 | 06 | 25',
     estadoAccion: 'Shop',
     link: '/collections/initiation',

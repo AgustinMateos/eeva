@@ -328,10 +328,10 @@ const Initiation = ({ initialData }) => {
         </svg>
       </button>
       <h3 className="text-white text-lg font-semibold mb-4 text-center">
-        Subscribe to Our Newsletter
+        Suscribite a nuestro Newsletter
       </h3>
       <p className="text-gray-300 text-sm mb-4 text-center">
-        Be the first to know!
+        Se el primero en enterarse!
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col md:flex-row">
         <input
@@ -346,7 +346,7 @@ const Initiation = ({ initialData }) => {
           type="submit"
           className="h-10 w-full md:w-[147px] bg-[#DFDFDF] text-black text-sm hover:bg-[#cccccc] transition-colors"
         >
-          Notify Me
+          Notificarme
         </button>
       </form>
       {message && (
