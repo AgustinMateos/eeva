@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -17,7 +17,7 @@ const options = [
 ];
 
 export default function Slider() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(null); // Use null to indicate "not yet determined"
 
   useEffect(() => {
     const checkMobile = () => {
@@ -29,6 +29,10 @@ export default function Slider() {
   }, []);
 
   const option = options[0];
+
+  if (isMobile === null) {
+    return null; // Or a loading placeholder
+  }
 
   return (
     <div className="relative w-full h-[100vh] overflow-hidden bg-black">
@@ -46,7 +50,7 @@ export default function Slider() {
               <h3 className="text-lg font-semibold uppercase">{option.name}</h3>
               <p>{option.estado}</p>
               <Link href={option.link}>
-                <p className='pt-[10px] text-[18px] font-bold xl:pt-[0px]'>{option.estadoAccion}</p>
+                <p className="pt-[10px] text-[18px] font-bold xl:pt-[0px]">{option.estadoAccion}</p>
               </Link>
             </div>
           </div>
