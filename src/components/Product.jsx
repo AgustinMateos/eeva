@@ -7,6 +7,44 @@ import Image from "next/image";
 import { useCart } from "./context/CartContext";
 import Marquee from "./Marquee";
 
+// TypingEffect Component
+const TypingEffect = ({ text, speed = 100, delay = 0, fieldName }) => {
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    // Log the input text for debugging
+    console.log(`TypingEffect for ${fieldName}:`, text);
+
+    // Convert text to string and handle undefined/null
+    const textToType = text ? String(text) : "N/A";
+    
+    // Reset state when text changes
+    setDisplayedText("");
+    setIndex(0);
+
+    // Start typing after delay
+    const startTimeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setIndex((prev) => {
+          if (prev >= textToType.length) {
+            clearInterval(interval);
+            return prev;
+          }
+          setDisplayedText(textToType.slice(0, prev + 1));
+          return prev + 1;
+        });
+      }, speed);
+
+      return () => clearInterval(interval);
+    }, delay);
+
+    return () => clearTimeout(startTimeout);
+  }, [text, speed, delay, fieldName]);
+
+  return <span>{displayedText}</span>;
+};
+
 // Modal Component
 const Modal = ({ isOpen, onClose, message }) => {
   if (!isOpen) return null;
@@ -120,7 +158,7 @@ const Product = () => {
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const { addToCart } = useCart();
-  const [lookAddCounts, setLookAddCounts] = useState({}); // Updated to track counts by lookId, color, and size
+  const [lookAddCounts, setLookAddCounts] = useState({});
   const [addCounts, setAddCounts] = useState({});
   const lensWidth = 160;
   const lensHeight = 160;
@@ -154,7 +192,7 @@ const Product = () => {
     try {
       const response = await axios.get(`https://eeva-api.vercel.app/api/v1/products/${id}`);
       const fetchedProduct = response.data;
-      console.log("GIF360 value:", fetchedProduct.models?.images?.gif360);
+      console.log("Fetched product:", fetchedProduct);
       setProduct(fetchedProduct);
 
       const newImages = fetchedProduct.models?.images?.gif360
@@ -531,6 +569,15 @@ const Product = () => {
     return () => clearInterval(interval);
   }, [isPaused, cachedImages.length]);
 
+  // Log product.models when product changes
+  useEffect(() => {
+    if (product?.models) {
+      console.log("Product models data:", product.models);
+    } else {
+      console.log("Product models is undefined or null");
+    }
+  }, [product]);
+
   const renderLook = useCallback(
     (look, index) => {
       const lookId = look._id || index;
@@ -743,22 +790,68 @@ const Product = () => {
                 `}</style>
                 <div className="relative">
                   <div className="absolute top-0 left-0 w-[1px] bg-gradient-to-r from-white to-[#BEBEBE] z-[-1]" style={{ height: "100%" }}></div>
-                  <div className="pl-[20px]">
-                    <div className="flex justify-between">
-                      <p>Nombre</p> <p className="w-[60px] lowercase">{product.models.modelName}</p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p>Altura</p> <p className="w-[60px] lowercase">{product.models.height}</p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p>Peso</p> <p className="w-[60px] lowercase">{product.models.weight} kg.</p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p>Talle</p> <p className="w-[60px] lowercase">{product.models.size.name}</p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p>Género</p> <p className="w-[60px] lowercase">{product.models.gender}</p>
-                    </div>
+                  <div className="pl-[20px]" aria-live="polite">
+                    {product?.models ? (
+                      <>
+                        <div className="flex justify-between">
+                          <p>Nombre</p>
+                          <p className="w-[60px] lowercase">
+                            <TypingEffect
+                              text={product.models.modelName || "N/A"}
+                              speed={100}
+                              delay={0}
+                              fieldName="modelName"
+                            />
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p>Altura</p>
+                          <p className="w-[60px] lowercase" >
+                            <TypingEffect
+                              text={product.models.height ? String(product.models.height) : "N/A"}
+                              speed={100}
+                              delay={500}
+                              fieldName="height"
+                            />
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p>Peso</p>
+                          <p className="w-[60px] lowercase">
+                            <TypingEffect
+                              text={product.models.weight ? `${product.models.weight} kg.` : "N/A"}
+                              speed={100}
+                              delay={1000}
+                              fieldName="weight"
+                            />
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p>Talle</p>
+                          <p className="w-[60px] lowercase">
+                            <TypingEffect
+                              text={product.models.size?.name || "N/A"}
+                              speed={100}
+                              delay={1500}
+                              fieldName="size"
+                            />
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p>Género</p>
+                          <p className="w-[60px] lowercase">
+                            <TypingEffect
+                              text={product.models.gender || "N/A"}
+                              speed={100}
+                              delay={2000}
+                              fieldName="gender"
+                            />
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-white text-xs">Cargando información del modelo...</p>
+                    )}
                   </div>
                 </div>
               </div>

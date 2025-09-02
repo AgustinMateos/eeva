@@ -778,9 +778,9 @@ const OrderStep1 = () => {
                 </button>
                 <button
                   onClick={handlePayOrder}
-                  className="text-white w-[90%] pb-[10px] md:w-[160px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
+                  className="text-white w-[90%] flex pb-[10px] md:w-[180px] justify-center h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
                 >
-                  Pagar Orden
+                  <p>Pagar Orden </p> <Image alt='mercado pago logo' width={30} height={30} src={'/mercadoPago.svg'}/>
                 </button>
               </div>
             </div>
