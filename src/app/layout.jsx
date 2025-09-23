@@ -17,6 +17,9 @@ export const metadata = {
     apple: '/logo.ico', // Ícono para dispositivos Apple (180x180px recomendado)
     shortcut: '/logo.ico', // Ícono para accesos directos
   },
+  other: {
+    "google-site-verification": "-aSvPMVt_0To09-nAayMutsKf4wXugkmApyPYVNsaxY",
+  },
 };
 
 export default function RootLayout({ children }) {
