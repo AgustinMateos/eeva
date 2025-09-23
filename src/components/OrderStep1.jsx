@@ -491,7 +491,7 @@ const OrderStep1 = () => {
                         name="calle"
                         value={address.calle}
                         onChange={handleAddressChange}
-                        placeholder="Calle + Altura"
+                        placeholder="Calle + Altura + Piso"
                       />
                     </div>
                   </div>
