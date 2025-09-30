@@ -181,7 +181,7 @@ const Initiation = ({ initialData }) => {
         className="group w-full h-auto relative flex flex-col"
         aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
       >
-        <div className="h-[200px] md:h-[589px] xl:h-[549px] 2xl:h-[650px] w-auto relative">
+        <div className="h-[200px] md:h-[589px] xl:h-[509px] 2xl:h-[690px] w-auto relative">
           <Image
             src={card.image}
             alt={card.title}
@@ -190,7 +190,7 @@ const Initiation = ({ initialData }) => {
             className="object-contain w-full h-auto"
           />
           {card.discount > 0 && (
-            <div className="absolute top-10 right-1 md:right-4 inline-block px-2 py-1 rounded-[2px] bg-[#FCFDFD] text-[#232323] text-[8px] md:text-[10px]">
+            <div className="absolute top-1 md:top-10 right-1 md:right-4 inline-block px-2 py-1 rounded-[2px] bg-[#FCFDFD] text-[#232323] text-[8px] md:text-[10px]">
               {card.discount}% OFF
             </div>
           )}
