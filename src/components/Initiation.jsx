@@ -181,7 +181,7 @@ const Initiation = ({ initialData }) => {
         className="group w-full h-auto relative flex flex-col"
         aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
       >
-        <div className="h-[250px] md:h-[520px] xl:h-[500px] 2xl:h-[600px] w-[139px] md:w-[289px] relative">
+        <div className="h-[315px] md:h-[589px] xl:h-[549px] 2xl:h-[650px] w-auto relative">
           <Image
             src={card.image}
             alt={card.title}
@@ -200,7 +200,7 @@ const Initiation = ({ initialData }) => {
             SEE PRODUCT
           </span>
         </div>
-        <div className="text-center w-[139px] md:w-[289px]">
+        <div className="text-center mt-2">
           <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px]">{card.title}</h3>
           {card.price !== 'N/A' ? (
             <div className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
@@ -260,7 +260,7 @@ const Initiation = ({ initialData }) => {
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
             {/* First product grid (first 8 products) */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {productCards.slice(0, 8)}
             </div>
 
@@ -311,7 +311,7 @@ const Initiation = ({ initialData }) => {
 
             {/* Second product grid (remaining products) */}
             {products.length > 8 && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {productCards.slice(8)}
               </div>
             )}
