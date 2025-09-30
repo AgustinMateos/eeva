@@ -160,65 +160,69 @@ const Initiation = ({ initialData }) => {
   };
 
   // Memoize product cards to prevent unnecessary re-renders
-  const productCards = useMemo(() => {
-    return products.map((card) => {
-      // Debugging: Log invalid prices or discounts
-      if (isNaN(card.price) && card.price !== 'N/A') {
-        console.warn(`Invalid price for product ${card.title}: ${card.price}`);
-      }
-      if (isNaN(card.discount)) {
-        console.warn(`Invalid discount for product ${card.title}: ${card.discount}`);
-      }
+ const productCards = useMemo(() => {
+  return products.map((card) => {
+    // Debugging: Log invalid prices or discounts
+    if (isNaN(card.price) && card.price !== 'N/A') {
+      console.warn(`Invalid price for product ${card.title}: ${card.price}`);
+    }
+    if (isNaN(card.discount)) {
+      console.warn(`Invalid discount for product ${card.title}: ${card.discount}`);
+    }
 
-      const discountedPrice = card.discount > 0 && card.price !== 'N/A'
-        ? card.price - (card.price * card.discount / 100)
-        : card.price;
+    const discountedPrice = card.discount > 0 && card.price !== 'N/A'
+      ? card.price - (card.price * card.discount / 100)
+      : card.price;
 
-      return (
-        <Link
-          key={card.id}
-          href={`/collections/initiation/product/${card.id}`}
-          className="group w-full h-auto relative flex flex-col"
-          aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
-        >
-          <div className="h-[315px] md:h-[589px] xl:h-[549px] 2xl:h-[650px] w-[139px] md:w-[289px] relative">
-            <Image
-              src={card.image}
-              alt={card.title}
-              fill
-              priority
-              className="object-contain w-full h-auto"
-            />
-            {card.discount > 0 && (
-              <div className="absolute top-10 right-1 md:right-4 inline-block px-2 py-1 rounded-[2px] bg-[#FCFDFD] text-[#232323] text-[8px] md:text-[10px]">
-                {card.discount}% OFF
-              </div>
-            )}
-          </div>
-          <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-            <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
-              SEE PRODUCT
-            </span>
-          </div>
-          <div className="text-center mt-2">
-            <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px]">{card.title}</h3>
-            {card.price !== 'N/A' ? (
-              <div className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
-                <p className="line-through">{priceFormatter.format(card.price)}</p>
-                {card.discount > 0 && (
+    return (
+      <Link
+        key={card.id}
+        href={`/collections/initiation/product/${card.id}`}
+        className="group w-full h-auto relative flex flex-col"
+        aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
+      >
+        <div className="h-[315px] md:h-[589px] xl:h-[549px] 2xl:h-[650px] w-[139px] md:w-[289px] relative">
+          <Image
+            src={card.image}
+            alt={card.title}
+            fill
+            priority
+            className="object-contain w-full h-auto"
+          />
+          {card.discount > 0 && (
+            <div className="absolute top-10 right-1 md:right-4 inline-block px-2 py-1 rounded-[2px] bg-[#FCFDFD] text-[#232323] text-[8px] md:text-[10px]">
+              {card.discount}% OFF
+            </div>
+          )}
+        </div>
+        <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+          <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
+            SEE PRODUCT
+          </span>
+        </div>
+        <div className="text-center mt-2">
+          <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px]">{card.title}</h3>
+          {card.price !== 'N/A' ? (
+            <div className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
+              {card.discount > 0 ? (
+                <>
+                  <p className="line-through">{priceFormatter.format(card.price)}</p>
                   <p>{priceFormatter.format(discountedPrice)}</p>
-                )}
-              </div>
-            ) : (
-              <p className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
-                Price not available
-              </p>
-            )}
-          </div>
-        </Link>
-      );
-    });
-  }, [products]);
+                </>
+              ) : (
+                <p>{priceFormatter.format(card.price)}</p>
+              )}
+            </div>
+          ) : (
+            <p className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
+              Price not available
+            </p>
+          )}
+        </div>
+      </Link>
+    );
+  });
+}, [products]);
 
   return (
     <>
