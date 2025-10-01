@@ -187,7 +187,7 @@ const Initiation = ({ initialData }) => {
             alt={card.title}
             fill
             priority
-            className="object-contain w-full h-auto"
+            className="object-contain 2xl:object-cover w-full h-auto"
           />
           {card.discount > 0 && (
             <div className="absolute top-1 md:top-10 right-1 md:right-4 inline-block px-2 py-1 rounded-[2px] bg-[#FCFDFD] text-[#232323] text-[8px] md:text-[10px]">
