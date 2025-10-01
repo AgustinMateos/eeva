@@ -181,7 +181,7 @@ const Initiation = ({ initialData }) => {
         className="group w-full h-auto relative flex flex-col"
         aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
       >
-        <div className="h-[200px] md:h-[589px] xl:h-[509px] 2xl:h-[800px] w-auto relative">
+        <div className="h-[200px] md:h-[589px] xl:h-[509px] 2xl:h-[900px] w-auto relative">
           <Image
             src={card.image}
             alt={card.title}
@@ -260,7 +260,7 @@ const Initiation = ({ initialData }) => {
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
             {/* First product grid (first 8 products) */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 2xl:gap-[5rem]">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {productCards.slice(0, 8)}
             </div>
 
