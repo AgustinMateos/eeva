@@ -200,7 +200,7 @@ const Initiation = ({ initialData }) => {
             SEE PRODUCT
           </span>
         </div>
-        <div className="text-center mt-2 ">
+        <div className="text-center mt-2 2xl:pt-[30px] ">
           <h3 className="text-[#FFFFFF] text-[10px] md:text-[12px]">{card.title}</h3>
           {card.price !== 'N/A' ? (
             <div className="text-[#CCCCCC] text-[10px] md:text-[12px] mt-1 font-semibold">
