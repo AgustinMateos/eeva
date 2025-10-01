@@ -260,7 +260,7 @@ const Initiation = ({ initialData }) => {
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
             {/* First product grid (first 8 products) */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 2xl:gap-x-36">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 2xl:gap-x-28">
               {productCards.slice(0, 8)}
             </div>
 
@@ -311,7 +311,7 @@ const Initiation = ({ initialData }) => {
 
             {/* Second product grid (remaining products) */}
             {products.length > 8 && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 2xl:gap-36">
+               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 2xl:gap-x-28">
                 {productCards.slice(8)}
               </div>
             )}
