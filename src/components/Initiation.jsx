@@ -311,7 +311,7 @@ const Initiation = ({ initialData }) => {
 
             {/* Second product grid (remaining products) */}
             {products.length > 8 && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 2xl:gap-36">
                 {productCards.slice(8)}
               </div>
             )}
