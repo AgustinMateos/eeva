@@ -181,7 +181,7 @@ const Initiation = ({ initialData }) => {
         className="group w-full h-auto relative flex flex-col"
         aria-label={`${card.title} - ${card.price !== 'N/A' ? priceFormatter.format(card.price) : 'Price not available'}`}
       >
-        <div className="h-[200px] md:h-[589px] xl:h-[509px] 2xl:h-[900px] w-auto relative">
+        <div className="h-[200px] md:h-[589px] xl:h-[509px] 2xl:h-[990px] w-auto relative">
           <Image
             src={card.image}
             alt={card.title}
