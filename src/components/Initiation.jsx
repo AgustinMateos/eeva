@@ -227,15 +227,16 @@ const Initiation = ({ initialData }) => {
             {description}
           </p>
 
-          <div className="relative w-full md:aspect-[16/9]">
-            <Image
-              src="/portadaIni.webp"
-              alt="Portada"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+          <div className="relative w-full aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/10]">
+  <Image
+    src="/portadaIni.webp"
+    alt="Portada Initiation"
+    fill
+    className="object-cover"
+    priority
+    sizes="100vw"
+  />
+</div>
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
             {/* Primer bloque de productos */}
