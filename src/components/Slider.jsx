@@ -7,10 +7,10 @@ import Link from 'next/link';
 const options = [
   {
     id: 3,
-    name: 'Initiation',
-    bgImage: '/initiationslider.jpg',
+    name: 'Concrete summer',
+    bgImage: '/summer.webp',
     mobileBgImage: '/initiation.webp',
-    estado: '25 | 06 | 25',
+    estado: '22 | 11 | 25',
     estadoAccion: 'Shop',
     link: '/collections/initiation',
   },
