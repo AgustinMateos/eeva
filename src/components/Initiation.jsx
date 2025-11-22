@@ -361,7 +361,7 @@ export async function getServerSideProps() {
   try {
     const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections');
     const initiationCollection = response.data.find(
-      (collection) => collection.title.toUpperCase() === 'Concrete Summer'
+      (collection) => collection.title.toUpperCase() === 'INITIATION'
     );
 
     if (!initiationCollection) {
