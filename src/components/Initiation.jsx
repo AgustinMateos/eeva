@@ -217,7 +217,9 @@ const Initiation = ({ initialData }) => {
         <div className="text-white text-center pt-[150px]">{error}</div>
       ) : (
         <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
-          <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">{title}</h1>
+          {/* <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">{title}</h1> */}
+                    <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">Concrete Summer </h1>
+
           <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-2xl uppercase">
             {subtitle}
           </p>
