@@ -352,7 +352,7 @@ const Initiation = ({ initialData }) => {
                     placeholder="Tu email"
                     required
                   />
-                  <button type="submit" className="h-10 bg-[#DFDFDF] text-black text-sm hover:bg-[#cccccc] transition-colors">
+                  <button type="submit" className="h-10 bg-[#DFDFDF] text-black text-sm p-2 hover:bg-[#cccccc] transition-colors">
                     Notificarme
                   </button>
                 </form>
