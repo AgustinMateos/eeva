@@ -218,7 +218,7 @@ const Initiation = ({ initialData }) => {
       ) : (
         <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
           {/* <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">{title}</h1> */}
-                    <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">Concrete Summer </h1>
+          <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">Concrete Summer </h1>
 
           <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-2xl uppercase">
             {subtitle}
@@ -228,14 +228,27 @@ const Initiation = ({ initialData }) => {
           </p>
 
           <div className="relative w-full aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/10]">
-  <Image
-    src="/portadaIni.webp"
-    alt="Portada Initiation"
-    fill
-    className="object-cover"
-    priority
-    sizes="100vw"
-  />
+  <picture>
+    {/* Móvil: hasta 768px */}
+    <source
+      media="(max-width: 767px)"
+      srcSet="/portadaMobile.webp"
+    />
+    {/* Tablet y desktop */}
+    <source
+      media="(min-width: 768px)"
+      srcSet="/portadaIni.webp"
+    />
+    {/* Fallback (por si el navegador no soporta <picture>) */}
+    <Image
+      src="/portadaIni.webp"
+      alt="Portada Initiation"
+      fill
+      className="object-cover"
+      priority
+      sizes="100vw"
+    />
+  </picture>
 </div>
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
