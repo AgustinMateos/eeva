@@ -9,7 +9,7 @@ const options = [
     id: 3,
     name: 'Concrete summer',
     bgImage: '/summer.webp',
-    mobileBgImage: '/initiation.webp',
+    mobileBgImage: '/summerMobile.webp',
     estado: '22 | 11 | 25',
     estadoAccion: 'Shop',
     link: '/collections/initiation',

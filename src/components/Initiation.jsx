@@ -93,7 +93,7 @@ const Initiation = ({ initialData }) => {
             setFooterImage(
               initiationCollection.images.footer
                 ? `/${initiationCollection.images.footer}.webp`
-                : '/evvaprevfooter.svg'
+                : '/footer_initiation.webp'
             );
           } else {
             setError('Colección INITIATION no encontrada');
