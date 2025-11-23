@@ -393,7 +393,7 @@ const Navbar = () => {
                   Collection
                 </p>
                 <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]">
-                  25-06-2025
+                  22-11-2025
                 </span>
               </div>
               <div className="flex h-full">
