@@ -35,7 +35,7 @@ export default function Slider() {
   }
 
   return (
-    <div className="relative w-full h-[100vh] overflow-hidden bg-black">
+    <div className="relative w-full min-h-[100vh] md:h-[100vh] overflow-hidden bg-black">
       <Image
         src={isMobile ? option.mobileBgImage : option.bgImage}
         alt="Initiation slide"
