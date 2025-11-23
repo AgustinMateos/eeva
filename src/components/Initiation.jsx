@@ -317,7 +317,7 @@ const Initiation = ({ initialData }) => {
           </div>
 
           {footerImage && (
-            <div className="relative h-[410px] md:h-[780px] w-full mt-[40px]">
+            <div className="relative h-[410px] md:h-[800px] w-full mt-[40px]">
               <Image src={'/footer_initiation.webp'} alt="Fondo Initiation" fill priority sizes="100vw" className="object-cover" />
               <div className="absolute top-[15px] md:top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px] flex flex-col items-end">
                 <h5 className="text-sm md:text-lg font-semibold uppercase">Concrete Summer</h5>
