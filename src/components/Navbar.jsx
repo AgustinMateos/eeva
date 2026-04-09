@@ -421,7 +421,7 @@ const Navbar = () => {
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
                       >
-                        Top
+                        Tops
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -435,7 +435,7 @@ const Navbar = () => {
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
                       >
-                        Bottom
+                        Bottoms
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -449,7 +449,7 @@ const Navbar = () => {
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsHombreOpen(false)}
                       >
-                        Accessories
+                        Accesorios
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -477,7 +477,7 @@ const Navbar = () => {
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsMujerOpen(false)}
                       >
-                        Top
+                        Tops
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -491,7 +491,7 @@ const Navbar = () => {
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsMujerOpen(false)}
                       >
-                        Bottom
+                        Bottoms
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -505,7 +505,7 @@ const Navbar = () => {
                         className="group flex items-center h-[30px] text-center rounded-[2px]"
                         onClick={() => setIsMujerOpen(false)}
                       >
-                        Accessories
+                        Accesorios
                         <Image
                           src="/flechaDiagonal.svg"
                           width={14}
@@ -546,8 +546,8 @@ const Navbar = () => {
               <Image src={"/lupa.svg"} width={24} height={24} alt="lupa" />
             </button>
             <Link href="/collections/aboutus">
-              <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[120px] justify-center items-center text-center bg-[#A8A8A81A] transition-all duration-200 hover:bg-[#A8A8A84D]">
-                ABOUT US
+              <p className="hidden md:flex backdrop-blur-[6px] rounded-[2px] border-[0.5px] border-white h-[36px] w-[150px] justify-center items-center text-center bg-[#A8A8A81A] transition-all duration-200 hover:bg-[#A8A8A84D]">
+              SOBRE NOSOTROS
               </p>
             </Link>
             <Link

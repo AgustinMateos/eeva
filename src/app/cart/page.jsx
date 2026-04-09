@@ -25,7 +25,7 @@ export default function CartPage() {
             <div className="divide-y divide-gray-400 mt-10 text-white">
               <div className="text-center py-12">
                 <p className=" mb-4 font-ibm-mono font-normal text-[32px] leading-[64px] tracking-[-0.04em] text-center align-middle uppercase">
-                  Your cart is empty
+                  Tu carrito está vacio
                 </p>
                 <Link
                   href="/"

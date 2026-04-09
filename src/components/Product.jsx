@@ -914,12 +914,12 @@ const Product = () => {
                     </div>
                   </div>
                   <div>
-                    <p className="uppercase">Size</p>
+                    <p className="uppercase">Talle</p>
                     <button
                       onClick={() => setIsSizeGuideOpen(true)}
                       className="text-white cursor-pointer flex w-full justify-between mt-2"
                     >
-                      Size guide
+                      Guía de talles
                       <Image src="/flechamobilediagonal.svg" width={24} height={24} alt="diagonal arrow" className="ml-2" />
                     </button>
                     <div>
@@ -952,13 +952,13 @@ const Product = () => {
                   onClick={handleAddToCart}
                   className="w-full max-w-[280px] md:w-[300px] h-[40px] gap-2 px-[12px] py-[6px] rounded-[2px] backdrop-blur-[6px] bg-[#0D0D0DE5] transition-all duration-200 hover:bg-[#2C2C2CE5] uppercase text-center"
                 >
-                  {addCounts[selectedColor]?.[selectedSize] > 0 ? `(${addCounts[selectedColor]?.[selectedSize]}) Added` : "+ Add to Bag"}
+                  {addCounts[selectedColor]?.[selectedSize] > 0 ? `(${addCounts[selectedColor]?.[selectedSize]}) Agregado` : "+ Agregar al carrito"}
                 </button>
                 <button
                   onClick={() => setIsShopLookOpen(true)}
-                  className="w-full max-w-[280px] md:w-[140px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase transition-all duration-200 hover:bg-[#A8A8A84D]"
+                  className="w-full max-w-[300px] md:w-[200px] h-[40px] gap-2 px-[20px] py-[6px] border border-white rounded-[2px] bg-[#A8A8A81A] backdrop-blur-[6px] uppercase transition-all duration-200 hover:bg-[#A8A8A84D]"
                 >
-                  Shop Look
+                  Comprar el look
                 </button>
               </div>
               <div className="w-full flex flex-col items-center">
@@ -967,7 +967,7 @@ const Product = () => {
                     onClick={() => setIsDetailsOpen(!isDetailsOpen)}
                     className="w-full text-left flex justify-between h-[30px] items-center uppercase"
                   >
-                    <span>Details</span>
+                    <span>Detalles</span>
                     <Image
                       src={isDetailsOpen ? "/flechamobileup.svg" : "/flechamobiledown.svg"}
                       width={24}
@@ -988,7 +988,7 @@ const Product = () => {
                     onClick={() => setIsProductCareOpen(!isProductCareOpen)}
                     className="w-full text-left flex justify-between items-center uppercase h-[30px]"
                   >
-                    <span>Product Care</span>
+                    <span>Cuidados de la prenda</span>
                     <Image
                       src={isProductCareOpen ? "/flechamobileup.svg" : "/flechamobiledown.svg"}
                       width={24}
@@ -1095,7 +1095,7 @@ const Product = () => {
                 <div className="w-full h-[60px] flex justify-center items-center">
                   <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center">
                     <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
-                      Size Guide
+                      Guía de talles
                     </h2>
                     <button onClick={() => setIsSizeGuideOpen(false)} className="text-gray-500 hover:text-gray-700">
                       <Image src="/crossSize.svg" width={16} height={16} alt="close modal" className="ml-2" />
