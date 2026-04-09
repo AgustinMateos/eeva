@@ -1024,7 +1024,7 @@ const Product = () => {
                 <div className="w-full h-[30px] md:h-[60px] flex justify-center items-center">
                   <div className="w-full max-w-[950px] h-[32px] flex justify-between items-center px-4">
                     <h2 className="font-medium text-sm sm:text-base md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
-                      SHOP ALL THE LOOK
+                      Comprar el look
                     </h2>
                     <button onClick={() => setIsShopLookOpen(false)} className="text-gray-500 hover:text-gray-700">
                       <Image src="/crossSize.svg" width={16} height={16} alt="close modal" className="ml-2" />
