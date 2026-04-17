@@ -1077,7 +1077,7 @@ const Product = () => {
                         className="w-full sm:w-[208px] h-10 px-4 py-2 rounded-[2px] bg-[#0D0D0DE5] hover:bg-[#2C2C2CE5] backdrop-blur-[6px]"
                       >
                         <p className="font-medium text-xs sm:text-sm md:text-[14px] leading-tight tracking-[0.1em] uppercase text-[#f2f2f2]">
-                          Finish Adding 
+                          Finish Adding   
                         </p>
                       </button>
                     </div>
