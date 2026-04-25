@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useState } from 'react';
@@ -7,137 +5,110 @@ import Footer from './Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/components/context/CartContext';
-import { useRouter } from 'next/navigation';
 
-// Function to fetch color ID by name
+// ====================== FUNCIONES AUXILIARES ======================
 const fetchColorId = async (colorName) => {
   try {
-    const response = await fetch(`https://eeva-api.vercel.app/api/v1/colors/name/${colorName}`, {
-      method: 'GET',
-      headers: { 'Accept': '*/*' },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch color ID for ${colorName}`);
-    }
-
-    const colorData = await response.json();
-    return colorData._id;
+    const response = await fetch(`https://eeva-api.vercel.app/api/v1/colors/name/${colorName}`);
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    return data._id;
   } catch (error) {
-    console.error(`Error fetching color ID for ${colorName}:`, error);
+    console.error(`Error color ${colorName}:`, error);
     return null;
   }
 };
 
-// Function to fetch size ID by name
 const fetchSizeId = async (sizeName) => {
   try {
-    const response = await fetch(`https://eeva-api.vercel.app/api/v1/sizes/name/${sizeName}`, {
-      method: 'GET',
-      headers: { 'Accept': '*/*' },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch size ID for ${sizeName}`);
-    }
-
-    const sizeData = await response.json();
-    return sizeData._id;
+    const response = await fetch(`https://eeva-api.vercel.app/api/v1/sizes/name/${sizeName}`);
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    return data._id;
   } catch (error) {
-    console.error(`Error fetching size ID for ${sizeName}:`, error);
+    console.error(`Error size ${sizeName}:`, error);
     return null;
   }
 };
 
-// Function to create Mercado Pago payment link
 const createPaymentLink = async (orderId) => {
   try {
     const response = await fetch(`https://eeva-api.vercel.app/api/v1/payment/mercado-pago/${orderId}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': '*/*',
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
-
-    if (!response.ok) {
-      throw new Error(`Failed to create payment link for order ${orderId}`);
-    }
-
-    const paymentResult = await response.json();
-    return paymentResult.link;
+    if (!response.ok) throw new Error('Error al generar link de pago');
+    const data = await response.json();
+    return data.link;
   } catch (error) {
-    console.error(`Error creating payment link for order ${orderId}:`, error);
+    console.error(error);
     throw error;
   }
 };
 
-// Function to validate email
-const validateEmail = (email) => {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return emailRegex.test(email);
-};
+const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
+// ====================== COMPONENTE ======================
 const OrderStep1 = () => {
   const { cart, totalPrice } = useCart();
-  const router = useRouter();
 
-  // State for user input
   const [info, setInfo] = useState({
     nombres: '',
     apellidos: '',
     correo: '',
   });
+
   const [address, setAddress] = useState({
     codigoArea: '',
     telefono: '',
     tipoDocumento: 'DNI',
     numeroDocumento: '',
     pais: '',
-    region: '',
+    province: '',
+    city: '',
     codigoPostal: '',
     calle: '',
   });
+
   const [emailError, setEmailError] = useState('');
   const [showAdditionalInputs, setShowAdditionalInputs] = useState(false);
   const [selectedShipping, setSelectedShipping] = useState({ name: '', cost: 0 });
-  const [paymentDetails, setPaymentDetails] = useState({
-    paymentMethod: 'credit_card',
-    numberOfInstallments: 3,
-  });
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);           // DNI / Pasaporte
+  const [isDropdownOpenProvince, setIsDropdownOpenProvince] = useState(false); // Provincia
+
   const [orderId, setOrderId] = useState(null);
   const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
   const [customAlert, setCustomAlert] = useState({ show: false, message: '' });
 
   const documentOptions = ['DNI', 'Pasaporte'];
 
+  const provinces = [
+    "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes",
+    "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza", "Misiones",
+    "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe",
+    "Santiago del Estero", "Tierra del Fuego", "Tucumán"
+  ];
+
   const handleInfoChange = (e) => {
     const { name, value } = e.target;
     setInfo((prev) => ({ ...prev, [name]: value }));
 
     if (name === 'correo') {
-      if (!value) {
-        setEmailError('El correo electrónico es obligatorio.');
-      } else if (!validateEmail(value)) {
-        setEmailError('Por favor, ingrese un correo electrónico válido (ejemplo: usuario@dominio.com).');
-      } else {
-        setEmailError('');
-      }
+      if (!value) setEmailError('El correo electrónico es obligatorio.');
+      else if (!validateEmail(value)) setEmailError('Por favor, ingrese un correo electrónico válido.');
+      else setEmailError('');
     }
   };
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
+    const numericFields = ['telefono', 'numeroDocumento', 'codigoArea', 'codigoPostal'];
 
-    // Handle numeric inputs for telefono and numeroDocumento
-    if (name === 'telefono' || name === 'numeroDocumento') {
-      // Remove non-numeric characters
-      const numericValue = value.replace(/[^0-9]/g, '');
-      setAddress((prev) => ({ ...prev, [name]: numericValue }));
-    } else {
-      setAddress((prev) => ({ ...prev, [name]: value }));
-    }
+    setAddress((prev) => ({
+      ...prev,
+      [name]: numericFields.includes(name) ? value.replace(/[^0-9]/g, '') : value,
+    }));
   };
 
   const handleDocumentSelect = (option) => {
@@ -155,7 +126,8 @@ const OrderStep1 = () => {
       address.telefono &&
       address.numeroDocumento &&
       address.pais &&
-      address.region &&
+      address.province &&
+      address.city &&
       address.codigoPostal &&
       address.calle
     );
@@ -165,99 +137,70 @@ const OrderStep1 = () => {
     if (areAllFieldsFilled()) {
       setShowAdditionalInputs(true);
     } else {
-      const errorMessage = emailError || 'Por favor, completa todos los campos antes de continuar.';
-      setCustomAlert({ show: true, message: errorMessage });
+      setCustomAlert({ show: true, message: emailError || 'Por favor, completa todos los campos.' });
     }
   };
 
-  const closeCustomAlert = () => {
-    setCustomAlert({ show: false, message: '' });
-  };
-
-  const handleBack = () => {
-    setShowAdditionalInputs(false);
-  };
+  const closeCustomAlert = () => setCustomAlert({ show: false, message: '' });
+  const handleBack = () => setShowAdditionalInputs(false);
 
   const handleShippingChange = (e) => {
-    const { value, dataset } = e.target;
     setSelectedShipping({
-      name: value,
-      cost: Number(dataset.cost || 0),
+      name: e.target.value,
+      cost: Number(e.target.dataset.cost || 0),
     });
   };
 
   const generateOrder = async () => {
-    if (!selectedShipping.name) {
-      setCustomAlert({ show: true, message: 'Por favor, selecciona un método de envío antes de confirmar la orden.' });
-      return;
-    }
-  
-    if (!cart.length) {
-      setCustomAlert({ show: true, message: 'El carrito está vacío.' });
-      return;
-    }
-  
+    if (!selectedShipping.name) return setCustomAlert({ show: true, message: 'Selecciona un método de envío' });
+    if (!cart.length) return setCustomAlert({ show: true, message: 'El carrito está vacío.' });
+
     const cartWithIds = await Promise.all(
-      cart.map(async (item) => {
-        const colorId = await fetchColorId(item.color);
-        const sizeId = await fetchSizeId(item.size);
-        return { ...item, colorId, sizeId };
-      })
+      cart.map(async (item) => ({
+        ...item,
+        colorId: await fetchColorId(item.color),
+        sizeId: await fetchSizeId(item.size),
+      }))
     );
-  
+
     for (const item of cartWithIds) {
-      if (!item.id) {
-        setCustomAlert({ show: true, message: 'ID de producto faltante.' });
-        return;
-      }
-      if (!item.quantity || item.quantity < 1) {
-        setCustomAlert({ show: true, message: 'Cantidad inválida.' });
-        return;
-      }
-      if (!item.price || item.price <= 0) {
-        setCustomAlert({ show: true, message: 'Precio inválido.' });
-        return;
-      }
-      if (!item.colorId) {
-        setCustomAlert({ show: true, message: `No se pudo obtener el ID del color para ${item.color}.` });
-        return;
-      }
-      if (!item.sizeId) {
-        setCustomAlert({ show: true, message: `No se pudo obtener el ID del talle para ${item.size}.` });
-        return;
+      if (!item.colorId || !item.sizeId) {
+        return setCustomAlert({ show: true, message: `Error con color/talle de ${item.name}` });
       }
     }
-  
-    const amountPerInstallment = (totalPrice + selectedShipping.cost) / paymentDetails.numberOfInstallments;
-  
+
+    const total = totalPrice + selectedShipping.cost;
+    const amountPerInstallment = total / 3;
+
     const order = {
       userInfo: {
         firstName: info.nombres,
         lastName: info.apellidos,
         email: info.correo,
-        dni: String(address.numeroDocumento),
+        dni: address.numeroDocumento,
       },
       shippingAddress: {
-        areaCode: String(address.codigoArea),
-        phone: String(address.codigoArea + address.telefono),
+        areaCode: address.codigoArea,
+        phone: address.codigoArea + address.telefono,
         country: address.pais,
-        city: address.region,
-        postalCode: String(address.codigoPostal),
+        province: address.province,
+        city: address.city,
+        postalCode: address.codigoPostal,
         street: address.calle,
       },
       deliveryDetails: {
-        deliveryMethod: selectedShipping.name === 'Correo Argentino a Domicilio' ? 'SHIPPING' : 'PICKUP',
+        deliveryMethod: 'SHIPPING',
         pickupPoint: null,
       },
       paymentDetails: {
-        totalAmount: Number((totalPrice + selectedShipping.cost).toFixed(2)),
+        totalAmount: Number(total.toFixed(2)),
         subtotalAmount: Number(totalPrice.toFixed(2)),
         discountAmount: 0,
         shippingPrice: Number(selectedShipping.cost.toFixed(2)),
         currency: 'ARS',
-        paymentMethod: paymentDetails.paymentMethod.toUpperCase().replace(' ', '_'),
+        paymentMethod: 'CREDIT_CARD',
         installments: {
-          numberOfInstallments: paymentDetails.numberOfInstallments,
+          numberOfInstallments: 3,
           amountPerInstallment: Number(amountPerInstallment.toFixed(2)),
         },
       },
@@ -269,67 +212,42 @@ const OrderStep1 = () => {
         size: item.sizeId,
       })),
     };
-  
-    if (!order.userInfo.firstName || !order.userInfo.email || !order.shippingAddress.street) {
-      setCustomAlert({ show: true, message: 'Datos de usuario o dirección incompletos.' });
-      return;
-    }
-    if (!order.items.length) {
-      setCustomAlert({ show: true, message: 'No hay ítems en la orden.' });
-      return;
-    }
-  
+
     try {
-      const orderResponse = await fetch('https://eeva-api.vercel.app/api/v1/orders/create', {
+      const response = await fetch('https://eeva-api.vercel.app/api/v1/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order),
       });
-  
-      console.log('Order response status:', orderResponse.status);
-      if (!orderResponse.ok) {
-        const errorText = await orderResponse.text();
-        console.log('Order response error:', errorText);
-        throw new Error(`Error al crear la orden: ${orderResponse.statusText} - ${errorText}`);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
       }
-  
-      const orderResult = await orderResponse.json();
-      console.log('Order creation response:', orderResult);
-  
-      const newOrderId = orderResult.order?._id || orderResult._id || orderResult.id || orderResult.orderId;
-      if (!newOrderId) {
-        throw new Error('No se recibió el ID de la orden en la respuesta. Verifica la estructura de la respuesta.');
-      }
-  
+
+      const result = await response.json();
+      const newOrderId = result.order?._id || result._id || result.id;
+
       setOrderId(newOrderId);
       setShowOrderConfirmation(true);
-      setCustomAlert({ show: true, message: 'Orden creada exitosamente!' });
+      setCustomAlert({ show: true, message: '¡Orden creada exitosamente!' });
     } catch (error) {
-      console.error('Error creating order:', error);
-      setCustomAlert({ show: true, message: `Error: ${error.message}` });
+      console.error(error);
+      setCustomAlert({ show: true, message: error.message || 'Error al crear la orden' });
     }
   };
 
   const handlePayOrder = async () => {
-    if (!orderId) {
-      setCustomAlert({ show: true, message: 'No hay una orden válida para pagar.' });
-      return;
-    }
-
+    if (!orderId) return setCustomAlert({ show: true, message: 'No hay una orden válida' });
     try {
       const paymentLink = await createPaymentLink(orderId);
-      if (!paymentLink) {
-        throw new Error('No se recibió el enlace de pago.');
-      }
       window.location.href = paymentLink;
     } catch (error) {
-      console.error('Error generating payment link:', error);
-      setCustomAlert({ show: true, message: `Error: ${error.message}` });
+      setCustomAlert({ show: true, message: error.message });
     }
   };
 
-  const formattedAddress = `${address.calle}, ${address.region}, ${address.pais} ${address.codigoPostal}.`;
-
+  const formattedAddress = `${address.calle}, ${address.city}, ${address.province}, ${address.pais} ${address.codigoPostal}`;
   return (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
       <style jsx>{`
@@ -440,7 +358,7 @@ const OrderStep1 = () => {
                             {documentOptions.map((option) => (
                               <div
                                 key={option}
-                                className="dropdown-item backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none"
+                                className="dropdown-item backdrop-blur-[6px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none w-[100%]"
                                 onClick={() => handleDocumentSelect(option)}
                               >
                                 {option}
@@ -467,16 +385,49 @@ const OrderStep1 = () => {
                       name="pais"
                       value={address.pais}
                       onChange={handleAddressChange}
-                      placeholder="País / Región"
+                      placeholder="País"
                     />
-                    <input
-                      className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
-                      type="text"
-                      name="region"
-                      value={address.region}
-                      onChange={handleAddressChange}
-                      placeholder="Región / Provincia"
-                    />
+                 <div className="flex flex-col md:flex-row w-[90%] md:w-[713px] justify-between gap-4">
+               {/* PROVINCIA (Select) + CIUDAD */}
+<div className="flex flex-col md:flex-row w-[90%]  justify-between gap-4">
+  {/* Select de Provincia */}
+  <div className="custom-dropdown w-full md:w-[483px]">
+    <div 
+      className="dropdown-button h-[48px] w-[300px] px-4 border border-[#F2F2F2] bg-[#F2F2F203] text-white rounded-[2px] flex items-center justify-between cursor-pointer"
+      onClick={() => setIsDropdownOpenProvince(!isDropdownOpenProvince)}
+    >
+      <span>{address.province || "Provincia"}</span>
+      <Image height={14} width={14} alt="flecha" src="/check.svg" />
+    </div>
+
+    {isDropdownOpenProvince && (
+      <div className="dropdown-menu  max-h-[300px] overflow-auto ">
+        {provinces.map((prov) => (
+          <div
+            key={prov}
+            className="dropdown-item py-3 px-4  hover:bg-white/10 cursor-pointer backdrop-blur-[6px] bg-[#A8A8A81A] focus:outline-none"
+            onClick={() => {
+              setAddress(prev => ({ ...prev, province: prov }));
+              setIsDropdownOpenProvince(false);
+            }}
+          >
+            {prov}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+ 
+</div>
+                <input
+                  className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white "
+                  name="city"
+                  value={address.city}
+                  onChange={handleAddressChange}
+                  placeholder="Ciudad"
+                />
+              </div>
                     <div className="flex justify-between w-[90%] md:w-[713px]">
                       <input
                         className="w-[109px] text-[14px] placeholder-white md:w-[139px] h-[48px] pr-[16px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
@@ -574,7 +525,7 @@ const OrderStep1 = () => {
                       href="/"
                       className="inline-block pr-2 text-white underline hover:text-gray-400 transition"
                     >
-                      Continue shopping
+                      Seguir comprando
                     </Link>
                     <button
                       onClick={handleContinue}
