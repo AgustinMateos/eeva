@@ -389,11 +389,11 @@ const OrderStep1 = () => {
                     />
                  <div className="flex flex-col md:flex-row w-[90%] md:w-[713px] justify-between gap-4">
                {/* PROVINCIA (Select) + CIUDAD */}
-<div className="flex flex-col md:flex-row w-[90%]  justify-between gap-4">
+<div className="flex flex-col md:flex-row w-[100%] md:w-[90%]  justify-between gap-4">
   {/* Select de Provincia */}
-  <div className="custom-dropdown w-full md:w-[483px]">
+  <div className="custom-dropdown  w-full md:w-[483px]">
     <div 
-      className="dropdown-button h-[48px] w-[300px] px-4 border border-[#F2F2F2] bg-[#F2F2F203] text-white rounded-[2px] flex items-center justify-between cursor-pointer"
+      className="dropdown-button w-[335px] h-[48px] md:w-[300px] px-4 border border-[#F2F2F2] bg-[#F2F2F203] text-white rounded-[2px] flex items-center justify-between cursor-pointer"
       onClick={() => setIsDropdownOpenProvince(!isDropdownOpenProvince)}
     >
       <span>{address.province || "Provincia"}</span>
@@ -405,7 +405,7 @@ const OrderStep1 = () => {
         {provinces.map((prov) => (
           <div
             key={prov}
-            className="dropdown-item py-3 px-4  hover:bg-white/10 cursor-pointer backdrop-blur-[6px] bg-[#A8A8A81A] focus:outline-none"
+            className="dropdown-item py-3 px-4 w-full hover:bg-white/10 cursor-pointer backdrop-blur-[6px] bg-[#A8A8A81A] focus:outline-none"
             onClick={() => {
               setAddress(prev => ({ ...prev, province: prov }));
               setIsDropdownOpenProvince(false);
@@ -421,7 +421,7 @@ const OrderStep1 = () => {
  
 </div>
                 <input
-                  className="w-[90%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white "
+                  className="w-[100%] text-[14px] placeholder-white md:w-[713px] h-[48px] gap-[10px] px-4 py-2 rounded-[2px] border border-[#F2F2F2] bg-[#F2F2F203] focus:outline-none focus:ring-2 focus:ring-white/50 text-white "
                   name="city"
                   value={address.city}
                   onChange={handleAddressChange}
