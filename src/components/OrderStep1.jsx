@@ -425,7 +425,7 @@ const OrderStep1 = () => {
                   name="city"
                   value={address.city}
                   onChange={handleAddressChange}
-                  placeholder="Ciudad"
+                  placeholder="Localidad"
                 />
               </div>
                     <div className="flex justify-between w-[90%] md:w-[713px]">

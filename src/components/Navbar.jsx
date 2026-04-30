@@ -290,21 +290,21 @@ const Navbar = () => {
                               className="flex h-[30px] text-center"
                               onClick={() => setIsHombreOpen(false)}
                             >
-                              Top
+                              Tops
                             </a>
                             <a
                               href="/collections/bottomm"
                               className="flex h-[30px] text-center"
                               onClick={() => setIsHombreOpen(false)}
                             >
-                              Bottom
+                              Bottoms
                             </a>
                             <a
                               href="/collections/accessoriesm"
                               className="flex h-[30px] text-center"
                               onClick={() => setIsHombreOpen(false)}
                             >
-                              Accessories
+                              Accesorios
                             </a>
                           </div>
                         </div>
@@ -338,21 +338,21 @@ const Navbar = () => {
                               className="flex h-[30px] text-center"
                               onClick={() => setIsMujerOpen(false)}
                             >
-                              Top
+                              Tops
                             </a>
                             <a
                               href="/collections/bottomw"
                               className="flex h-[30px] text-center"
                               onClick={() => setIsMujerOpen(false)}
                             >
-                              Bottom
+                              Bottoms
                             </a>
                             <a
                               href="/collections/accessoriesg"
                               className="flex h-[30px] text-center"
                               onClick={() => setIsMujerOpen(false)}
                             >
-                              Accessories
+                              Accesorios
                             </a>
                           </div>
                         </div>
@@ -366,10 +366,10 @@ const Navbar = () => {
                         alt="eevaLogo"
                         className="w-auto h-12"
                       />
-                      <div className="flex items-center w-[137px] justify-between">
+                      <div className="flex items-center w-[197px] justify-between">
                         <Link href="/collections/aboutus">
                           <p className="flex text-center text-[16px] w-full font-medium text-base leading-[14px] tracking-[0.1em]">
-                            ABOUT US
+                            SOBRE NOSOTROS
                           </p>
                         </Link>
                         <Image

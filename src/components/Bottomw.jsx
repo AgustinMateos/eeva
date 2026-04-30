@@ -148,7 +148,7 @@ const Bottomw = () => {
           />
           <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A] focus:outline-none">
-              SEE PRODUCT
+              VER PRODUCTO
             </span>
           </div>
         </div>
