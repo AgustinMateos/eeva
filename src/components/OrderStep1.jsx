@@ -391,9 +391,9 @@ const OrderStep1 = () => {
                {/* PROVINCIA (Select) + CIUDAD */}
 <div className="flex flex-col md:flex-row w-[100%] md:w-[90%]  justify-between gap-4">
   {/* Select de Provincia */}
-  <div className="custom-dropdown  w-full md:w-[483px]">
+  <div className="custom-dropdown  w-[100%] md:w-[483px]" >
     <div 
-      className="dropdown-button w-[335px] h-[48px] md:w-[300px] px-4 border border-[#F2F2F2] bg-[#F2F2F203] text-white rounded-[2px] flex items-center justify-between cursor-pointer"
+      className="dropdown-button w-[100%] h-[48px] md:w-[300px] px-4 border border-[#F2F2F2] bg-[#F2F2F203] text-white rounded-[2px] flex items-center justify-between cursor-pointer"
       onClick={() => setIsDropdownOpenProvince(!isDropdownOpenProvince)}
     >
       <span>{address.province || "Provincia"}</span>
