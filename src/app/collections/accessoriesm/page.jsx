@@ -1,15 +1,13 @@
-'use client'; 
-
-
-import React from 'react';
 import Accesoriesm from '@/components/Accesoriesm';
+import { getCategoryProducts } from '@/lib/products';
 
+const Page = async () => {
+  const initialProducts = await getCategoryProducts('ACCESSORIES', 'MALE');
 
-const Page = () => {
   return (
-    <div className="h-screen w-full  ">
+    <div className="h-screen w-full">
       <div className="min-h-[100vh] w-full bg-gradient-to-r from-[#303F48] to-[#6D7276]">
-       <Accesoriesm/>
+        <Accesoriesm initialProducts={initialProducts} />
       </div>
     </div>
   );

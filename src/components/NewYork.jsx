@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Axios from 'axios';
 import Footer from './Footer';
+import Loader from './Loader';
 
 export default function NewYork() {
   const videoRef = useRef(null);
@@ -116,11 +117,10 @@ export default function NewYork() {
     return <div className="text-white text-center pt-[150px]">{error}</div>;
   }
 
-  if (loading) {
-    return null;
-  }
-
   return (
+    <>
+    <Loader loading={loading} />
+    {!loading && (
     <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
       <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">
         {title}
@@ -295,5 +295,7 @@ export default function NewYork() {
         <Footer />
       </div>
     </div>
+    )}
+    </>
   );
 }

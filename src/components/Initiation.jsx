@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Axios from 'axios';
 import dynamic from 'next/dynamic';
+import { COLLECTIONS_URL, findInitiation, formatInitiation } from '@/lib/initiation';
+import Loader from './Loader';
 
 // Currency formatter for Argentine Pesos (ARS)
 const priceFormatter = new Intl.NumberFormat('es-AR', {
@@ -15,7 +17,6 @@ const priceFormatter = new Intl.NumberFormat('es-AR', {
 });
 
 const Footer = dynamic(() => import('./Footer'), { ssr: false });
-const Loader = dynamic(() => import('./Loader'), { ssr: false });
 
 const Initiation = ({ initialData }) => {
   const videoRef = useRef(null);
@@ -49,52 +50,17 @@ const Initiation = ({ initialData }) => {
     if (!initialData) {
       const fetchInitiationCollection = async () => {
         try {
-          const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections', {
-            headers: { 'Cache-Control': 'public, max-age=3600' },
-          });
-          const initiationCollection = response.data.find(
-            (collection) => collection.title.toUpperCase() === 'INITIATION'
-          );
+          const response = await Axios.get(COLLECTIONS_URL);
+          const initiationCollection = findInitiation(response.data);
 
           if (initiationCollection) {
-            const formattedProducts = initiationCollection.products.map((product) => {
-              const price = Number(product.price);
-              const discount = Number(product.discount) || 0;
-              return {
-                id: product._id,
-                title: product.displayName || product.name || 'Producto sin título',
-                subtitle: product.subtitle,
-                image: `/static/${product.models.images.static}.webp`,
-                gender: product.gender || 'unknown',
-                price: isNaN(price) ? 'N/A' : price,
-                discount: isNaN(discount) ? 0 : discount,
-                createdAt: product.createdAt || product.date || product.updatedAt, // ← fecha original
-              };
-            });
-
-            // ORDEN: MÁS NUEVO PRIMRE PRIMERO
-            const sortedProducts = formattedProducts
-              .map(p => ({
-                ...p,
-                date: new Date(p.createdAt || 0) // fallback si no hay fecha
-              }))
-              .sort((a, b) => b.date - a.date); // descendente = más nuevo arriba
-
-            setProducts(sortedProducts);
-            setDescription(initiationCollection.description || 'Descripción no disponible');
-            setTitle(initiationCollection.title || 'Sin título');
-            setSubtitle(initiationCollection.subtitle || 'Subtítulo no disponible');
-
-            const formattedMiddleImages = initiationCollection.images.middle.map((image, index) => ({
-              id: index + 1,
-              image: `/${image}.webp`,
-            }));
-            setMiddleImages(formattedMiddleImages);
-            setFooterImage(
-              initiationCollection.images.footer
-                ? `/${initiationCollection.images.footer}.webp`
-                : '/footer_initiation.webp'
-            );
+            const data = formatInitiation(initiationCollection);
+            setProducts(data.products);
+            setDescription(data.description);
+            setTitle(data.title);
+            setSubtitle(data.subtitle);
+            setMiddleImages(data.middleImages);
+            setFooterImage(data.footerImage);
           } else {
             setError('Colección INITIATION no encontrada');
           }
@@ -155,7 +121,7 @@ const Initiation = ({ initialData }) => {
   };
 
   const productCards = useMemo(() => {
-    return products.map((card) => {
+    return products.map((card, index) => {
       const discountedPrice = card.discount > 0 && card.price !== 'N/A'
         ? card.price - (card.price * card.discount / 100)
         : card.price;
@@ -172,7 +138,8 @@ const Initiation = ({ initialData }) => {
               src={card.image}
               alt={card.title}
               fill
-              priority
+              priority={index < 4}
+              sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-contain 2xl:object-cover w-full h-auto"
             />
             {card.discount > 0 && (
@@ -182,7 +149,7 @@ const Initiation = ({ initialData }) => {
             )}
           </div>
           <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-            <span className="text-sm backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
+            <span className="text-sm group-hover:backdrop-blur-[6px] pl-[20px] pr-[20px] flex justify-center items-center h-[36px] text-center rounded-[2px] border-[0.5px] bg-[#A8A8A81A]">
               VER PRODUCTO
             </span>
           </div>
@@ -260,6 +227,7 @@ const Initiation = ({ initialData }) => {
             {/* Sección videos middle */}
             <div className="mt-[60px] mb-[60px]">
               {/* Mobile */}
+              {isMobile && (
               <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
                 {middleImages.map((item, index) => (
                   <div key={item.id} className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2">
@@ -271,18 +239,20 @@ const Initiation = ({ initialData }) => {
                         loop
                         muted
                         playsInline
+                        preload="metadata"
                         className="w-full h-[400px] object-cover rounded-sm"
                       />
-                      <Image src={item.image} alt={`Middle ${index + 1}`} fill className="object-cover rounded-sm -z-10" />
                     </div>
                   </div>
                 ))}
               </div>
+              )}
               <div className="md:hidden max-w-[500px] w-full pl-[16px] flex justify-start">
                 <p className="text-[#FFFFFF] pt-[20px] text-[12px]">INTENSO | FUERTE | AUDAZ W25</p>
               </div>
 
               {/* Desktop */}
+              {!isMobile && (
               <div className="hidden md:grid md:grid-cols-2 md:gap-6">
                 {middleImages.map((item, index) => (
                   <div key={item.id} className="flex flex-col items-center">
@@ -294,9 +264,9 @@ const Initiation = ({ initialData }) => {
                         loop
                         muted
                         playsInline
+                        preload="metadata"
                         className="w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5] object-cover rounded-sm"
                       />
-                      <Image src={item.image} alt={`Middle ${index + 1}`} fill className="object-cover rounded-sm -z-10" />
                     </div>
                     {index === 0 && (
                       <div className="flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] justify-start">
@@ -306,6 +276,7 @@ const Initiation = ({ initialData }) => {
                   </div>
                 ))}
               </div>
+              )}
             </div>
 
             {/* Segundo bloque (resto de productos) */}
@@ -318,7 +289,7 @@ const Initiation = ({ initialData }) => {
 
           {footerImage && (
             <div className="relative h-[410px] md:h-[800px] w-full mt-[40px]">
-              <Image src={'/footer_initiation.webp'} alt="Fondo Initiation" fill priority sizes="100vw" className="object-cover" />
+              <Image src={'/footer_initiation.webp'} alt="Fondo Initiation" fill sizes="100vw" className="object-cover" />
               <div className="absolute top-[15px] md:top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px] flex flex-col items-end">
                 <h5 className="text-sm md:text-lg font-semibold uppercase">Concrete Summer</h5>
                 <div className="text-[8px] md:text-[12px] w-[221px] md:w-[480px] text-right">
@@ -369,65 +340,5 @@ const Initiation = ({ initialData }) => {
     </>
   );
 };
-
-/* ==============================================
-   getServerSideProps – también ordenado por fecha
-   ============================================== */
-export async function getServerSideProps() {
-  try {
-    const response = await Axios.get('https://eeva-api.vercel.app/api/v1/collections');
-    const initiationCollection = response.data.find(
-      (collection) => collection.title.toUpperCase() === 'INITIATION'
-    );
-
-    if (!initiationCollection) {
-      return { props: { initialData: null } };
-    }
-
-    const formattedProducts = initiationCollection.products.map((product) => {
-      const price = Number(product.price);
-      const discount = Number(product.discount) || 0;
-      return {
-        id: product._id,
-        title: product.displayName || product.name || 'Producto sin título',
-        subtitle: product.subtitle,
-        image: `/static/${product.models.images.static}.webp`,
-        gender: product.gender || 'unknown',
-        price: isNaN(price) ? 'N/A' : price,
-        discount: isNaN(discount) ? 0 : discount,
-        createdAt: product.createdAt || product.date || product.updatedAt, // guardamos la fecha original
-      };
-    });
-
-    // ORDEN: MÁS NUEVO PRIMERO (igual que en el cliente)
-    const sortedProducts = formattedProducts
-      .map(p => ({
-        ...p,
-        date: new Date(p.createdAt || 0)
-      }))
-      .sort((a, b) => b.date - a.date);
-
-    return {
-      props: {
-        initialData: {
-          products: sortedProducts,
-          description: initiationCollection.description || 'Descripción no definida',
-          title: initiationCollection.title || 'Sin título',
-          subtitle: initiationCollection.subtitle || 'Subtítulo no definido',
-          middleImages: initiationCollection.images.middle.map((image, index) => ({
-            id: index + 1,
-            image: `/${image}.webp`,
-          })),
-          footerImage: initiationCollection.images.footer
-            ? `/${initiationCollection.images.footer}.webp`
-            : '/evvaprevfooter.svg',
-        },
-      },
-    };
-  } catch (err) {
-    console.error('Error en getServerSideProps:', err);
-    return { props: { initialData: null } };
-  }
-}
 
 export default Initiation;

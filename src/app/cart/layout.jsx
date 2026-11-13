@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import Loader from "@/components/Loader";
 
 export default function CartLayout({ children }) {
  
