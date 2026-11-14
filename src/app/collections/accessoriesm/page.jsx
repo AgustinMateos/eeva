@@ -1,6 +1,10 @@
 import Accesoriesm from '@/components/Accesoriesm';
 import { getCategoryProducts } from '@/lib/products';
 
+// Refrescar los datos de la API cada 60 s (igual a API_REVALIDATE_SECONDS en lib/site.js).
+// Tiene que ser un número literal: sin esto Next genera la página estática y no se actualiza nunca.
+export const revalidate = 60;
+
 const Page = async () => {
   const initialProducts = await getCategoryProducts('ACCESSORIES', 'MALE');
 

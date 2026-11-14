@@ -3,6 +3,10 @@ import Initiation from '@/components/Initiation';
 import { COLLECTIONS_URL, findInitiation, formatInitiation } from '@/lib/initiation';
 import { pageMetadata, API_CACHE } from '@/lib/site';
 
+// Refrescar los datos de la API cada 60 s (igual a API_REVALIDATE_SECONDS en lib/site.js).
+// Tiene que ser un número literal: sin esto Next genera la página estática y no se actualiza nunca.
+export const revalidate = 60;
+
 export const metadata = pageMetadata({
   title: 'Concrete Summer | Colección Initiation',
   description:
