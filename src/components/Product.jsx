@@ -144,8 +144,19 @@ const Product = () => {
       const newImages = fetchedProduct.models?.images?.gif360
         ? Array.from({ length: 8 }, (_, i) => `/360/${fetchedProduct.models.images.gif360}-${i + 1}.webp`)
         : ["/rotate1.svg", "/rotate2.svg", "/rotate3.svg", "/rotate4.svg", "/rotate5.svg"];
-      console.log("Cached Images:", newImages);
       setCachedImages(newImages);
+
+      // Saltear frames del 360 que todavía no existen (ej: falta una foto),
+      // así el giro no muestra una imagen rota.
+      if (fetchedProduct.models?.images?.gif360) {
+        newImages.forEach((src) => {
+          fetch(src, { method: "HEAD" })
+            .then((res) => {
+              if (!res.ok) setCachedImages((prev) => prev.filter((s) => s !== src));
+            })
+            .catch(() => {});
+        });
+      }
 
       if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
         const firstAvailableColor = fetchedProduct.colors.find((color) =>
