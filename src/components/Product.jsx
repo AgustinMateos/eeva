@@ -222,19 +222,11 @@ const Product = ({ initialProduct = null, relatedProducts = [] }) => {
     };
   }, [id, initialProduct]);
 
-  // Saltear frames del 360 que todavía no existen (ej: falta una foto),
-  // así el giro no muestra una imagen rota.
-  const gif360 = product?.models?.images?.gif360;
-  useEffect(() => {
-    if (!gif360) return;
-    Array.from({ length: 8 }, (_, i) => `/360/${gif360}-${i + 1}.webp`).forEach((src) => {
-      fetch(src, { method: "HEAD" })
-        .then((res) => {
-          if (!res.ok) setCachedImages((prev) => prev.filter((s) => s !== src));
-        })
-        .catch(() => {});
-    });
-  }, [gif360]);
+  // Saltear frames del 360 que no existen (ej: falta una foto), así el giro no muestra
+  // una imagen rota. Lo dispara el onError de cada frame, sin pedidos HEAD extra.
+  const dropMissingFrame = useCallback((src) => {
+    setCachedImages((prev) => prev.filter((s) => s !== src));
+  }, []);
 
   useEffect(() => {
     if (!product || !selectedColor) {
@@ -667,17 +659,27 @@ const Product = ({ initialProduct = null, relatedProducts = [] }) => {
             <div className="w-auto md:w-[940px] md:items-end h-[600px] relative flex flex-col items-center">
               {cachedImages.length > 0 && (
                 <div className="relative" onMouseMove={handleMouseMove} onMouseLeave={handleCloseMagnifier}>
-                  <Image
-                    ref={imageRef}
-                    src={cachedImages[currentImageIndex] || "/rotate1.svg"}
-                    alt={`Product image ${currentImageIndex + 1}`}
-                    width={545}
-                    height={900}
-                    className="object-contain h-[535px] md:w-[550px] md:h-[650px]"
-                    priority
-                    onLoad={() => console.log("Image loaded:", cachedImages[currentImageIndex])}
-                    onError={() => console.error("Image failed to load:", cachedImages[currentImageIndex])}
-                  />
+                  {/* Los frames del 360 se dibujan todos una sola vez, apilados, y solo se
+                      muestra el actual. Si se cambiara el src, el navegador volvería a pedir
+                      cada frame en cada vuelta (las imágenes llegan con max-age=0). */}
+                  {cachedImages.map((src, i) => (
+                    <Image
+                      key={src}
+                      ref={i === 0 ? imageRef : undefined}
+                      src={src}
+                      alt={i === 0 ? `${product.displayName} - vista 360` : ""}
+                      aria-hidden={i === 0 ? undefined : true}
+                      width={545}
+                      height={900}
+                      className={`object-contain h-[535px] md:w-[550px] md:h-[650px] ${i === 0 ? "" : "absolute inset-0"} ${
+                        i === currentImageIndex % cachedImages.length ? "opacity-100" : "opacity-0"
+                      }`}
+                      priority={i === 0}
+                      loading={i === 0 ? undefined : "eager"}
+                      fetchPriority={i === 0 ? undefined : "low"}
+                      onError={() => dropMissingFrame(src)}
+                    />
+                  ))}
                   {isMagnifying && (
                     <div
                       className="absolute rounded-md shadow-lg bg-white bg-opacity-10"
