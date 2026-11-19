@@ -12,7 +12,22 @@ async function getProduct(id) {
   }
 }
 
-const cleanText = (text = "") => text.replace(/\s+/g, " ").trim();
+// Productos para el marquee "También te puede gustar". Se piden en el servidor (cacheados)
+// y se mandan al navegador solo con los campos que usa, sin el producto actual.
+async function getRelatedProducts(currentId) {
+  try {
+    const res = await fetch(`${API_URL}/products`, API_CACHE);
+    if (!res.ok) return [];
+    const products = await res.json();
+    return products
+      .filter((p) => p._id !== currentId && p.models?.images?.gif360)
+      .map((p) => ({ _id: p._id, displayName: p.displayName, gif360: p.models.images.gif360 }));
+  } catch {
+    return [];
+  }
+}
+
+const cleanText =(text = "") => text.replace(/\s+/g, " ").trim();
 
 function productImages(product) {
   const images = [];
@@ -95,7 +110,7 @@ function breadcrumbJsonLd(product, id) {
 
 export default async function Page({ params }) {
   const id = (await params).id;
-  const product = await getProduct(id);
+  const [product, relatedProducts] = await Promise.all([getProduct(id), getRelatedProducts(id)]);
   return (
     <div className="min-h-[100vh] w-full bg-gradient-to-r from-[#303F48] to-[#6D7276]">
       {product && (
@@ -106,7 +121,7 @@ export default async function Page({ params }) {
           }}
         />
       )}
-      <Product id={id} />
+      <Product initialProduct={product} relatedProducts={relatedProducts} />
 
       <div className="w-[90%] h-[315px] md:h-[415px] flex md:min-w-[1315px] 2xl:w-[100%]">
             <Footer />

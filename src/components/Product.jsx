@@ -78,21 +78,78 @@ const Modal = ({ isOpen, onClose, message }) => {
   );
 };
 
-const Product = () => {
-  const [loading, setLoading] = useState(true);
+// Barras animadas junto al 360. Pseudoaleatorias pero fijas (semilla constante, solo
+// enteros): el servidor y el navegador generan exactamente lo mismo, sin errores de hidratación.
+const SOUND_BARS = (() => {
+  let seed = 20260;
+  const next = () => {
+    seed = (seed * 1103515245 + 12345) % 2147483648;
+    return seed / 2147483648;
+  };
+  const maxHeightOptions = [5, 10, 15, 30];
+  return Array.from({ length: 40 }, () => {
+    const maxHeight = maxHeightOptions[Math.floor(next() * maxHeightOptions.length)];
+    return { maxHeight, delay: Math.round(next() * 200) / 100, height: Math.floor(next() * maxHeight) + 10 };
+  });
+})();
+
+// Estado inicial que se deriva del producto: frames del 360 y primer color/talle con stock
+// (del producto y de cada look). Es una función pura para poder usarla tanto con el
+// producto que llega del servidor como con uno pedido desde el navegador.
+function deriveProductState(product) {
+  const cachedImages = product.models?.images?.gif360
+    ? Array.from({ length: 8 }, (_, i) => `/360/${product.models.images.gif360}-${i + 1}.webp`)
+    : ["/rotate1.svg", "/rotate2.svg", "/rotate3.svg", "/rotate4.svg", "/rotate5.svg"];
+
+  let selectedColor = null;
+  let selectedSize = null;
+  if (product.colors && product.colors.length > 0) {
+    const firstAvailableColor = product.colors.find((color) => color.sizes.some((size) => size.stock > 0));
+    if (firstAvailableColor) {
+      selectedColor = firstAvailableColor.color.name;
+      const firstAvailableSize = firstAvailableColor.sizes.find((size) => size.stock > 0);
+      selectedSize = firstAvailableSize ? firstAvailableSize.size.name : null;
+    } else {
+      selectedColor = product.colors[0].color.name;
+    }
+  }
+
+  const lookColors = {};
+  const lookSizes = {};
+  const lookAddCounts = {};
+  (product.looks || []).forEach((look, index) => {
+    if (look.colors && look.colors.length > 0) {
+      const lookId = look._id || index;
+      const firstAvailableColor = look.colors.find((color) => color.sizes.some((size) => size.stock > 0));
+      lookColors[lookId] = firstAvailableColor ? firstAvailableColor.color.name : look.colors[0].color.name;
+      const color = firstAvailableColor || look.colors[0];
+      const firstAvailableSize = color.sizes.find((size) => size.stock > 0);
+      lookSizes[lookId] = firstAvailableSize ? firstAvailableSize.size.name : null;
+      lookAddCounts[lookId] = {};
+    }
+  });
+
+  return { cachedImages, selectedColor, selectedSize, lookColors, lookSizes, lookAddCounts };
+}
+
+// initialProduct y relatedProducts llegan desde page.jsx (servidor, cacheados).
+// Si el servidor no pudo traer el producto, se pide desde el navegador como antes.
+const Product = ({ initialProduct = null, relatedProducts = [] }) => {
+  const [initial] = useState(() => (initialProduct ? deriveProductState(initialProduct) : null));
+  const [loading, setLoading] = useState(!initialProduct);
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState(initialProduct);
   const [error, setError] = useState(null);
-  const [cachedImages, setCachedImages] = useState([]);
+  const [cachedImages, setCachedImages] = useState(initial?.cachedImages ?? []);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isProductCareOpen, setIsProductCareOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(null);
-  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(initial?.selectedColor ?? null);
+  const [selectedSize, setSelectedSize] = useState(initial?.selectedSize ?? null);
   const [isShopLookOpen, setIsShopLookOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedLookColors, setSelectedLookColors] = useState({});
-  const [selectedLookSizes, setSelectedLookSizes] = useState({});
+  const [selectedLookColors, setSelectedLookColors] = useState(initial?.lookColors ?? {});
+  const [selectedLookSizes, setSelectedLookSizes] = useState(initial?.lookSizes ?? {});
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMagnifying, setIsMagnifying] = useState(false);
@@ -104,7 +161,7 @@ const Product = () => {
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const { addToCart } = useCart();
-  const [lookAddCounts, setLookAddCounts] = useState({});
+  const [lookAddCounts, setLookAddCounts] = useState(initial?.lookAddCounts ?? {});
   const [addCounts, setAddCounts] = useState({});
   const lensWidth = 160;
   const lensHeight = 160;
@@ -134,90 +191,50 @@ const Product = () => {
     return parseInt(decimalPart) === 0 ? formattedInteger : `${formattedInteger},${decimalPart}`;
   };
 
-  const fetchProduct = async () => {
-    try {
-      const response = await axios.get(`https://eeva-api.vercel.app/api/v1/products/${id}`);
-      const fetchedProduct = response.data;
-      console.log("Fetched product:", fetchedProduct);
-      setProduct(fetchedProduct);
-
-      const newImages = fetchedProduct.models?.images?.gif360
-        ? Array.from({ length: 8 }, (_, i) => `/360/${fetchedProduct.models.images.gif360}-${i + 1}.webp`)
-        : ["/rotate1.svg", "/rotate2.svg", "/rotate3.svg", "/rotate4.svg", "/rotate5.svg"];
-      setCachedImages(newImages);
-
-      // Saltear frames del 360 que todavía no existen (ej: falta una foto),
-      // así el giro no muestra una imagen rota.
-      if (fetchedProduct.models?.images?.gif360) {
-        newImages.forEach((src) => {
-          fetch(src, { method: "HEAD" })
-            .then((res) => {
-              if (!res.ok) setCachedImages((prev) => prev.filter((s) => s !== src));
-            })
-            .catch(() => {});
-        });
-      }
-
-      if (fetchedProduct.colors && fetchedProduct.colors.length > 0) {
-        const firstAvailableColor = fetchedProduct.colors.find((color) =>
-          color.sizes.some((size) => size.stock > 0)
-        );
-        if (firstAvailableColor) {
-          setSelectedColor(firstAvailableColor.color.name);
-          const firstAvailableSize = firstAvailableColor.sizes.find((size) => size.stock > 0);
-          setSelectedSize(firstAvailableSize ? firstAvailableSize.size.name : null);
-        } else {
-          setSelectedColor(fetchedProduct.colors[0].color.name);
-          setSelectedSize(null);
-        }
-      }
-
-      if (fetchedProduct.looks && fetchedProduct.looks.length > 0) {
-        const initialLookColors = {};
-        const initialLookSizes = {};
-        const initialLookAddCounts = {};
-        fetchedProduct.looks.forEach((look, index) => {
-          if (look.colors && look.colors.length > 0) {
-            const lookId = look._id || index;
-            const firstAvailableColor = look.colors.find((color) =>
-              color.sizes.some((size) => size.stock > 0)
-            );
-            initialLookColors[lookId] = firstAvailableColor
-              ? firstAvailableColor.color.name
-              : look.colors[0].color.name;
-            const selectedColor = firstAvailableColor || look.colors[0];
-            const firstAvailableSize = selectedColor.sizes.find((size) => size.stock > 0);
-            initialLookSizes[lookId] = firstAvailableSize ? firstAvailableSize.size.name : null;
-            initialLookAddCounts[lookId] = {};
-          }
-        });
-        setSelectedLookColors(initialLookColors);
-        setSelectedLookSizes(initialLookSizes);
-        setLookAddCounts(initialLookAddCounts);
-      }
-
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching product:", err);
-      setError("Error al cargar el producto. Por favor, intenta de nuevo.");
-      setLoading(false);
-    }
-  };
-
+  // Solo si el servidor no trajo el producto: pedirlo desde el navegador.
   useEffect(() => {
-    if (!id) return;
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await fetchProduct();
-      } catch (error) {
-        setError("Error al cargar el producto");
-      } finally {
-        setLoading(false);
-      }
+    if (initialProduct || !id) return;
+    let cancelled = false;
+    setLoading(true);
+    axios
+      .get(`https://eeva-api.vercel.app/api/v1/products/${id}`)
+      .then(({ data }) => {
+        if (cancelled) return;
+        const derived = deriveProductState(data);
+        setProduct(data);
+        setCachedImages(derived.cachedImages);
+        setSelectedColor(derived.selectedColor);
+        setSelectedSize(derived.selectedSize);
+        setSelectedLookColors(derived.lookColors);
+        setSelectedLookSizes(derived.lookSizes);
+        setLookAddCounts(derived.lookAddCounts);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("Error fetching product:", err);
+        setError("Error al cargar el producto. Por favor, intenta de nuevo.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
     };
-    fetchData();
-  }, [id]);
+  }, [id, initialProduct]);
+
+  // Saltear frames del 360 que todavía no existen (ej: falta una foto),
+  // así el giro no muestra una imagen rota.
+  const gif360 = product?.models?.images?.gif360;
+  useEffect(() => {
+    if (!gif360) return;
+    Array.from({ length: 8 }, (_, i) => `/360/${gif360}-${i + 1}.webp`).forEach((src) => {
+      fetch(src, { method: "HEAD" })
+        .then((res) => {
+          if (!res.ok) setCachedImages((prev) => prev.filter((s) => s !== src));
+        })
+        .catch(() => {});
+    });
+  }, [gif360]);
 
   useEffect(() => {
     if (!product || !selectedColor) {
@@ -704,19 +721,13 @@ const Product = () => {
               </div>
               <div className="absolute top-[-10px] md:top-[20px] left-[40px] md:left-[-10px] xl:left-[250px] w-[140px] md:w-[200px] text-white z-10 font-normal text-[12px] tracking-[-0.04em] align-middle pl-[1px]">
                 <div className="w-[190px] md:w-[170px] h-[60px] flex flex-row items-end overflow-hidden mb-[20px]">
-                  {Array.from({ length: 40 }, (_, index) => {
-                    const maxHeightOptions = [5, 10, 15, 30];
-                    const maxHeight = maxHeightOptions[Math.floor(Math.random() * maxHeightOptions.length)];
-                    const animationClass = `animate-pulseHeight-${maxHeight}`;
-                    const delay = Math.random() * 2;
-                    return (
-                      <div
-                        key={index}
-                        className={`bg-white w-[1px] md:w-[2px] mx-[1px] md:mx-[2px] transition-all ${animationClass}`}
-                        style={{ height: `${Math.floor(Math.random() * maxHeight) + 10}px`, animationDelay: `${delay}s` }}
-                      ></div>
-                    );
-                  })}
+                  {SOUND_BARS.map(({ maxHeight, height, delay }, index) => (
+                    <div
+                      key={index}
+                      className={`bg-white w-[1px] md:w-[2px] mx-[1px] md:mx-[2px] transition-all animate-pulseHeight-${maxHeight}`}
+                      style={{ height: `${height}px`, animationDelay: `${delay}s` }}
+                    ></div>
+                  ))}
                 </div>
                 <style jsx>{`
                   @keyframes pulseHeight-5 {
@@ -969,7 +980,7 @@ const Product = () => {
             </div>
           </div>
           <div className="w-full mt-8 z-0">
-            <Marquee />
+            <Marquee products={relatedProducts} />
           </div>
           {isShopLookOpen && (
             <div
