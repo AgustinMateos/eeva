@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { useCart } from "./context/CartContext";
 
 const colecciones = [
-  { name: "Concrete Summer", link: "/collections/initiation", age: "new" },
+  { name: "Spring 2026", link: "/collections/initiation", age: "new" },
   // { name: "Amsterdam", link: "/collections/amsterdam", age: "'24" },
   // { name: "New York", link: "/collections/newyork", age: "'27" },
   // { name: "Groenlandia", link: "/collections/groenlandia", age: "'20" },
@@ -393,7 +393,7 @@ const Navbar = () => {
                   Collection
                 </p>
                 <span className="font-normal text-[12px] leading-[100%] tracking-[-0.02em]">
-                  22-11-2025
+                  17-11-2026
                 </span>
               </div>
               <div className="flex h-full">

@@ -2,7 +2,7 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.eevast.com').replace(/\/$/, '');
 export const SITE_NAME = 'EEVA Studios';
 export const SITE_DESCRIPTION =
-  'EEVA Studios: marca de ropa de diseño argentina. Colección Concrete Summer con tops, pantalones, camperas, accesorios y ropa interior para hombre y mujer. Comprá online.';
+  'EEVA Studios: marca de ropa de diseño argentina. Colección Spring 2026 con tops, pantalones, camperas, accesorios y ropa interior para hombre y mujer. Comprá online.';
 export const INSTAGRAM_URL = 'https://www.instagram.com/eevastudios';
 export const CONTACT_EMAIL = 'contacto@eevastudios.com';
 export const API_URL = 'https://eeva-api.vercel.app/api/v1';
@@ -14,7 +14,7 @@ export const PRODUCTS_TAG = 'products';
 export const API_REVALIDATE_SECONDS = 60;
 export const API_CACHE = { next: { revalidate: API_REVALIDATE_SECONDS, tags: [PRODUCTS_TAG] } };
 
-export const DEFAULT_OG_IMAGE = { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EEVA Studios - Concrete Summer' };
+export const DEFAULT_OG_IMAGE = { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EEVA Studios - Spring 2026' };
 
 // Metadata de una página: título, descripción, canonical y Open Graph coherentes.
 // Next reemplaza openGraph/twitter enteros (no los combina con el layout), por eso se repiten acá.

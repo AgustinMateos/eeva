@@ -82,7 +82,7 @@ function breadcrumbJsonLd(product, id) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Concrete Summer", item: `${SITE_URL}/collections/initiation` },
+      { "@type": "ListItem", position: 1, name: "Spring 2026", item: `${SITE_URL}/collections/initiation` },
       {
         "@type": "ListItem",
         position: 2,

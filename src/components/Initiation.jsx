@@ -18,10 +18,13 @@ const priceFormatter = new Intl.NumberFormat('es-AR', {
 
 const Footer = dynamic(() => import('./Footer'), { ssr: false });
 
+// Fotos de la sección del medio (Spring 2026). Reemplazan a los videos.
+const MIDDLE_PHOTOS = [
+  { src: '/spring2026-middle-1.webp', width: 1257, height: 1885, alt: 'Spring 2026 mujer: camisa a rayas y bermudas de lana marrón' },
+  { src: '/spring2026-middle-2.webp', width: 1155, height: 1733, alt: 'Spring 2026 hombre: musculosa negra y jean' },
+];
+
 const Initiation = ({ initialData }) => {
-  const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState(initialData?.products || []);
   const [description, setDescription] = useState(initialData?.description || '');
   const [title, setTitle] = useState(initialData?.title || '');
@@ -35,16 +38,6 @@ const Initiation = ({ initialData }) => {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const hasModalBeenClosed = useRef(false);
-  const videoSource = isMobile ? '/initiationvertical.mp4' : '/initiation1.mp4';
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     if (!initialData) {
@@ -82,13 +75,6 @@ const Initiation = ({ initialData }) => {
 
     return () => clearTimeout(timer);
   }, [initialData]);
-
-  const toggleSound = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -185,7 +171,7 @@ const Initiation = ({ initialData }) => {
       ) : (
         <div className="min-h-[100vh] w-full flex flex-col justify-center items-center pt-[150px]">
           {/* <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">{title}</h1> */}
-          <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">Concrete Summer </h1>
+          <h1 className="text-white text-4xl font-bold pb-[20px] md:pb-[30px] uppercase">Spring 2026</h1>
 
           <p className="text-white pl-[15px] pr-[15px] text-[10px] md:text-lg text-center max-w-2xl uppercase">
             {subtitle}
@@ -194,29 +180,19 @@ const Initiation = ({ initialData }) => {
             {description}
           </p>
 
+          {/* Portada Spring 2026: una sola foto horizontal para mobile y desktop.
+              En desktop el recuadro es más apaisado que la foto, así que se
+              ancla arriba para no cortar las cabezas. */}
           <div className="relative w-full aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/10]">
-  <picture>
-    {/* Móvil: hasta 768px */}
-    <source
-      media="(max-width: 767px)"
-      srcSet="/portadaMobile.webp"
-    />
-    {/* Tablet y desktop */}
-    <source
-      media="(min-width: 768px)"
-      srcSet="/portadaIni.webp"
-    />
-    {/* Fallback (por si el navegador no soporta <picture>) */}
-    <Image
-      src="/portadaIni.webp"
-      alt="Portada Initiation"
-      fill
-      className="object-cover"
-      priority
-      sizes="100vw"
-    />
-  </picture>
-</div>
+            <Image
+              src="/spring2026-portada.webp"
+              alt="Spring 2026: campera negra, remera blanca y jean; musculosa gris y pantalón negro"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center md:object-top"
+            />
+          </div>
 
           <div className="w-full max-w-[90%] mx-auto mt-[60px]">
             {/* Primer bloque de productos */}
@@ -224,50 +200,39 @@ const Initiation = ({ initialData }) => {
               {productCards.slice(0, 8)}
             </div>
 
-            {/* Sección videos middle */}
+            {/* Sección fotos middle (reemplaza a los videos) */}
             <div className="mt-[60px] mb-[60px]">
               {/* Mobile */}
-              {isMobile && (
               <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-                {middleImages.map((item, index) => (
-                  <div key={item.id} className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2">
-                    <div className="relative">
-                      <video
-                        src={`/videos/middle/hero_middle_${index === 0 ? '11' : '22'}.MP4`}
-                        poster={item.image}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-[400px] object-cover rounded-sm"
-                      />
-                    </div>
+                {MIDDLE_PHOTOS.map((photo) => (
+                  <div key={photo.src} className="snap-center flex-shrink-0 w-[80%] max-w-[500px] mx-2">
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      width={photo.width}
+                      height={photo.height}
+                      sizes="80vw"
+                      className="w-full h-[400px] object-cover rounded-sm"
+                    />
                   </div>
                 ))}
               </div>
-              )}
               <div className="md:hidden max-w-[500px] w-full pl-[16px] flex justify-start">
                 <p className="text-[#FFFFFF] pt-[20px] text-[12px]">INTENSO | FUERTE | AUDAZ W25</p>
               </div>
 
               {/* Desktop */}
-              {!isMobile && (
               <div className="hidden md:grid md:grid-cols-2 md:gap-6">
-                {middleImages.map((item, index) => (
-                  <div key={item.id} className="flex flex-col items-center">
-                    <div className="relative">
-                      <video
-                        src={`/videos/middle/hero_middle_${index === 0 ? '11' : '22'}.MP4`}
-                        poster={item.image}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5] object-cover rounded-sm"
-                      />
-                    </div>
+                {MIDDLE_PHOTOS.map((photo, index) => (
+                  <div key={photo.src} className="flex flex-col items-center">
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      width={photo.width}
+                      height={photo.height}
+                      sizes="(max-width: 1280px) 50vw, 560px"
+                      className="w-full max-w-[500px] md:max-w-[550px] xl:max-w-[560px] aspect-[4/5] object-cover rounded-sm"
+                    />
                     {index === 0 && (
                       <div className="flex max-w-[500px] w-full md:max-w-[550px] xl:max-w-[560px] pl-[16px] justify-start">
                         <p className="text-[#FFFFFF] pt-[20px]">INTENSO | FUERTE | AUDAZ W25</p>
@@ -276,7 +241,6 @@ const Initiation = ({ initialData }) => {
                   </div>
                 ))}
               </div>
-              )}
             </div>
 
             {/* Segundo bloque (resto de productos) */}
@@ -291,7 +255,7 @@ const Initiation = ({ initialData }) => {
             <div className="relative h-[410px] md:h-[800px] w-full mt-[40px]">
               <Image src={'/footer_initiation.webp'} alt="Fondo Initiation" fill sizes="100vw" className="object-cover" />
               <div className="absolute top-[15px] md:top-[95px] right-0 p-4 text-white mr-[0px] md:mr-[40px] flex flex-col items-end">
-                <h5 className="text-sm md:text-lg font-semibold uppercase">Concrete Summer</h5>
+                <h5 className="text-sm md:text-lg font-semibold uppercase">Spring 2026</h5>
                 <div className="text-[8px] md:text-[12px] w-[221px] md:w-[480px] text-right">
                   <p>Se buscó construir un universo que transmitiera una vision futurista y dramática. Se crea una sensacion de precisión, movimiento y poder generando una atmósfera única.</p>
                 </div>

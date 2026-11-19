@@ -17,7 +17,7 @@ export const metadata = {
     "ropa de diseño",
     "moda argentina",
     "ropa de autor",
-    "Concrete Summer",
+    "Spring 2026",
     "streetwear",
     "ropa hombre",
     "ropa mujer",

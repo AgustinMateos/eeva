@@ -3,13 +3,16 @@ import Link from 'next/link';
 
 const options = [
   {
-    id: 3,
-    name: 'Concrete summer',
-    bgImage: '/summer-hero.webp',
-    bgImageSize: { width: 2400, height: 1350 },
-    mobileBgImage: '/summerMobile.webp',
-    mobileBgImageSize: { width: 1001, height: 1334 },
-    estado: '22 | 11 | 25',
+    id: 4,
+    name: 'New Collection',
+    // La foto de desktop ya trae el texto "NEW COLLECTION / Spring 2026".
+    bgImage: '/spring2026-hero.webp',
+    bgImageSize: { width: 4096, height: 1596 },
+    mobileBgImage: '/spring2026-mobile.webp',
+    mobileBgImageSize: { width: 1080, height: 1920 },
+    estado: 'Spring 2026',
+    detalle: 'Hombre y Mujer',
+    fecha: '17 | 11 | 26',
     estadoAccion: 'Shop',
     link: '/collections/initiation',
   },
@@ -19,7 +22,7 @@ const options = [
 // viene en el HTML inicial y el navegador elige desktop o mobile por CSS media query.
 export default function Slider() {
   const option = options[0];
-  const common = { alt: 'Initiation slide', sizes: '100vw', fetchPriority: 'high', loading: 'eager' };
+  const common = { alt: 'New Collection Spring 2026, Hombre y Mujer', sizes: '100vw', fetchPriority: 'high', loading: 'eager' };
 
   const {
     props: { srcSet: desktopSrcSet },
@@ -30,26 +33,28 @@ export default function Slider() {
   } = getImageProps({ ...common, ...option.mobileBgImageSize, src: option.mobileBgImage });
 
   return (
-    <div className="relative w-full min-h-[100vh] md:h-[100vh] overflow-hidden bg-black">
+    <Link href={option.link} aria-label={`${option.name} ${option.estado} ${option.detalle}: ${option.estadoAccion}`}
+      className="relative block w-full h-[100vh] overflow-hidden bg-black">
       <picture>
-        <source media="(min-width: 769px)" srcSet={desktopSrcSet} sizes="100vw" />
-        <source media="(max-width: 768px)" srcSet={mobileSrcSet} sizes="100vw" />
+        {/* Mismo corte que el breakpoint `md` de Tailwind (768px). */}
+        <source media="(min-width: 768px)" srcSet={desktopSrcSet} sizes="100vw" />
+        <source media="(max-width: 767px)" srcSet={mobileSrcSet} sizes="100vw" />
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <img {...imgProps} className="absolute inset-0 w-full h-full object-cover" />
       </picture>
-      <div className="absolute top-[350px] md:top-[400px] left-0 right-0 flex items-center justify-center">
-        <div className="w-[60%] xl:w-[20%] px-4 scale-110 z-10">
-          <div className="flex h-full items-center justify-center">
-            <div className="text-white rounded-lg p-4 text-center">
-              <h3 className="text-lg font-semibold uppercase">{option.name}</h3>
-              <p>{option.estado}</p>
-              <Link href={option.link}>
-                <p className="pt-[10px] text-[18px] font-bold xl:pt-[0px]">{option.estadoAccion}</p>
-              </Link>
-            </div>
-          </div>
+
+      {/* Mismo bloque de texto que tenía la portada de Initiation: en mobile
+          arriba (sobre la pared) y en desktop centrado en el medio. */}
+      <div className="absolute inset-x-0 top-[110px] md:top-1/2 md:-translate-y-1/2 z-10 flex items-center justify-center px-4">
+        <div className="text-white text-center md:scale-110 md:p-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]">
+          {/* En desktop la foto ya trae "NEW COLLECTION / Spring 2026". */}
+          <h3 className="text-lg font-semibold uppercase md:hidden">{option.name}</h3>
+          <p className="md:hidden">{option.estado}</p>
+          <p>{option.detalle}</p>
+          <p>{option.fecha}</p>
+          <p className="pt-[10px] text-[18px] font-bold">{option.estadoAccion}</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

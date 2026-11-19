@@ -8,9 +8,9 @@ import { pageMetadata, API_CACHE } from '@/lib/site';
 export const revalidate = 60;
 
 export const metadata = pageMetadata({
-  title: 'Concrete Summer | Colección Initiation',
+  title: 'Spring 2026 | Nueva colección Hombre y Mujer',
   description:
-    'Concrete Summer, la colección Initiation de EEVA Studios: tops, pantalones, camperas, bikinis y accesorios con una visión futurista y dramática. Comprá online.',
+    'Spring 2026, la nueva colección de EEVA Studios para hombre y mujer: tops, pantalones, bermudas, camperas y accesorios. Comprá online.',
   path: '/collections/initiation',
 });
 
